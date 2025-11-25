@@ -1,0 +1,61 @@
+# Root .gitignore for Football Arena Project
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.metadata
+
+# Environment Files (contains sensitive data)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Temporary Files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Build Outputs
+dist/
+build/
+out/
+
+# Dependencies
+node_modules/
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup Files
+*.backup
+*.bak
+
+# Documentation (uncomment if you don't want to track these)
+# *.md
+# docs/
