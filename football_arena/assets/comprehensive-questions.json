@@ -1,0 +1,933 @@
+[
+  {
+    "text": "Who won the FIFA World Cup in 2018?",
+    "textAr": "من فاز بكأس العالم لكرة القدم في 2018؟",
+    "type": "multipleChoice",
+    "difficulty": "easy",
+    "categories": ["World Cup", "General"],
+    "options": ["France", "Croatia", "Belgium", "England"],
+    "optionsAr": ["فرنسا", "كرواتيا", "بلجيكا", "إنجلترا"],
+    "correctAnswer": "France"
+  },
+  {
+    "text": "Which player is shown in this image celebrating?",
+    "textAr": "أي لاعب يظهر في هذه الصورة؟",
+    "type": "imageBased",
+    "difficulty": "easy",
+    "categories": ["Players"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg/220px-Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg",
+    "options": ["Lionel Messi", "Cristiano Ronaldo", "Neymar", "Kylian Mbappé"],
+    "optionsAr": ["ليونيل ميسي", "كريستيانو رونالدو", "نيمار", "كيليان مبابي"],
+    "correctAnswer": "Lionel Messi"
+  },
+  {
+    "text": "True or False: Lionel Messi has won 8 Ballon d'Or awards",
+    "textAr": "صح أم خطأ: فاز ليونيل ميسي بـ 8 جوائز الكرة الذهبية",
+    "type": "trueFalse",
+    "difficulty": "medium",
+    "categories": ["Players"],
+    "options": ["True", "False"],
+    "optionsAr": ["صحيح", "خطأ"],
+    "correctAnswer": "True"
+  },
+  {
+    "text": "True or False: The offside rule was introduced in 1990",
+    "textAr": "صح أم خطأ: تم تقديم قاعدة التسلل في عام 1990",
+    "type": "trueFalse",
+    "difficulty": "hard",
+    "categories": ["Rules", "History"],
+    "options": ["True", "False"],
+    "optionsAr": ["صحيح", "خطأ"],
+    "correctAnswer": "False"
+  },
+  {
+    "text": "Who won the FIFA World Cup in 2022?",
+    "textAr": "من فاز بكأس العالم 2022؟",
+    "difficulty": "easy",
+    "categories": ["World Cup"],
+    "options": ["Argentina", "France", "Brazil", "Germany"],
+    "optionsAr": ["الأرجنتين", "فرنسا", "البرازيل", "ألمانيا"],
+    "correctAnswer": "Argentina"
+  },
+  {
+    "text": "Which country has won the most FIFA World Cups?",
+    "textAr": "أي دولة فازت بأكبر عدد من كؤوس العالم؟",
+    "difficulty": "easy",
+    "categories": ["World Cup", "Stats"],
+    "options": ["Brazil", "Germany", "Italy", "Argentina"],
+    "optionsAr": ["البرازيل", "ألمانيا", "إيطاليا", "الأرجنتين"],
+    "correctAnswer": "Brazil"
+  },
+  {
+    "text": "In which year was the first FIFA World Cup held?",
+    "textAr": "في أي عام أقيمت أول بطولة كأس عالم؟",
+    "difficulty": "medium",
+    "categories": ["World Cup", "History"],
+    "options": ["1930", "1934", "1928", "1938"],
+    "optionsAr": ["1930", "1934", "1928", "1938"],
+    "correctAnswer": "1930"
+  },
+  {
+    "text": "Which country won the first ever FIFA World Cup?",
+    "textAr": "أي دولة فازت بأول كأس عالم؟",
+    "difficulty": "medium",
+    "categories": ["World Cup", "History"],
+    "options": ["Uruguay", "Brazil", "Argentina", "Italy"],
+    "optionsAr": ["أوروغواي", "البرازيل", "الأرجنتين", "إيطاليا"],
+    "correctAnswer": "Uruguay"
+  },
+  {
+    "text": "Who is the all-time top scorer in FIFA World Cup history?",
+    "textAr": "من هو الهداف التاريخي لكأس العالم؟",
+    "difficulty": "medium",
+    "categories": ["World Cup", "Stats", "Players"],
+    "options": ["Miroslav Klose", "Ronaldo Nazário", "Gerd Müller", "Just Fontaine"],
+    "optionsAr": ["ميروسلاف كلوزه", "رونالدو", "جيرد مولر", "جوست فونتين"],
+    "correctAnswer": "Miroslav Klose"
+  },
+  {
+    "text": "Who won the Golden Boot at the 2022 FIFA World Cup?",
+    "textAr": "من فاز بالحذاء الذهبي في كأس العالم 2022؟",
+    "difficulty": "medium",
+    "categories": ["World Cup", "Players"],
+    "options": ["Kylian Mbappé", "Lionel Messi", "Julián Álvarez", "Olivier Giroud"],
+    "optionsAr": ["كيليان مبابي", "ليونيل ميسي", "جوليان ألفاريز", "أوليفييه جيرو"],
+    "correctAnswer": "Kylian Mbappé"
+  },
+  {
+    "text": "Which city hosted the 2022 FIFA World Cup final?",
+    "textAr": "أي مدينة استضافت نهائي كأس العالم 2022؟",
+    "difficulty": "medium",
+    "categories": ["World Cup"],
+    "options": ["Lusail", "Doha", "Al Wakrah", "Al Khor"],
+    "optionsAr": ["لوسيل", "الدوحة", "الوكرة", "الخور"],
+    "correctAnswer": "Lusail"
+  },
+  {
+    "text": "Which country hosted the 2014 FIFA World Cup?",
+    "textAr": "أي دولة استضافت كأس العالم 2014؟",
+    "difficulty": "easy",
+    "categories": ["World Cup"],
+    "options": ["Brazil", "Russia", "South Africa", "Germany"],
+    "optionsAr": ["البرازيل", "روسيا", "جنوب أفريقيا", "ألمانيا"],
+    "correctAnswer": "Brazil"
+  },
+  {
+    "text": "Who is the youngest player to score in a World Cup final?",
+    "textAr": "من هو أصغر لاعب يسجل في نهائي كأس العالم؟",
+    "difficulty": "hard",
+    "categories": ["World Cup", "Players", "Stats"],
+    "options": ["Pelé", "Kylian Mbappé", "Diego Maradona", "Ronaldo"],
+    "optionsAr": ["بيليه", "كيليان مبابي", "دييغو مارادونا", "رونالدو"],
+    "correctAnswer": "Pelé"
+  },
+  {
+    "text": "Which club has won the most UEFA Champions League titles?",
+    "textAr": "أي نادي فاز بأكبر عدد من ألقاب دوري أبطال أوروبا؟",
+    "difficulty": "easy",
+    "categories": ["Champions League", "Clubs"],
+    "options": ["Real Madrid", "AC Milan", "Liverpool", "Barcelona"],
+    "optionsAr": ["ريال مدريد", "إيه سي ميلان", "ليفربول", "برشلونة"],
+    "correctAnswer": "Real Madrid"
+  },
+  {
+    "text": "Who holds the record for most Champions League goals?",
+    "textAr": "من يحمل الرقم القياسي لأكثر أهداف في دوري الأبطال؟",
+    "difficulty": "medium",
+    "categories": ["Champions League", "Players", "Stats"],
+    "options": ["Cristiano Ronaldo", "Lionel Messi", "Robert Lewandowski", "Karim Benzema"],
+    "optionsAr": ["كريستيانو رونالدو", "ليونيل ميسي", "روبرت ليفاندوفسكي", "كريم بنزيمة"],
+    "correctAnswer": "Cristiano Ronaldo"
+  },
+  {
+    "text": "Which team won the Champions League in 2023?",
+    "textAr": "أي فريق فاز بدوري الأبطال 2023؟",
+    "difficulty": "easy",
+    "categories": ["Champions League", "Clubs"],
+    "options": ["Manchester City", "Inter Milan", "Real Madrid", "Bayern Munich"],
+    "optionsAr": ["مانشستر سيتي", "إنتر ميلان", "ريال مدريد", "بايرن ميونيخ"],
+    "correctAnswer": "Manchester City"
+  },
+  {
+    "text": "Which player has won the most Ballon d'Or awards?",
+    "textAr": "أي لاعب فاز بأكبر عدد من جوائز الكرة الذهبية؟",
+    "difficulty": "easy",
+    "categories": ["Players", "General"],
+    "options": ["Lionel Messi", "Cristiano Ronaldo", "Michel Platini", "Johan Cruyff"],
+    "optionsAr": ["ليونيل ميسي", "كريستيانو رونالدو", "ميشيل بلاتيني", "يوهان كرويف"],
+    "correctAnswer": "Lionel Messi"
+  },
+  {
+    "text": "Which country is Cristiano Ronaldo from?",
+    "textAr": "من أي دولة كريستيانو رونالدو؟",
+    "difficulty": "easy",
+    "categories": ["Players", "General"],
+    "options": ["Spain", "Portugal", "Brazil", "Argentina"],
+    "optionsAr": ["إسبانيا", "البرتغال", "البرازيل", "الأرجنتين"],
+    "correctAnswer": "Portugal"
+  },
+  {
+    "text": "Who is known as 'The Egyptian King'?",
+    "textAr": "من المعروف بـ 'الملك المصري'؟",
+    "difficulty": "easy",
+    "categories": ["Players", "Premier League"],
+    "options": ["Mohamed Salah", "Ahmed Hegazi", "Mohamed Elneny", "Omar Marmoush"],
+    "optionsAr": ["محمد صلاح", "أحمد حجازي", "محمد النني", "عمر مرموش"],
+    "correctAnswer": "Mohamed Salah"
+  },
+  {
+    "text": "Which player is known as 'CR7'?",
+    "textAr": "أي لاعب معروف بـ 'CR7'؟",
+    "difficulty": "easy",
+    "categories": ["Players"],
+    "options": ["Cristiano Ronaldo", "Carlos Ronaldo", "César Ronaldo", "Christian Ronaldo"],
+    "optionsAr": ["كريستيانو رونالدو", "كارلوس رونالدو", "سيزار رونالدو", "كريستيان رونالدو"],
+    "correctAnswer": "Cristiano Ronaldo"
+  },
+  {
+    "text": "Which player is known as 'The Atomic Flea'?",
+    "textAr": "أي لاعب معروف بـ 'البرغوث الذري'؟",
+    "difficulty": "medium",
+    "categories": ["Players"],
+    "options": ["Lionel Messi", "Diego Maradona", "Ronaldinho", "Neymar"],
+    "optionsAr": ["ليونيل ميسي", "دييغو مارادونا", "رونالدينيو", "نيمار"],
+    "correctAnswer": "Lionel Messi"
+  },
+  {
+    "text": "Who is the all-time top scorer for Barcelona?",
+    "textAr": "من هو الهداف التاريخي لبرشلونة؟",
+    "difficulty": "easy",
+    "categories": ["Players", "La Liga", "Clubs"],
+    "options": ["Lionel Messi", "César Rodríguez", "Luis Suárez", "Samuel Eto'o"],
+    "optionsAr": ["ليونيل ميسي", "سيزار رودريغيز", "لويس سواريز", "صامويل إيتو"],
+    "correctAnswer": "Lionel Messi"
+  },
+  {
+    "text": "Which player scored the 'Hand of God' goal?",
+    "textAr": "أي لاعب سجل هدف 'يد الله'؟",
+    "difficulty": "medium",
+    "categories": ["Players", "World Cup", "History"],
+    "options": ["Diego Maradona", "Pelé", "Zinedine Zidane", "Johan Cruyff"],
+    "optionsAr": ["دييغو مارادونا", "بيليه", "زين الدين زيدان", "يوهان كرويف"],
+    "correctAnswer": "Diego Maradona"
+  },
+  {
+    "text": "Which goalkeeper has won the most Ballon d'Or awards?",
+    "textAr": "أي حارس مرمى فاز بأكبر عدد من جوائز الكرة الذهبية؟",
+    "difficulty": "hard",
+    "categories": ["Players", "Stats"],
+    "options": ["Lev Yashin", "Gianluigi Buffon", "Manuel Neuer", "Iker Casillas"],
+    "optionsAr": ["ليف ياشين", "جيانلويجي بوفون", "مانويل نوير", "إيكر كاسياس"],
+    "correctAnswer": "Lev Yashin"
+  },
+  {
+    "text": "Which club is known as 'The Red Devils'?",
+    "textAr": "أي نادي يعرف بـ 'الشياطين الحمر'؟",
+    "difficulty": "easy",
+    "categories": ["Clubs", "Premier League"],
+    "options": ["Liverpool", "Arsenal", "Manchester United", "AC Milan"],
+    "optionsAr": ["ليفربول", "أرسنال", "مانشستر يونايتد", "إيه سي ميلان"],
+    "correctAnswer": "Manchester United"
+  },
+  {
+    "text": "Which team is known as 'The Gunners'?",
+    "textAr": "أي فريق يعرف بـ 'المدفعجية'؟",
+    "difficulty": "easy",
+    "categories": ["Clubs", "Premier League"],
+    "options": ["Arsenal", "Chelsea", "Tottenham", "West Ham"],
+    "optionsAr": ["أرسنال", "تشيلسي", "توتنهام", "ويست هام"],
+    "correctAnswer": "Arsenal"
+  },
+  {
+    "text": "Which Premier League club is nicknamed 'The Blues'?",
+    "textAr": "أي نادي في الدوري الإنجليزي الممتاز لقبه 'البلوز'؟",
+    "difficulty": "easy",
+    "categories": ["Clubs", "Premier League"],
+    "options": ["Chelsea", "Everton", "Leicester City", "Manchester City"],
+    "optionsAr": ["تشيلسي", "إيفرتون", "ليستر سيتي", "مانشستر سيتي"],
+    "correctAnswer": "Chelsea"
+  },
+  {
+    "text": "Which club plays at the Santiago Bernabéu?",
+    "textAr": "أي نادي يلعب في ملعب سانتياغو برنابيو؟",
+    "difficulty": "easy",
+    "categories": ["Clubs", "La Liga"],
+    "options": ["Real Madrid", "Barcelona", "Atlético Madrid", "Valencia"],
+    "optionsAr": ["ريال مدريد", "برشلونة", "أتلتيكو مدريد", "فالنسيا"],
+    "correctAnswer": "Real Madrid"
+  },
+  {
+    "text": "Which English club has won the most league titles?",
+    "textAr": "أي نادي إنجليزي فاز بأكبر عدد من ألقاب الدوري؟",
+    "difficulty": "medium",
+    "categories": ["Premier League", "Clubs", "Stats"],
+    "options": ["Manchester United", "Liverpool", "Arsenal", "Chelsea"],
+    "optionsAr": ["مانشستر يونايتد", "ليفربول", "أرسنال", "تشيلسي"],
+    "correctAnswer": "Manchester United"
+  },
+  {
+    "text": "Who holds the record for most Premier League goals in a season?",
+    "textAr": "من يحمل الرقم القياسي لأكثر أهداف في موسم الدوري الإنجليزي؟",
+    "difficulty": "medium",
+    "categories": ["Premier League", "Stats", "Players"],
+    "options": ["Erling Haaland", "Mohamed Salah", "Alan Shearer", "Andy Cole"],
+    "optionsAr": ["إيرلينغ هالاند", "محمد صلاح", "آلان شيرر", "آندي كول"],
+    "correctAnswer": "Erling Haaland"
+  },
+  {
+    "text": "Who is the all-time top scorer in the Premier League?",
+    "textAr": "من هو الهداف التاريخي للدوري الإنجليزي الممتاز؟",
+    "difficulty": "medium",
+    "categories": ["Premier League", "Stats", "Players"],
+    "options": ["Alan Shearer", "Wayne Rooney", "Harry Kane", "Thierry Henry"],
+    "optionsAr": ["آلان شيرر", "واين روني", "هاري كين", "تييري هنري"],
+    "correctAnswer": "Alan Shearer"
+  },
+  {
+    "text": "Which stadium is known as 'The Theatre of Dreams'?",
+    "textAr": "أي ملعب يعرف بـ 'مسرح الأحلام'؟",
+    "difficulty": "medium",
+    "categories": ["Clubs", "Premier League"],
+    "options": ["Old Trafford", "Anfield", "Stamford Bridge", "Emirates Stadium"],
+    "optionsAr": ["أولد ترافورد", "أنفيلد", "ستامفورد بريدج", "الإمارات"],
+    "correctAnswer": "Old Trafford"
+  },
+  {
+    "text": "Which Spanish club is known as 'Los Blancos'?",
+    "textAr": "أي نادي إسباني يعرف بـ 'البيض'؟",
+    "difficulty": "easy",
+    "categories": ["Clubs", "La Liga"],
+    "options": ["Real Madrid", "Barcelona", "Valencia", "Sevilla"],
+    "optionsAr": ["ريال مدريد", "برشلونة", "فالنسيا", "إشبيلية"],
+    "correctAnswer": "Real Madrid"
+  },
+  {
+    "text": "Which club is nicknamed 'Blaugrana'?",
+    "textAr": "أي نادي لقبه 'البلوغرانا'؟",
+    "difficulty": "medium",
+    "categories": ["Clubs", "La Liga"],
+    "options": ["Barcelona", "Real Madrid", "Atlético Madrid", "Athletic Bilbao"],
+    "optionsAr": ["برشلونة", "ريال مدريد", "أتلتيكو مدريد", "أتلتيك بيلباو"],
+    "correctAnswer": "Barcelona"
+  },
+  {
+    "text": "Which Italian club is known as 'The Old Lady'?",
+    "textAr": "أي نادي إيطالي يعرف بـ 'السيدة العجوز'؟",
+    "difficulty": "medium",
+    "categories": ["Clubs", "Serie A"],
+    "options": ["Juventus", "AC Milan", "Inter Milan", "Roma"],
+    "optionsAr": ["يوفنتوس", "إيه سي ميلان", "إنتر ميلان", "روما"],
+    "correctAnswer": "Juventus"
+  },
+  {
+    "text": "Which German club is known as 'Die Roten' (The Reds)?",
+    "textAr": "أي نادي ألماني يعرف بـ 'الحمر'؟",
+    "difficulty": "medium",
+    "categories": ["Clubs", "Bundesliga"],
+    "options": ["Bayern Munich", "Borussia Dortmund", "RB Leipzig", "Bayer Leverkusen"],
+    "optionsAr": ["بايرن ميونيخ", "بوروسيا دورتموند", "لايبزيغ", "باير ليفركوزن"],
+    "correctAnswer": "Bayern Munich"
+  },
+  {
+    "text": "How many players are on a football team on the field?",
+    "textAr": "كم عدد اللاعبين في فريق كرة القدم على الملعب؟",
+    "difficulty": "easy",
+    "categories": ["General", "Rules"],
+    "options": ["9", "10", "11", "12"],
+    "optionsAr": ["9", "10", "11", "12"],
+    "correctAnswer": "11"
+  },
+  {
+    "text": "How long is a standard football match?",
+    "textAr": "كم مدة مباراة كرة القدم القياسية؟",
+    "difficulty": "easy",
+    "categories": ["General", "Rules"],
+    "options": ["80 minutes", "90 minutes", "100 minutes", "120 minutes"],
+    "optionsAr": ["80 دقيقة", "90 دقيقة", "100 دقيقة", "120 دقيقة"],
+    "correctAnswer": "90 minutes"
+  },
+  {
+    "text": "What is the duration of each half in a football match?",
+    "textAr": "ما مدة كل شوط في مباراة كرة القدم؟",
+    "difficulty": "easy",
+    "categories": ["General", "Rules"],
+    "options": ["40 minutes", "45 minutes", "50 minutes", "60 minutes"],
+    "optionsAr": ["40 دقيقة", "45 دقيقة", "50 دقيقة", "60 دقيقة"],
+    "correctAnswer": "45 minutes"
+  },
+  {
+    "text": "What color card does a referee show for a sending off?",
+    "textAr": "ما لون البطاقة التي يعرضها الحكم للطرد؟",
+    "difficulty": "easy",
+    "categories": ["General", "Rules"],
+    "options": ["Yellow", "Red", "Blue", "Green"],
+    "optionsAr": ["صفراء", "حمراء", "زرقاء", "خضراء"],
+    "correctAnswer": "Red"
+  },
+  {
+    "text": "How many substitutions are allowed in a standard match?",
+    "textAr": "كم عدد التبديلات المسموح بها في مباراة قياسية؟",
+    "difficulty": "medium",
+    "categories": ["General", "Rules"],
+    "options": ["3", "5", "7", "Unlimited"],
+    "optionsAr": ["3", "5", "7", "غير محدود"],
+    "correctAnswer": "5"
+  },
+  {
+    "text": "What does VAR stand for?",
+    "textAr": "ماذا يعني VAR؟",
+    "difficulty": "medium",
+    "categories": ["General", "Rules"],
+    "options": ["Video Assistant Referee", "Virtual Assistant Review", "Visual Aid Referee", "Verified Action Replay"],
+    "optionsAr": ["حكم مساعد بالفيديو", "مراجعة مساعد افتراضي", "حكم مساعد بصري", "إعادة عمل موثقة"],
+    "correctAnswer": "Video Assistant Referee"
+  },
+  {
+    "text": "What is the maximum number of touches a goalkeeper can have on the ball?",
+    "textAr": "ما هو الحد الأقصى لعدد لمسات حارس المرمى على الكرة؟",
+    "difficulty": "hard",
+    "categories": ["Rules"],
+    "options": ["No limit", "6 seconds", "10 seconds", "15 seconds"],
+    "optionsAr": ["لا يوجد حد", "6 ثوان", "10 ثوان", "15 ثانية"],
+    "correctAnswer": "6 seconds"
+  },
+  {
+    "text": "What is the maximum number of players in a match squad?",
+    "textAr": "ما هو الحد الأقصى لعدد اللاعبين في قائمة المباراة؟",
+    "difficulty": "medium",
+    "categories": ["Rules"],
+    "options": ["18", "20", "23", "25"],
+    "optionsAr": ["18", "20", "23", "25"],
+    "correctAnswer": "23"
+  },
+  {
+    "text": "What is the standard size of a football (soccer ball)?",
+    "textAr": "ما هو الحجم القياسي لكرة القدم؟",
+    "difficulty": "medium",
+    "categories": ["General"],
+    "options": ["Size 3", "Size 4", "Size 5", "Size 6"],
+    "optionsAr": ["حجم 3", "حجم 4", "حجم 5", "حجم 6"],
+    "correctAnswer": "Size 5"
+  },
+  {
+    "text": "Who won the UEFA Euro 2020 (played in 2021)?",
+    "textAr": "من فاز ببطولة أمم أوروبا 2020؟",
+    "difficulty": "easy",
+    "categories": ["Euro", "General"],
+    "options": ["Italy", "England", "Spain", "Germany"],
+    "optionsAr": ["إيطاليا", "إنجلترا", "إسبانيا", "ألمانيا"],
+    "correctAnswer": "Italy"
+  },
+  {
+    "text": "Which country won the Copa América 2021?",
+    "textAr": "أي دولة فازت بكوبا أمريكا 2021؟",
+    "difficulty": "medium",
+    "categories": ["Copa América"],
+    "options": ["Argentina", "Brazil", "Uruguay", "Chile"],
+    "optionsAr": ["الأرجنتين", "البرازيل", "أوروغواي", "تشيلي"],
+    "correctAnswer": "Argentina"
+  },
+  {
+    "text": "What is the name of the FIFA World Cup trophy?",
+    "textAr": "ما اسم كأس العالم لكرة القدم؟",
+    "difficulty": "medium",
+    "categories": ["World Cup", "General"],
+    "options": ["FIFA World Cup Trophy", "Jules Rimet Trophy", "Golden Globe", "Victory Cup"],
+    "optionsAr": ["كأس العالم", "كأس جول ريميه", "الكرة الذهبية", "كأس النصر"],
+    "correctAnswer": "FIFA World Cup Trophy"
+  },
+  {
+    "text": "Which player has scored the most goals in a single calendar year?",
+    "textAr": "أي لاعب سجل أكبر عدد من الأهداف في سنة واحدة؟",
+    "difficulty": "hard",
+    "categories": ["Players", "Stats"],
+    "options": ["Lionel Messi", "Cristiano Ronaldo", "Gerd Müller", "Pelé"],
+    "optionsAr": ["ليونيل ميسي", "كريستيانو رونالدو", "جيرد مولر", "بيليه"],
+    "correctAnswer": "Lionel Messi"
+  },
+  {
+    "text": "Who is the youngest player to score a hat-trick in World Cup?",
+    "textAr": "من هو أصغر لاعب يسجل هاتريك في كأس العالم؟",
+    "difficulty": "hard",
+    "categories": ["World Cup", "Stats", "Players"],
+    "options": ["Pelé", "Kylian Mbappé", "Michael Owen", "Lionel Messi"],
+    "optionsAr": ["بيليه", "كيليان مبابي", "مايكل أوين", "ليونيل ميسي"],
+    "correctAnswer": "Pelé"
+  },
+  {
+    "text": "Which club has won the most Serie A titles?",
+    "textAr": "أي نادي فاز بأكبر عدد من ألقاب الدوري الإيطالي؟",
+    "difficulty": "medium",
+    "categories": ["Serie A", "Clubs", "Stats"],
+    "options": ["Juventus", "AC Milan", "Inter Milan", "Roma"],
+    "optionsAr": ["يوفنتوس", "إيه سي ميلان", "إنتر ميلان", "روما"],
+    "correctAnswer": "Juventus"
+  },
+  {
+    "text": "Which club has won the most Bundesliga titles?",
+    "textAr": "أي نادي فاز بأكبر عدد من ألقاب الدوري الألماني؟",
+    "difficulty": "easy",
+    "categories": ["Bundesliga", "Clubs", "Stats"],
+    "options": ["Bayern Munich", "Borussia Dortmund", "Hamburg", "Schalke 04"],
+    "optionsAr": ["بايرن ميونيخ", "بوروسيا دورتموند", "هامبورغ", "شالكه"],
+    "correctAnswer": "Bayern Munich"
+  },
+  {
+    "text": "Who was the first player to win the Ballon d'Or?",
+    "textAr": "من كان أول لاعب يفوز بالكرة الذهبية؟",
+    "difficulty": "hard",
+    "categories": ["Players", "History"],
+    "options": ["Stanley Matthews", "Alfredo Di Stéfano", "Raymond Kopa", "Ferenc Puskás"],
+    "optionsAr": ["ستانلي ماثيوز", "ألفريدو دي ستيفانو", "ريموند كوبا", "فيرينتس بوشكاش"],
+    "correctAnswer": "Stanley Matthews"
+  },
+  {
+    "text": "Which player has the most international goals ever?",
+    "textAr": "أي لاعب لديه أكثر أهداف دولية على الإطلاق؟",
+    "difficulty": "medium",
+    "categories": ["Players", "Stats"],
+    "options": ["Cristiano Ronaldo", "Lionel Messi", "Ali Daei", "Pelé"],
+    "optionsAr": ["كريستيانو رونالدو", "ليونيل ميسي", "علي دائي", "بيليه"],
+    "correctAnswer": "Cristiano Ronaldo"
+  },
+  {
+    "text": "Which team won the first Premier League title in 1992-93?",
+    "textAr": "أي فريق فاز بأول لقب للدوري الإنجليزي الممتاز 1992-93؟",
+    "difficulty": "medium",
+    "categories": ["Premier League", "History"],
+    "options": ["Manchester United", "Blackburn Rovers", "Arsenal", "Liverpool"],
+    "optionsAr": ["مانشستر يونايتد", "بلاكبيرن روفرز", "أرسنال", "ليفربول"],
+    "correctAnswer": "Manchester United"
+  },
+  {
+    "text": "Which country won the African Cup of Nations 2023?",
+    "textAr": "أي دولة فازت بكأس الأمم الأفريقية 2023؟",
+    "difficulty": "medium",
+    "categories": ["AFCON"],
+    "options": ["Ivory Coast", "Nigeria", "Senegal", "Egypt"],
+    "optionsAr": ["ساحل العاج", "نيجيريا", "السنغال", "مصر"],
+    "correctAnswer": "Ivory Coast"
+  },
+  {
+    "text": "Who is the all-time top scorer in Champions League?",
+    "textAr": "من هو الهداف التاريخي لدوري الأبطال؟",
+    "difficulty": "easy",
+    "categories": ["Champions League", "Players", "Stats"],
+    "options": ["Cristiano Ronaldo", "Lionel Messi", "Robert Lewandowski", "Karim Benzema"],
+    "optionsAr": ["كريستيانو رونالدو", "ليونيل ميسي", "روبرت ليفاندوفسكي", "كريم بنزيمة"],
+    "correctAnswer": "Cristiano Ronaldo"
+  },
+  {
+    "text": "Which club won the treble (League, Cup, Champions League) in 1999?",
+    "textAr": "أي نادي فاز بالثلاثية في 1999؟",
+    "difficulty": "medium",
+    "categories": ["Clubs", "Champions League", "History"],
+    "options": ["Manchester United", "Barcelona", "Bayern Munich", "Inter Milan"],
+    "optionsAr": ["مانشستر يونايتد", "برشلونة", "بايرن ميونيخ", "إنتر ميلان"],
+    "correctAnswer": "Manchester United"
+  },
+  {
+    "text": "Who scored the fastest goal in World Cup history?",
+    "textAr": "من سجل أسرع هدف في تاريخ كأس العالم؟",
+    "difficulty": "hard",
+    "categories": ["World Cup", "Stats"],
+    "options": ["Hakan Şükür", "Clint Dempsey", "Bryan Robson", "Emilio Butragueño"],
+    "optionsAr": ["هاكان شوكور", "كلينت ديمبسي", "بريان روبسون", "إيميليو بوتراغينيو"],
+    "correctAnswer": "Hakan Şükür"
+  },
+  {
+    "text": "Which player has won the most Champions League titles?",
+    "textAr": "أي لاعب فاز بأكبر عدد من ألقاب دوري الأبطال؟",
+    "difficulty": "hard",
+    "categories": ["Champions League", "Players", "Stats"],
+    "options": ["Paco Gento", "Cristiano Ronaldo", "Lionel Messi", "Paolo Maldini"],
+    "optionsAr": ["باكو خينتو", "كريستيانو رونالدو", "ليونيل ميسي", "باولو مالديني"],
+    "correctAnswer": "Paco Gento"
+  },
+  {
+    "text": "Which country has hosted the World Cup the most times?",
+    "textAr": "أي دولة استضافت كأس العالم أكثر من مرة؟",
+    "difficulty": "medium",
+    "categories": ["World Cup", "History"],
+    "options": ["Mexico", "Italy", "France", "Germany"],
+    "optionsAr": ["المكسيك", "إيطاليا", "فرنسا", "ألمانيا"],
+    "correctAnswer": "Mexico"
+  },
+  {
+    "text": "Which player scored in three different World Cup finals?",
+    "textAr": "أي لاعب سجل في ثلاثة نهائيات مختلفة لكأس العالم؟",
+    "difficulty": "hard",
+    "categories": ["World Cup", "Players", "Stats"],
+    "options": ["Pelé", "Vavá", "Zinedine Zidane", "Diego Maradona"],
+    "optionsAr": ["بيليه", "فافا", "زين الدين زيدان", "دييغو مارادونا"],
+    "correctAnswer": "Pelé"
+  },
+  {
+    "text": "Which La Liga team plays at Camp Nou?",
+    "textAr": "أي فريق في الدوري الإسباني يلعب في كامب نو؟",
+    "difficulty": "easy",
+    "categories": ["La Liga", "Clubs"],
+    "options": ["Barcelona", "Real Madrid", "Valencia", "Sevilla"],
+    "optionsAr": ["برشلونة", "ريال مدريد", "فالنسيا", "إشبيلية"],
+    "correctAnswer": "Barcelona"
+  },
+  {
+    "text": "Who is known as 'The Phenomenon'?",
+    "textAr": "من المعروف بـ 'الظاهرة'؟",
+    "difficulty": "medium",
+    "categories": ["Players"],
+    "options": ["Ronaldo Nazário", "Cristiano Ronaldo", "Ronaldinho", "Romário"],
+    "optionsAr": ["رونالدو", "كريستيانو رونالدو", "رونالدينيو", "روماريو"],
+    "correctAnswer": "Ronaldo Nazário"
+  },
+  {
+    "text": "Which team is called 'The Reds' in the Premier League?",
+    "textAr": "أي فريق يسمى 'الحمر' في الدوري الإنجليزي؟",
+    "difficulty": "easy",
+    "categories": ["Premier League", "Clubs"],
+    "options": ["Liverpool", "Manchester United", "Arsenal", "Southampton"],
+    "optionsAr": ["ليفربول", "مانشستر يونايتد", "أرسنال", "ساوثهامبتون"],
+    "correctAnswer": "Liverpool"
+  },
+  {
+    "text": "Who is the all-time top scorer for Real Madrid?",
+    "textAr": "من هو الهداف التاريخي لريال مدريد؟",
+    "difficulty": "easy",
+    "categories": ["La Liga", "Clubs", "Players"],
+    "options": ["Cristiano Ronaldo", "Raúl", "Alfredo Di Stéfano", "Karim Benzema"],
+    "optionsAr": ["كريستيانو رونالدو", "راؤول", "ألفريدو دي ستيفانو", "كريم بنزيمة"],
+    "correctAnswer": "Cristiano Ronaldo"
+  },
+  {
+    "text": "Which Serie A club is known as 'The Nerazzurri'?",
+    "textAr": "أي نادي في الدوري الإيطالي يعرف بـ 'النيرازوري'؟",
+    "difficulty": "medium",
+    "categories": ["Serie A", "Clubs"],
+    "options": ["Inter Milan", "Juventus", "Napoli", "Lazio"],
+    "optionsAr": ["إنتر ميلان", "يوفنتوس", "نابولي", "لاتسيو"],
+    "correctAnswer": "Inter Milan"
+  },
+  {
+    "text": "Who won the Golden Ball at the 2022 World Cup?",
+    "textAr": "من فاز بالكرة الذهبية في كأس العالم 2022؟",
+    "difficulty": "easy",
+    "categories": ["World Cup", "Players"],
+    "options": ["Lionel Messi", "Kylian Mbappé", "Luka Modrić", "Julián Álvarez"],
+    "optionsAr": ["ليونيل ميسي", "كيليان مبابي", "لوكا مودريتش", "جوليان ألفاريز"],
+    "correctAnswer": "Lionel Messi"
+  },
+  {
+    "text": "Which player has won the most Premier League titles?",
+    "textAr": "أي لاعب فاز بأكبر عدد من ألقاب الدوري الإنجليزي؟",
+    "difficulty": "hard",
+    "categories": ["Premier League", "Players", "Stats"],
+    "options": ["Ryan Giggs", "Paul Scholes", "Rio Ferdinand", "John Terry"],
+    "optionsAr": ["ريان غيغز", "بول سكولز", "ريو فرديناند", "جون تيري"],
+    "correctAnswer": "Ryan Giggs"
+  },
+  {
+    "text": "Which stadium is the largest football stadium in the world?",
+    "textAr": "أي ملعب هو أكبر ملعب كرة قدم في العالم؟",
+    "difficulty": "hard",
+    "categories": ["Clubs", "General"],
+    "options": ["Camp Nou", "Wembley", "Rungrado May Day Stadium", "Estadio Azteca"],
+    "optionsAr": ["كامب نو", "ويمبلي", "رونغرادو", "أزتيكا"],
+    "correctAnswer": "Rungrado May Day Stadium"
+  },
+  {
+    "text": "Who is the youngest Ballon d'Or winner?",
+    "textAr": "من هو أصغر فائز بالكرة الذهبية؟",
+    "difficulty": "hard",
+    "categories": ["Players", "Stats"],
+    "options": ["Ronaldo Nazário", "Lionel Messi", "Michael Owen", "Kylian Mbappé"],
+    "optionsAr": ["رونالدو", "ليونيل ميسي", "مايكل أوين", "كيليان مبابي"],
+    "correctAnswer": "Ronaldo Nazário"
+  },
+  {
+    "text": "Which national team is known as 'La Albiceleste'?",
+    "textAr": "أي منتخب وطني يعرف بـ 'الأبيض والأزرق'؟",
+    "difficulty": "medium",
+    "categories": ["General"],
+    "options": ["Argentina", "Uruguay", "Chile", "Paraguay"],
+    "optionsAr": ["الأرجنتين", "أوروغواي", "تشيلي", "باراغواي"],
+    "correctAnswer": "Argentina"
+  },
+  {
+    "text": "What is the diameter of a football goal?",
+    "textAr": "ما قطر مرمى كرة القدم؟",
+    "difficulty": "hard",
+    "categories": ["General", "Rules"],
+    "options": ["7.32 meters wide", "8 meters wide", "6 meters wide", "9 meters wide"],
+    "optionsAr": ["7.32 متر", "8 متر", "6 متر", "9 متر"],
+    "correctAnswer": "7.32 meters wide"
+  },
+  {
+    "text": "Who won the FIFA Best Men's Player award in 2023?",
+    "textAr": "من فاز بجائزة أفضل لاعب من الفيفا 2023؟",
+    "difficulty": "easy",
+    "categories": ["Players"],
+    "options": ["Lionel Messi", "Erling Haaland", "Kylian Mbappé", "Karim Benzema"],
+    "optionsAr": ["ليونيل ميسي", "إيرلينغ هالاند", "كيليان مبابي", "كريم بنزيمة"],
+    "correctAnswer": "Lionel Messi"
+  },
+  {
+    "text": "Which club is known as 'The Black and Yellows'?",
+    "textAr": "أي نادي يعرف بـ 'الأسود والأصفر'؟",
+    "difficulty": "medium",
+    "categories": ["Bundesliga", "Clubs"],
+    "options": ["Borussia Dortmund", "Dynamo Dresden", "Young Boys", "Aachen"],
+    "optionsAr": ["بوروسيا دورتموند", "دينامو دريسدن", "يونغ بويز", "آخن"],
+    "correctAnswer": "Borussia Dortmund"
+  },
+  {
+    "text": "What is a 'nutmeg' in football?",
+    "textAr": "ما هي 'النتميج' في كرة القدم؟",
+    "difficulty": "easy",
+    "categories": ["General"],
+    "options": ["Kicking the ball between opponent's legs", "Scoring from outside the box", "Header goal", "Bicycle kick"],
+    "optionsAr": ["تمرير الكرة بين رجلي الخصم", "التسجيل من خارج المنطقة", "هدف بالرأس", "ركلة مقصية"],
+    "correctAnswer": "Kicking the ball between opponent's legs"
+  },
+  {
+    "text": "How many teams participate in the FIFA World Cup finals?",
+    "textAr": "كم عدد الفرق المشاركة في نهائيات كأس العالم؟",
+    "difficulty": "easy",
+    "categories": ["World Cup", "General"],
+    "options": ["24", "32", "48", "64"],
+    "optionsAr": ["24", "32", "48", "64"],
+    "correctAnswer": "32"
+  },
+  {
+    "text": "Which player is the fastest to score 100 Premier League goals?",
+    "textAr": "أي لاعب سجل 100 هدف في الدوري الإنجليزي بأسرع وقت؟",
+    "difficulty": "hard",
+    "categories": ["Premier League", "Stats", "Players"],
+    "options": ["Alan Shearer", "Sergio Agüero", "Erling Haaland", "Harry Kane"],
+    "optionsAr": ["آلان شيرر", "سيرخيو أغويرو", "إيرلينغ هالاند", "هاري كين"],
+    "correctAnswer": "Erling Haaland"
+  },
+  {
+    "text": "What is the record transfer fee in football history?",
+    "textAr": "ما هو الرقم القياسي لرسوم الانتقال في تاريخ كرة القدم؟",
+    "difficulty": "hard",
+    "categories": ["General", "Stats"],
+    "options": ["€222 million (Neymar)", "€180 million (Mbappé)", "€160 million (Coutinho)", "€135 million (Pogba)"],
+    "optionsAr": ["222 مليون يورو (نيمار)", "180 مليون يورو (مبابي)", "160 مليون يورو (كوتينيو)", "135 مليون يورو (بوغبا)"],
+    "correctAnswer": "€222 million (Neymar)"
+  },
+  {
+    "text": "Which team is known as 'The Citizens'?",
+    "textAr": "أي فريق يعرف بـ 'المواطنون'؟",
+    "difficulty": "easy",
+    "categories": ["Premier League", "Clubs"],
+    "options": ["Manchester City", "Leicester City", "Bristol City", "Cardiff City"],
+    "optionsAr": ["مانشستر سيتي", "ليستر سيتي", "بريستول سيتي", "كارديف سيتي"],
+    "correctAnswer": "Manchester City"
+  },
+  {
+    "text": "Who scored the 'Goal of the Century' in 1986?",
+    "textAr": "من سجل 'هدف القرن' في 1986؟",
+    "type": "multipleChoice",
+    "difficulty": "medium",
+    "categories": ["Players", "World Cup", "History"],
+    "options": ["Diego Maradona", "Pelé", "Zinedine Zidane", "Johan Cruyff"],
+    "optionsAr": ["دييغو مارادونا", "بيليه", "زين الدين زيدان", "يوهان كرويف"],
+    "correctAnswer": "Diego Maradona"
+  },
+  {
+    "text": "True or False: Cristiano Ronaldo has scored over 800 career goals",
+    "textAr": "صح أم خطأ: سجل كريستيانو رونالدو أكثر من 800 هدف في مسيرته",
+    "type": "trueFalse",
+    "difficulty": "easy",
+    "categories": ["Players", "Stats"],
+    "options": ["True", "False"],
+    "optionsAr": ["صحيح", "خطأ"],
+    "correctAnswer": "True"
+  },
+  {
+    "text": "True or False: A football match can end in a tie in knockout stages",
+    "textAr": "صح أم خطأ: يمكن أن تنتهي مباراة كرة القدم بالتعادل في مراحل خروج المغلوب",
+    "type": "trueFalse",
+    "difficulty": "medium",
+    "categories": ["Rules"],
+    "options": ["True", "False"],
+    "optionsAr": ["صحيح", "خطأ"],
+    "correctAnswer": "False"
+  },
+  {
+    "text": "Identify this famous football stadium",
+    "textAr": "حدد هذا الملعب الشهير",
+    "type": "imageBased",
+    "difficulty": "medium",
+    "categories": ["Clubs"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Camp_Nou_-_April_2017.jpg/300px-Camp_Nou_-_April_2017.jpg",
+    "options": ["Camp Nou", "Santiago Bernabéu", "Old Trafford", "Anfield"],
+    "optionsAr": ["كامب نو", "سانتياغو برنابيو", "أولد ترافورد", "أنفيلد"],
+    "correctAnswer": "Camp Nou"
+  },
+  {
+    "text": "True or False: The World Cup is held every 2 years",
+    "textAr": "صح أم خطأ: تقام كأس العالم كل سنتين",
+    "type": "trueFalse",
+    "difficulty": "easy",
+    "categories": ["World Cup"],
+    "options": ["True", "False"],
+    "optionsAr": ["صحيح", "خطأ"],
+    "correctAnswer": "False"
+  },
+  {
+    "text": "Which club's logo is this?",
+    "textAr": "شعار أي نادي هذا؟",
+    "type": "imageBased",
+    "difficulty": "easy",
+    "categories": ["Clubs"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/100px-Liverpool_FC.svg.png",
+    "options": ["Liverpool", "Manchester United", "Arsenal", "Chelsea"],
+    "optionsAr": ["ليفربول", "مانشستر يونايتد", "أرسنال", "تشيلسي"],
+    "correctAnswer": "Liverpool"
+  },
+  {
+    "text": "Identify this player from the image",
+    "textAr": "حدد هذا اللاعب من الصورة",
+    "type": "imageBased",
+    "difficulty": "easy",
+    "categories": ["Players"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cristiano_Ronaldo_2018.jpg/220px-Cristiano_Ronaldo_2018.jpg",
+    "options": ["Cristiano Ronaldo", "Lionel Messi", "Neymar", "Gareth Bale"],
+    "optionsAr": ["كريستيانو رونالدو", "ليونيل ميسي", "نيمار", "غاريث بيل"],
+    "correctAnswer": "Cristiano Ronaldo"
+  },
+  {
+    "text": "Which famous stadium is shown?",
+    "textAr": "أي ملعب شهير معروض؟",
+    "type": "imageBased",
+    "difficulty": "medium",
+    "categories": ["Clubs"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Aerial_view_of_Wembley_Stadium.jpg/300px-Aerial_view_of_Wembley_Stadium.jpg",
+    "options": ["Wembley Stadium", "Old Trafford", "Emirates Stadium", "Stamford Bridge"],
+    "optionsAr": ["ويمبلي", "أولد ترافورد", "الإمارات", "ستامفورد بريدج"],
+    "correctAnswer": "Wembley Stadium"
+  },
+  {
+    "text": "Which club's emblem is this?",
+    "textAr": "شعار أي نادي هذا؟",
+    "type": "imageBased",
+    "difficulty": "easy",
+    "categories": ["Clubs"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/150px-Manchester_City_FC_badge.svg.png",
+    "options": ["Manchester City", "Manchester United", "Chelsea", "Arsenal"],
+    "optionsAr": ["مانشستر سيتي", "مانشستر يونايتد", "تشيلسي", "أرسنال"],
+    "correctAnswer": "Manchester City"
+  },
+  {
+    "text": "Identify this legendary player",
+    "textAr": "حدد هذا اللاعب الأسطوري",
+    "type": "imageBased",
+    "difficulty": "medium",
+    "categories": ["Players"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Pele_by_Eric_Koch_1971.jpg/220px-Pele_by_Eric_Koch_1971.jpg",
+    "options": ["Pelé", "Diego Maradona", "Johan Cruyff", "Franz Beckenbauer"],
+    "optionsAr": ["بيليه", "دييغو مارادونا", "يوهان كرويف", "فرانز بيكنباور"],
+    "correctAnswer": "Pelé"
+  },
+  {
+    "text": "Which national team badge is this?",
+    "textAr": "شعار أي منتخب وطني هذا؟",
+    "type": "imageBased",
+    "difficulty": "easy",
+    "categories": ["World Cup"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Brazil_national_football_team_logo.svg/150px-Brazil_national_football_team_logo.svg.png",
+    "options": ["Brazil", "Argentina", "Germany", "Portugal"],
+    "optionsAr": ["البرازيل", "الأرجنتين", "ألمانيا", "البرتغال"],
+    "correctAnswer": "Brazil"
+  },
+  {
+    "text": "Which club logo is shown?",
+    "textAr": "أي شعار نادي معروض؟",
+    "type": "imageBased",
+    "difficulty": "easy",
+    "categories": ["Clubs", "La Liga"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/150px-FC_Barcelona_%28crest%29.svg.png",
+    "options": ["Barcelona", "Real Madrid", "Atlético Madrid", "Valencia"],
+    "optionsAr": ["برشلونة", "ريال مدريد", "أتلتيكو مدريد", "فالنسيا"],
+    "correctAnswer": "Barcelona"
+  },
+  {
+    "text": "Identify this player from the image",
+    "textAr": "حدد هذا اللاعب من الصورة",
+    "type": "imageBased",
+    "difficulty": "easy",
+    "categories": ["Players"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cristiano_Ronaldo_2018.jpg/220px-Cristiano_Ronaldo_2018.jpg",
+    "options": ["Cristiano Ronaldo", "Lionel Messi", "Neymar", "Gareth Bale"],
+    "optionsAr": ["كريستيانو رونالدو", "ليونيل ميسي", "نيمار", "غاريث بيل"],
+    "correctAnswer": "Cristiano Ronaldo"
+  },
+  {
+    "text": "Which famous stadium is shown in this image?",
+    "textAr": "أي ملعب شهير يظهر في هذه الصورة؟",
+    "type": "imageBased",
+    "difficulty": "medium",
+    "categories": ["Clubs"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Aerial_view_of_Wembley_Stadium.jpg/300px-Aerial_view_of_Wembley_Stadium.jpg",
+    "options": ["Wembley Stadium", "Old Trafford", "Emirates Stadium", "Stamford Bridge"],
+    "optionsAr": ["ويمبلي", "أولد ترافورد", "الإمارات", "ستامفورد بريدج"],
+    "correctAnswer": "Wembley Stadium"
+  },
+  {
+    "text": "Which club plays at this iconic stadium?",
+    "textAr": "أي نادي يلعب في هذا الملعب الشهير؟",
+    "type": "imageBased",
+    "difficulty": "easy",
+    "categories": ["Clubs", "La Liga"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/RealMadridStadium.jpg/300px-RealMadridStadium.jpg",
+    "options": ["Real Madrid", "Barcelona", "Atlético Madrid", "Valencia"],
+    "optionsAr": ["ريال مدريد", "برشلونة", "أتلتيكو مدريد", "فالنسيا"],
+    "correctAnswer": "Real Madrid"
+  },
+  {
+    "text": "Identify this football legend",
+    "textAr": "حدد أسطورة كرة القدم هذه",
+    "type": "imageBased",
+    "difficulty": "medium",
+    "categories": ["Players", "History"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Pele_by_Eric_Koch_1971.jpg/220px-Pele_by_Eric_Koch_1971.jpg",
+    "options": ["Pelé", "Diego Maradona", "Johan Cruyff", "Franz Beckenbauer"],
+    "optionsAr": ["بيليه", "دييغو مارادونا", "يوهان كرويف", "فرانز بيكنباور"],
+    "correctAnswer": "Pelé"
+  },
+  {
+    "text": "Which national team jersey is this?",
+    "textAr": "قميص أي منتخب وطني هذا؟",
+    "type": "imageBased",
+    "difficulty": "easy",
+    "categories": ["World Cup"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Brazil_national_football_team_logo.svg/150px-Brazil_national_football_team_logo.svg.png",
+    "options": ["Brazil", "Argentina", "Germany", "Portugal"],
+    "optionsAr": ["البرازيل", "الأرجنتين", "ألمانيا", "البرتغال"],
+    "correctAnswer": "Brazil"
+  },
+  {
+    "text": "Which club's logo is shown?",
+    "textAr": "شعار أي نادي معروض؟",
+    "type": "imageBased",
+    "difficulty": "easy",
+    "categories": ["Clubs"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/150px-Manchester_City_FC_badge.svg.png",
+    "options": ["Manchester City", "Manchester United", "Chelsea", "Arsenal"],
+    "optionsAr": ["مانشستر سيتي", "مانشستر يونايتد", "تشيلسي", "أرسنال"],
+    "correctAnswer": "Manchester City"
+  },
+  {
+    "text": "Identify this iconic player from the image",
+    "textAr": "حدد هذا اللاعب الشهير",
+    "type": "imageBased",
+    "difficulty": "medium",
+    "categories": ["Players"],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Neymar_Jr._2018.jpg/220px-Neymar_Jr._2018.jpg",
+    "options": ["Neymar", "Kylian Mbappé", "Vinicius Jr", "Rodrygo"],
+    "optionsAr": ["نيمار", "كيليان مبابي", "فينيسيوس جونيور", "رودريغو"],
+    "correctAnswer": "Neymar"
+  }
+]
+
