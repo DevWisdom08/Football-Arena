@@ -1,0 +1,32 @@
+@"
+NODE_ENV=development
+PORT=3000
+APP_URL=http://localhost:3000
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=football_admin
+DB_PASSWORD=football123
+DB_NAME=football_arena
+
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production-min-32-chars
+JWT_EXPIRATION=7d
+
+WS_PORT=3001
+
+DEFAULT_PAGE_SIZE=20
+MAX_PAGE_SIZE=100
+
+SOLO_MODE_QUESTIONS=10
+CHALLENGE_1V1_QUESTIONS=10
+TEAM_MATCH_QUESTIONS=10
+DAILY_QUIZ_QUESTIONS=15
+QUESTION_TIME_LIMIT=10
+
+BASE_POINTS_PER_CORRECT=100
+MAX_TIME_BONUS=50
+XP_DIVISOR=20
+COINS_PER_TWO_CORRECT=1
+"@ | Out-File -FilePath ".env" -Encoding utf8
+Write-Host ".env file created successfully!"
+

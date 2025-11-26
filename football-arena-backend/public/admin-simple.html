@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Arena Admin - Quick</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0A0E27;
+            color: #fff;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #FFD700; margin-bottom: 20px; }
+        .card {
+            background: #1A1F3A;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #0A0E27;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn-danger { background: #E53935; color: white; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background: #252B48; padding: 12px; text-align: left; color: #FFD700; }
+        td { padding: 12px; border-bottom: 1px solid #252B48; }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            background: #252B48;
+            border: 1px solid #2A3F5F;
+            border-radius: 6px;
+            color: #fff;
+            margin: 8px 0;
+        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #B0B8C1; font-weight: 600; }
+        .loading { text-align: center; padding: 40px; color: #888; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: linear-gradient(135deg, #1A1F3A, #252B48); padding: 20px; border-radius: 12px; text-align: center; }
+        .stat-value { font-size: 36px; font-weight: 900; color: #FFD700; }
+        .stat-label { color: #B0B8C1; margin-top: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚽ Football Arena Admin</h1>
+        
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalUsers">-</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalQuestions">-</div>
+                <div class="stat-label">Questions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeQuestions">-</div>
+                <div class="stat-label">Active</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="guestUsers">-</div>
+                <div class="stat-label">Guests</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <h2>⚡ Quick Actions</h2>
+            <button class="btn" onclick="seedQuestions()">🌱 Seed 5 Questions</button>
+            <button class="btn" onclick="loadUsers()">👥 Load Users</button>
+            <button class="btn" onclick="loadQuestions()">❓ Load Questions</button>
+            <button class="btn" onclick="showAddForm()">➕ Add Question</button>
+        </div>
+
+        <!-- Add Question Form -->
+        <div class="card" id="addForm" style="display: none;">
+            <h2>Add New Question</h2>
+            <div class="form-group">
+                <label>Question Text *</label>
+                <textarea id="qText" rows="2" placeholder="Who won the 2018 World Cup?"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Options (comma separated) *</label>
+                <input type="text" id="qOptions" placeholder="France, Croatia, Belgium, England">
+            </div>
+            <div class="form-group">
+                <label>Correct Answer *</label>
+                <input type="text" id="qAnswer" placeholder="France">
+            </div>
+            <div class="form-group">
+                <label>Difficulty *</label>
+                <select id="qDifficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Categories (comma separated)</label>
+                <input type="text" id="qCategories" placeholder="World Cup, General">
+            </div>
+            <button class="btn" onclick="createQuestion()">✅ Create</button>
+            <button class="btn-danger btn" onclick="hideAddForm()">Cancel</button>
+        </div>
+
+        <!-- Data Display -->
+        <div class="card">
+            <h2>📊 Data</h2>
+            <div id="dataDisplay" class="loading">Click a button to load data...</div>
+        </div>
+    </div>
+
+    <script>
+        const API = 'http://localhost:3000';
+
+        // Load stats on page load
+        async function loadStats() {
+            try {
+                const res = await fetch(`${API}/admin/users`);
+                const users = await res.json();
+                document.getElementById('totalUsers').textContent = users.data?.length || 0;
+                document.getElementById('guestUsers').textContent = users.data?.filter(u => u.isGuest).length || 0;
+
+                const qRes = await fetch(`${API}/questions`);
+                const questions = await qRes.json();
+                document.getElementById('totalQuestions').textContent = questions.length || 0;
+                document.getElementById('activeQuestions').textContent = questions.filter(q => q.isActive).length || 0;
+            } catch (e) {
+                console.error('Stats error:', e);
+            }
+        }
+
+        async function seedQuestions() {
+            try {
+                document.getElementById('dataDisplay').innerHTML = '<div class="loading">Seeding questions...</div>';
+                const res = await fetch(`${API}/questions/seed`, { method: 'POST' });
+                const data = await res.json();
+                alert(`✅ ${data.message}`);
+                loadStats();
+                document.getElementById('dataDisplay').innerHTML = `<p style="color:#4CAF50">✅ ${data.message}</p>`;
+            } catch (e) {
+                alert('❌ Error: ' + e.message);
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                document.getElementById('dataDisplay').innerHTML = '<div class="loading">Loading...</div>';
+                const res = await fetch(`${API}/admin/users`);
+                const data = await res.json();
+                
+                let html = '<table><thead><tr><th>Username</th><th>Email</th><th>Level</th><th>XP</th><th>Coins</th><th>Type</th></tr></thead><tbody>';
+                data.data.forEach(u => {
+                    html += `<tr>
+                        <td><strong>${u.username}</strong></td>
+                        <td>${u.email}</td>
+                        <td>${u.level}</td>
+                        <td>${u.xp}</td>
+                        <td>${u.coins}</td>
+                        <td>${u.isGuest ? '🎮 Guest' : u.isVip ? '⭐ VIP' : 'User'}</td>
+                    </tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('dataDisplay').innerHTML = html;
+            } catch (e) {
+                document.getElementById('dataDisplay').innerHTML = `<p style="color:#E53935">❌ Error: ${e.message}<br>Make sure backend is running!</p>`;
+            }
+        }
+
+        async function loadQuestions() {
+            try {
+                document.getElementById('dataDisplay').innerHTML = '<div class="loading">Loading...</div>';
+                const res = await fetch(`${API}/questions`);
+                const questions = await res.json();
+                
+                let html = '<table><thead><tr><th>Question</th><th>Difficulty</th><th>Correct Answer</th><th>Actions</th></tr></thead><tbody>';
+                questions.forEach(q => {
+                    html += `<tr>
+                        <td style="max-width:400px">${q.text}</td>
+                        <td><span style="padding:4px 8px;background:#4CAF50;border-radius:8px;font-size:11px">${q.difficulty.toUpperCase()}</span></td>
+                        <td><strong>${q.correctAnswer}</strong></td>
+                        <td><button class="btn-danger btn" onclick="deleteQuestion('${q.id}')">Delete</button></td>
+                    </tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('dataDisplay').innerHTML = html;
+            } catch (e) {
+                document.getElementById('dataDisplay').innerHTML = `<p style="color:#E53935">❌ Error: ${e.message}</p>`;
+            }
+        }
+
+        async function deleteQuestion(id) {
+            if (!confirm('Delete this question?')) return;
+            try {
+                await fetch(`${API}/admin/questions/${id}`, { method: 'DELETE' });
+                alert('✅ Question deleted!');
+                loadQuestions();
+                loadStats();
+            } catch (e) {
+                alert('❌ Error: ' + e.message);
+            }
+        }
+
+        function showAddForm() {
+            document.getElementById('addForm').style.display = 'block';
+        }
+
+        function hideAddForm() {
+            document.getElementById('addForm').style.display = 'none';
+        }
+
+        async function createQuestion() {
+            const text = document.getElementById('qText').value;
+            const optionsText = document.getElementById('qOptions').value;
+            const answer = document.getElementById('qAnswer').value;
+            const difficulty = document.getElementById('qDifficulty').value;
+            const categoriesText = document.getElementById('qCategories').value;
+
+            if (!text || !optionsText || !answer) {
+                alert('❌ Please fill required fields!');
+                return;
+            }
+
+            const options = optionsText.split(',').map(o => o.trim());
+            const categories = categoriesText ? categoriesText.split(',').map(c => c.trim()) : ['General'];
+
+            try {
+                await fetch(`${API}/admin/questions`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text,
+                        options,
+                        correctAnswer: answer,
+                        difficulty,
+                        categories,
+                        type: 'multipleChoice',
+                        isActive: true,
+                    }),
+                });
+                alert('✅ Question created!');
+                hideAddForm();
+                loadQuestions();
+                loadStats();
+                // Clear form
+                document.getElementById('qText').value = '';
+                document.getElementById('qOptions').value = '';
+                document.getElementById('qAnswer').value = '';
+                document.getElementById('qCategories').value = '';
+            } catch (e) {
+                alert('❌ Error: ' + e.message);
+            }
+        }
+
+        // Load stats on page load
+        window.onload = () => {
+            loadStats();
+            console.log('✅ Admin dashboard loaded');
+            console.log('📡 API URL:', API);
+        };
+    </script>
+</body>
+</html>
+
