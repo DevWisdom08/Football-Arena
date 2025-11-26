@@ -1,0 +1,489 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/network/store_api_service.dart';
+import '../../../core/services/storage_service.dart';
+import '../../../core/extensions/localization_extensions.dart';
+import '../../../shared/widgets/custom_card.dart';
+import '../../../shared/widgets/top_notification.dart';
+
+class StoreScreen extends ConsumerStatefulWidget {
+  const StoreScreen({super.key});
+
+  @override
+  ConsumerState<StoreScreen> createState() => _StoreScreenState();
+}
+
+class _StoreScreenState extends ConsumerState<StoreScreen> {
+  int userCoins = 0;
+  String? userId;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final userData = StorageService.instance.getUserData();
+    if (userData != null) {
+      setState(() {
+        userId = userData['id'];
+        userCoins = (userData['coins'] ?? 0) as int;
+      });
+    }
+  }
+
+  Future<void> _purchaseItem({
+    required String itemType,
+    required String itemId,
+    required String paymentMethod,
+    String? transactionId,
+  }) async {
+    if (userId == null) {
+      TopNotification.show(
+        context,
+        message: context.l10n.pleaseLoginToPurchase,
+        type: NotificationType.error,
+      );
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      final storeService = ref.read(storeApiServiceProvider);
+      final result = await storeService.purchaseItem(
+        userId: userId!,
+        itemType: itemType,
+        itemId: itemId,
+        paymentMethod: paymentMethod,
+        transactionId: transactionId,
+      );
+
+      if (result['success'] == true) {
+        TopNotification.show(
+          context,
+          message: result['message'] ?? context.l10n.purchaseSuccessful,
+          type: NotificationType.success,
+        );
+
+        // Refresh user data
+        await _loadUserData();
+
+        // Update coins if returned
+        if (result['newBalance'] != null) {
+          setState(() {
+            userCoins = result['newBalance'] as int;
+          });
+        }
+      }
+    } catch (e) {
+      TopNotification.show(
+        context,
+        message: e.toString().replaceAll('Exception: ', ''),
+        type: NotificationType.error,
+      );
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: const AssetImage('assets/images/background1.png'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.3),
+              BlendMode.darken,
+            ),
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // App bar
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => context.pop(),
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    ),
+                    Text(
+                      context.l10n.store,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.heading,
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: AppColors.coinsGradient,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/icons/coin_icon.png',
+                            width: 20,
+                            height: 20,
+                            errorBuilder: (c, e, s) => const Icon(
+                              Icons.monetization_on,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '$userCoins',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        context.l10n.coinPacks,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.heading,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Coin packs
+                      _StoreItem(
+                        title: context.l10n.smallPack,
+                        subtitle: context.l10n.coins(500),
+                        price: '\$0.99',
+                        iconAsset: 'assets/icons/coin_icon.png',
+                        gradient: AppColors.coinsGradient,
+                        isLoading: isLoading,
+                        onPurchase: () => _purchaseItem(
+                          itemType: 'coin_pack',
+                          itemId: 'small',
+                          paymentMethod: 'iap',
+                          transactionId:
+                              'mock_transaction_${DateTime.now().millisecondsSinceEpoch}',
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _StoreItem(
+                        title: context.l10n.mediumPack,
+                        subtitle: context.l10n.coins(1500),
+                        price: '\$2.99',
+                        iconAsset: 'assets/icons/coins_dumb.png',
+                        gradient: AppColors.coinsGradient,
+                        badge: context.l10n.bonus20Percent,
+                        isLoading: isLoading,
+                        onPurchase: () => _purchaseItem(
+                          itemType: 'coin_pack',
+                          itemId: 'medium',
+                          paymentMethod: 'iap',
+                          transactionId:
+                              'mock_transaction_${DateTime.now().millisecondsSinceEpoch}',
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _StoreItem(
+                        title: context.l10n.largePack,
+                        subtitle: context.l10n.coins(5000),
+                        price: '\$7.99',
+                        iconAsset: 'assets/icons/coins_mass.png',
+                        gradient: AppColors.coinsGradient,
+                        badge: context.l10n.bestValue,
+                        isLoading: isLoading,
+                        onPurchase: () => _purchaseItem(
+                          itemType: 'coin_pack',
+                          itemId: 'large',
+                          paymentMethod: 'iap',
+                          transactionId:
+                              'mock_transaction_${DateTime.now().millisecondsSinceEpoch}',
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+
+                      Text(
+                        context.l10n.vipMembership,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.heading,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      _StoreItem(
+                        title: context.l10n.vipMonthly,
+                        subtitle: context.l10n.noAds,
+                        price: '\$4.99/mo',
+                        iconAsset: 'assets/icons/vip.png',
+                        gradient: AppColors.primaryGradient,
+                        isLoading: isLoading,
+                        onPurchase: () => _purchaseItem(
+                          itemType: 'vip_subscription',
+                          itemId: 'monthly',
+                          paymentMethod: 'subscription',
+                          transactionId:
+                              'mock_transaction_${DateTime.now().millisecondsSinceEpoch}',
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+
+                      Text(
+                        context.l10n.boosts,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.heading,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      _StoreItem(
+                        title: context.l10n.extraTimeBoost,
+                        subtitle: context.l10n.plus5Seconds,
+                        price: '50',
+                        icon: Icons.timer,
+                        gradient: AppColors.challenge1v1Gradient,
+                        isCoinPrice: true,
+                        isLoading: isLoading,
+                        onPurchase: () => _purchaseItem(
+                          itemType: 'boost',
+                          itemId: 'extra_time',
+                          paymentMethod: 'coins',
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _StoreItem(
+                        title: context.l10n.skipQuestion,
+                        subtitle: context.l10n.skipAnyQuestion,
+                        price: '30',
+                        icon: Icons.skip_next,
+                        gradient: AppColors.teamMatchGradient,
+                        isCoinPrice: true,
+                        isLoading: isLoading,
+                        onPurchase: () => _purchaseItem(
+                          itemType: 'boost',
+                          itemId: 'skip',
+                          paymentMethod: 'coins',
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _StoreItem(
+                        title: context.l10n.revealWrongOption,
+                        subtitle: context.l10n.revealOneWrong,
+                        price: '40',
+                        icon: Icons.visibility,
+                        gradient: AppColors.dailyQuizGradient,
+                        isCoinPrice: true,
+                        isLoading: isLoading,
+                        onPurchase: () => _purchaseItem(
+                          itemType: 'boost',
+                          itemId: 'reveal_wrong',
+                          paymentMethod: 'coins',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StoreItem extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String price;
+  final IconData? icon;
+  final String? iconAsset;
+  final Gradient gradient;
+  final String? badge;
+  final bool isLoading;
+  final VoidCallback? onPurchase;
+  final bool isCoinPrice;
+
+  const _StoreItem({
+    required this.title,
+    required this.subtitle,
+    required this.price,
+    this.icon,
+    this.iconAsset,
+    required this.gradient,
+    this.badge,
+    this.isLoading = false,
+    this.onPurchase,
+    this.isCoinPrice = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomCard(
+      backgroundColor: AppColors.cardBackground,
+      onTap: isLoading ? null : onPurchase,
+      child: Row(
+        children: [
+          // Icon container - no background for coin images
+          iconAsset != null
+              ? SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: Image.asset(
+                    iconAsset!,
+                    fit: BoxFit.contain,
+                    errorBuilder: (c, e, s) => Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        gradient: gradient,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Icon(
+                        icon ?? Icons.monetization_on,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    gradient: gradient,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    icon ?? Icons.monetization_on,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    if (badge != null) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.success,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          badge!,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              gradient: gradient,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: isCoinPrice
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/icons/coin_icon.png',
+                        width: 16,
+                        height: 16,
+                        errorBuilder: (c, e, s) => const Icon(
+                          Icons.monetization_on,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        price,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  )
+                : Text(
+                    price,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}

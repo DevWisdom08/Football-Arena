@@ -1,0 +1,401 @@
+{
+  "@@locale": "ar",
+  "appTitle": "ساحة كرة القدم",
+  
+  "login": "تسجيل الدخول",
+  "register": "التسجيل",
+  "signUp": "إنشاء حساب",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "username": "اسم المستخدم",
+  "country": "الدولة",
+  "continueAsGuest": "المتابعة كضيف",
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "alreadyHaveAccount": "لديك حساب بالفعل؟",
+  "dontHaveAccount": "ليس لديك حساب؟",
+  "signIn": "تسجيل الدخول",
+  
+  "home": "الرئيسية",
+  "leaderboard": "لوحة المتصدرين",
+  "profile": "الملف الشخصي",
+  "store": "المتجر",
+  "settings": "الإعدادات",
+  "friends": "الأصدقاء",
+  "history": "السجل",
+  
+  "soloMode": "الوضع الفردي",
+  "challenge1v1": "تحدي 1 ضد 1",
+  "teamMatch": "مباراة الفريق",
+  "dailyQuiz": "اختبار يومي",
+  "play": "العب",
+  
+  "roomName": "اسم الغرفة",
+  "roomNameOptional": "اسم الغرفة (اختياري)",
+  "roomNameHint": "أدخل اسماً لغرفتك",
+  "numberOfRounds": "عدد الجولات",
+  "roundsHint": "عدد الأسئلة (5-30)",
+  "roundsMin": "الحد الأدنى 5 جولات",
+  "roundsMax": "الحد الأقصى 30 جولة",
+  "roundsInvalid": "يرجى إدخال رقم صحيح بين 5 و 30",
+  
+  "shuffleTeams": "خلط الفرق",
+  "teamsShuffled": "تم خلط الفرق!",
+  "shufflingTeams": "جاري خلط الفرق...",
+  "onlyHostCanShuffle": "فقط المضيف يمكنه خلط الفرق",
+  "cannotShuffleAfterStart": "لا يمكن خلط الفرق بعد بدء اللعبة",
+  "needTwoPlayersToShuffle": "يحتاج إلى لاعبين على الأقل لخلط الفرق",
+  
+  "protectYourStreak": "احمِ سلسلتك",
+  "currentStreak": "السلسلة الحالية: {streak} أيام",
+  "@currentStreak": {
+    "placeholders": {
+      "streak": {
+        "type": "int"
+      }
+    }
+  },
+  "streakProtectionDescription": "سلسلتك على وشك الانقطاع! احمها باستخدام العملات أو عضوية VIP.",
+  "protectWithVip": "احمِ بـ VIP (مجاني)",
+  "protectWithCoins": "احمِ بـ {coins} عملة",
+  "@protectWithCoins": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
+  "notEnoughCoinsForProtection": "تحتاج إلى 100 عملة لحماية سلسلتك",
+  "noThanks": "لا شكراً",
+  "streakProtected": "تم حماية السلسلة! {streak} أيام",
+  "@streakProtected": {
+    "placeholders": {
+      "streak": {
+        "type": "int"
+      }
+    }
+  },
+  "streakBroken": "انقطعت السلسلة",
+  "dayStreak": "يوم متتالي!",
+  "streakProtectedMessage": "تم حماية سلسلتك!",
+  "streakBrokenMessage": "انقطعت سلسلتك",
+  "keepPlayingDaily": "استمر في اللعب يومياً!",
+  "protectStreakNow": "احمِ سلسلتك الآن!",
+  "protectStreakDescription": "لا تفقد تقدمك! استخدم العملات أو VIP لحماية سلسلتك.",
+  "protectMyStreak": "احمِ سلسلتي",
+  "pleaseLoginToProtectStreak": "يرجى تسجيل الدخول لحماية سلسلتك",
+  "streakProtectedSuccessfully": "تم حماية السلسلة بنجاح!",
+  "startQuiz": "بدء الاختبار",
+  "startGame": "بدء اللعبة",
+  "playAgain": "العب مرة أخرى",
+  "backHome": "العودة للرئيسية",
+  "shareScore": "مشاركة النتيجة",
+  
+  "difficulty": "الصعوبة",
+  "category": "الفئة",
+  "selectDifficulty": "اختر الصعوبة",
+  "selectCategory": "اختر الفئة (اختياري)",
+  "easy": "سهل",
+  "medium": "متوسط",
+  "hard": "صعب",
+  "general": "عام",
+  "worldCup": "كأس العالم",
+  "clubs": "الأندية",
+  "players": "اللاعبون",
+  "difficultyDescription": "اختر مستوى التحدي",
+  "categoryDescription": "اختر موضوعاً محدداً أو اتركه فارغاً للأسئلة المختلطة",
+  "anyDifficulty": "أي صعوبة",
+  "anyCategory": "أي فئة",
+  
+  "welcomeBack": "مرحباً بعودتك",
+  "level": "المستوى",
+  "xp": "النقاط",
+  "coins": "العملات",
+  "streak": "السلسلة",
+  "dayStreak": "سلسلة {count} يوم",
+  "@dayStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "question": "السؤال",
+  "questionNumber": "السؤال {current} من {total}",
+  "@questionNumber": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "timeRemaining": "{seconds}ث",
+  "@timeRemaining": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "correct": "صحيح",
+  "wrong": "خطأ",
+  "trueText": "صحيح",
+  "@trueText": {
+    "description": "خيار صحيح لأسئلة صح/خطأ"
+  },
+  "falseText": "خطأ",
+  "@falseText": {
+    "description": "خيار خطأ لأسئلة صح/خطأ"
+  },
+  "selectAnswer": "اختر الإجابة",
+  "timeUp": "انتهى الوقت!",
+  "nextQuestion": "السؤال التالي",
+  "skip": "تخطي",
+  "revealWrong": "كشف خاطئ",
+  "extraTime": "وقت إضافي",
+  
+  "results": "النتائج",
+  "score": "النتيجة",
+  "correctAnswers": "الإجابات الصحيحة",
+  "incorrectAnswers": "الإجابات الخاطئة",
+  "accuracy": "الدقة",
+  "xpGained": "النقاط المكتسبة",
+  "coinsEarned": "العملات المكتسبة",
+  "timeBonus": "مكافأة الوقت",
+  "totalScore": "النتيجة الإجمالية",
+  "wellDone": "أحسنت!",
+  "greatJob": "عمل رائع!",
+  "excellent": "ممتاز!",
+  "tryAgain": "حاول مرة أخرى",
+  
+  "matchmaking": "البحث عن خصم",
+  "findingOpponent": "جاري البحث عن خصم...",
+  "opponentFound": "تم العثور على خصم!",
+  "waitingForOpponent": "في انتظار الخصم...",
+  "opponent": "الخصم",
+  "you": "أنت",
+  "attack": "هجوم",
+  "counterAttack": "هجوم مضاد",
+  "neutralPlay": "لعب محايد",
+  "addFriend": "إضافة صديق",
+  "shareResult": "مشاركة النتيجة",
+  "region": "المنطقة",
+  "selectRegion": "اختر المنطقة",
+  
+  "teamLobby": "غرفة الفريق",
+  "createTeam": "إنشاء فريق",
+  "joinTeam": "الانضمام لفريق",
+  "teamA": "الفريق أ",
+  "teamB": "الفريق ب",
+  "ready": "جاهز",
+  "notReady": "غير جاهز",
+  "waitingForPlayers": "في انتظار اللاعبين...",
+  "teamFull": "الفريق ممتلئ",
+  "mvp": "أفضل لاعب",
+  
+  "dailyQuizAvailable": "الاختبار اليومي متاح",
+  "dailyQuizCompleted": "تم إكمال الاختبار اليومي",
+  "quizStartsIn": "يبدأ الاختبار في {time}",
+  "@quizStartsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "specialRewards": "مكافآت خاصة",
+  "bonusCoins": "عملات إضافية",
+  "bonusXP": "نقاط إضافية",
+  
+  "global": "العالمي",
+  "friends": "الأصدقاء",
+  "monthly": "الشهري",
+  "allTime": "كل الوقت",
+  "daily": "اليومي",
+  "weekly": "الأسبوعي",
+  "rank": "الترتيب",
+  "noDataAvailable": "لا توجد بيانات متاحة",
+  "noFriendsYet": "لا توجد أصدقاء بعد. أضف أصدقاء لرؤية ترتيبهم!",
+  "usingOfflineData": "استخدام البيانات غير المتصلة. اسحب للتحديث.",
+  
+  "friendsList": "قائمة الأصدقاء",
+  "friendRequests": "طلبات الصداقة",
+  "pendingRequests": "الطلبات المعلقة",
+  "sentRequests": "الطلبات المرسلة",
+  "addFriend": "إضافة صديق",
+  "accept": "قبول",
+  "reject": "رفض",
+  "remove": "إزالة",
+  "searchFriends": "البحث عن أصدقاء",
+  "noFriends": "لا توجد أصدقاء بعد",
+  "noRequests": "لا توجد طلبات معلقة",
+  "addFriendsToChallenge": "أضف أصدقاء لتحديهم!",
+  "noPendingRequests": "لا توجد طلبات معلقة",
+  "removeFriend": "إزالة صديق",
+  "removeFriendConfirmation": "هل أنت متأكد أنك تريد إزالة هذا الصديق؟",
+  "friendRemoved": "تمت إزالة الصديق بنجاح",
+  "enterUsernameOrEmail": "أدخل اسم المستخدم أو البريد الإلكتروني",
+  "sendRequest": "إرسال طلب",
+  "friendRequestSent": "تم إرسال طلب الصداقة بنجاح",
+  "userNotFound": "المستخدم غير موجود",
+  "friendRequestAccepted": "تم قبول طلب الصداقة",
+  "friendRequestRejected": "تم رفض طلب الصداقة",
+  
+  "matchHistory": "سجل المباريات",
+  "recentMatches": "المباريات الأخيرة",
+  "noMatches": "لم يتم لعب أي مباريات بعد",
+  "matchType": "نوع المباراة",
+  "result": "النتيجة",
+  "win": "فوز",
+  "lose": "خسارة",
+  "draw": "تعادل",
+  "playedAt": "تم اللعب في",
+  
+  "editProfile": "تعديل الملف الشخصي",
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "changeAvatar": "تغيير الصورة",
+  "totalGames": "إجمالي المباريات",
+  "soloGames": "مباريات فردية",
+  "challengeGames": "مباريات 1 ضد 1",
+  "teamGames": "مباريات الفريق",
+  "winRate": "معدل الفوز",
+  "accuracyRate": "معدل الدقة",
+  "achievements": "الإنجازات",
+  "badges": "شارات",
+  "vipStatus": "حالة العضوية المميزة",
+  "active": "نشط",
+  "inactive": "غير نشط",
+  "expiresOn": "ينتهي في",
+  
+  "coinPacks": "باقات العملات",
+  "vipMembership": "العضوية المميزة",
+  "boosts": "تعزيزات",
+  "smallPack": "باقة صغيرة",
+  "mediumPack": "باقة متوسطة",
+  "largePack": "باقة كبيرة",
+  "coins": "{count} عملة",
+  "@coins": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vipMonthly": "عضوية شهرية",
+  "vipYearly": "عضوية سنوية",
+  "vipLifetime": "عضوية مدى الحياة",
+  "noAds": "بدون إعلانات + 50% مكافآت إضافية",
+  "purchase": "شراء",
+  "purchased": "تم الشراء",
+  "insufficientCoins": "عملات غير كافية",
+  "purchaseSuccessful": "تم الشراء بنجاح!",
+  "purchaseFailed": "فشل الشراء",
+  
+  "notifications": "الإشعارات",
+  "sound": "الصوت",
+  "vibration": "الاهتزاز",
+  "language": "اللغة",
+  "english": "الإنجليزية",
+  "arabic": "العربية",
+  "selectLanguage": "اختر اللغة",
+  "clearCache": "مسح الذاكرة المؤقتة",
+  "logout": "تسجيل الخروج",
+  "about": "حول",
+  "privacyPolicy": "سياسة الخصوصية",
+  "termsOfService": "شروط الخدمة",
+  "version": "الإصدار",
+  "cacheCleared": "تم مسح الذاكرة المؤقتة بنجاح",
+  
+  "onboarding": "البدء",
+  "skip": "تخطي",
+  "next": "التالي",
+  "getStarted": "ابدأ",
+  "welcome": "مرحباً",
+  "welcomeDescription": "اختبر معرفتك بكرة القدم وتنافس مع اللاعبين حول العالم",
+  
+  "loading": "جاري التحميل...",
+  "error": "خطأ",
+  "success": "نجح",
+  "warning": "تحذير",
+  "info": "معلومات",
+  "ok": "موافق",
+  "yes": "نعم",
+  "no": "لا",
+  "close": "إغلاق",
+  "retry": "إعادة المحاولة",
+  "refresh": "تحديث",
+  
+  "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك.",
+  "connectionTimeout": "انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.",
+  "serverError": "خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً.",
+  "unknownError": "حدث خطأ غير معروف",
+  
+  "pleaseLogin": "يرجى تسجيل الدخول للمتابعة",
+  "pleaseLoginToPurchase": "يرجى تسجيل الدخول لإجراء عمليات الشراء",
+  "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+  "emailAlreadyExists": "البريد الإلكتروني موجود بالفعل",
+  "weakPassword": "كلمة المرور ضعيفة جداً",
+  "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+  "passwordRequired": "كلمة المرور مطلوبة",
+  "upgradeGuestAccount": "ترقية حساب الضيف",
+  "upgradeGuestDescription": "حول حساب الضيف الخاص بك إلى حساب كامل لحفظ تقدمك والوصول إلى جميع الميزات.",
+  "upgradeAccount": "ترقية الحساب",
+  "accountUpgradedSuccessfully": "تمت ترقية الحساب بنجاح!",
+  "optional": "اختياري",
+  "confirmPasswordRequired": "يرجى تأكيد كلمة المرور",
+  
+  "bonus20Percent": "مكافأة 20%",
+  "bestValue": "أفضل قيمة",
+  "skipQuestion": "تخطي السؤال",
+  "revealWrongOption": "كشف خاطئ",
+  "extraTimeBoost": "وقت إضافي",
+  "plus5Seconds": "+5 ثوانٍ لكل سؤال",
+  "skipAnyQuestion": "تخطي أي سؤال",
+  "revealOneWrong": "كشف خيار خاطئ واحد",
+  
+  "gameModes": "أوضاع اللعبة",
+  "xpProgress": "تقدم النقاط",
+  "yourStats": "إحصائياتك",
+  "games": "المباريات",
+  "visitStore": "زيارة المتجر",
+  "boostsAndItems": "التعزيزات والعناصر",
+  "open": "فتح",
+  "playNow": "العب الآن",
+  "quickQuiz": "اختبار سريع",
+  "duelMode": "وضع المبارزة",
+  "upTo10Players": "حتى 10 لاعبين",
+  "twoXRewards": "مكافآت مضاعفة",
+  "twoXXP": "نقاط مضاعفة",
+  "bonusCoinsExclamation": "عملات إضافية!",
+  "or": "أو",
+  "apple": "آبل",
+  "google": "جوجل",
+  "pleaseEnterEmail": "يرجى إدخال بريدك الإلكتروني",
+  "pleaseEnterValidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+  "pleaseEnterPassword": "يرجى إدخال كلمة المرور",
+  "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+  "levelFormat": "المستوى {level} - {country}",
+  "@levelFormat": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "empty": "فارغ",
+  "noQuestions": "لا توجد أسئلة متاحة. يرجى المحاولة مرة أخرى لاحقاً.",
+  "quizCompleted": "تم إكمال الاختبار",
+  "matchEnded": "انتهت المباراة"
+}
+

@@ -1,0 +1,404 @@
+{
+  "@@locale": "en",
+  "appTitle": "Football Arena",
+  "@appTitle": {
+    "description": "The application title"
+  },
+  
+  "login": "Login",
+  "register": "Register",
+  "signUp": "Sign Up",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  "username": "Username",
+  "country": "Country",
+  "continueAsGuest": "Continue as Guest",
+  "forgotPassword": "Forgot Password?",
+  "alreadyHaveAccount": "Already have an account?",
+  "dontHaveAccount": "Don't have an account?",
+  "signIn": "Sign In",
+  
+  "home": "Home",
+  "leaderboard": "Leaderboard",
+  "profile": "Profile",
+  "store": "Store",
+  "settings": "Settings",
+  "friends": "Friends",
+  "history": "History",
+  
+  "soloMode": "Solo Mode",
+  "challenge1v1": "1v1 Challenge",
+  "teamMatch": "Team Match",
+  "dailyQuiz": "Daily Quiz",
+  "play": "Play",
+  
+  "roomName": "Room Name",
+  "roomNameOptional": "Room Name (Optional)",
+  "roomNameHint": "Enter a name for your room",
+  "numberOfRounds": "Number of Rounds",
+  "roundsHint": "Number of questions (5-30)",
+  "roundsMin": "Minimum 5 rounds",
+  "roundsMax": "Maximum 30 rounds",
+  "roundsInvalid": "Please enter a valid number between 5 and 30",
+  
+  "shuffleTeams": "Shuffle Teams",
+  "teamsShuffled": "Teams have been shuffled!",
+  "shufflingTeams": "Shuffling teams...",
+  "onlyHostCanShuffle": "Only the host can shuffle teams",
+  "cannotShuffleAfterStart": "Cannot shuffle teams after game has started",
+  "needTwoPlayersToShuffle": "Need at least 2 players to shuffle teams",
+  
+  "protectYourStreak": "Protect Your Streak",
+  "currentStreak": "Current Streak: {streak} days",
+  "@currentStreak": {
+    "placeholders": {
+      "streak": {
+        "type": "int"
+      }
+    }
+  },
+  "streakProtectionDescription": "Your streak is about to be broken! Protect it using coins or VIP membership.",
+  "protectWithVip": "Protect with VIP (Free)",
+  "protectWithCoins": "Protect with {coins} Coins",
+  "@protectWithCoins": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
+  "notEnoughCoinsForProtection": "You need 100 coins to protect your streak",
+  "noThanks": "No Thanks",
+  "streakProtected": "Streak Protected! {streak} days",
+  "@streakProtected": {
+    "placeholders": {
+      "streak": {
+        "type": "int"
+      }
+    }
+  },
+  "streakBroken": "Streak Broken",
+  "dayStreak": "Day Streak!",
+  "streakProtectedMessage": "Your streak has been protected!",
+  "streakBrokenMessage": "Your streak has been broken",
+  "keepPlayingDaily": "Keep playing daily!",
+  "protectStreakNow": "Protect Your Streak Now!",
+  "protectStreakDescription": "Don't lose your progress! Use coins or VIP to protect your streak.",
+  "protectMyStreak": "Protect My Streak",
+  "pleaseLoginToProtectStreak": "Please login to protect your streak",
+  "streakProtectedSuccessfully": "Streak protected successfully!",
+  "startQuiz": "Start Quiz",
+  "startGame": "Start Game",
+  "playAgain": "Play Again",
+  "backHome": "Back Home",
+  "shareScore": "Share Score",
+  
+  "difficulty": "Difficulty",
+  "category": "Category",
+  "selectDifficulty": "Select Difficulty",
+  "selectCategory": "Select Category (Optional)",
+  "easy": "Easy",
+  "medium": "Medium",
+  "hard": "Hard",
+  "general": "General",
+  "worldCup": "World Cup",
+  "clubs": "Clubs",
+  "players": "Players",
+  "difficultyDescription": "Choose your challenge level",
+  "categoryDescription": "Pick a specific topic or leave blank for mixed questions",
+  "anyDifficulty": "Any Difficulty",
+  "anyCategory": "Any Category",
+  
+  "welcomeBack": "Welcome Back",
+  "level": "Level",
+  "xp": "XP",
+  "coins": "Coins",
+  "streak": "Streak",
+  "dayStreak": "{count} Day Streak",
+  "@dayStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "question": "Question",
+  "questionNumber": "Question {current} of {total}",
+  "@questionNumber": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "timeRemaining": "{seconds}s",
+  "@timeRemaining": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "correct": "Correct",
+  "wrong": "Wrong",
+  "trueText": "True",
+  "@trueText": {
+    "description": "True option for True/False questions"
+  },
+  "falseText": "False",
+  "@falseText": {
+    "description": "False option for True/False questions"
+  },
+  "selectAnswer": "Select Answer",
+  "timeUp": "Time's Up!",
+  "nextQuestion": "Next Question",
+  "skip": "Skip",
+  "revealWrong": "Reveal Wrong",
+  "extraTime": "Extra Time",
+  
+  "results": "Results",
+  "score": "Score",
+  "correctAnswers": "Correct Answers",
+  "incorrectAnswers": "Incorrect Answers",
+  "accuracy": "Accuracy",
+  "xpGained": "XP Gained",
+  "coinsEarned": "Coins Earned",
+  "timeBonus": "Time Bonus",
+  "totalScore": "Total Score",
+  "wellDone": "Well Done!",
+  "greatJob": "Great Job!",
+  "excellent": "Excellent!",
+  "tryAgain": "Try Again",
+  
+  "matchmaking": "Matchmaking",
+  "findingOpponent": "Finding Opponent...",
+  "opponentFound": "Opponent Found!",
+  "waitingForOpponent": "Waiting for Opponent...",
+  "opponent": "Opponent",
+  "you": "You",
+  "attack": "Attack",
+  "counterAttack": "Counter Attack",
+  "neutralPlay": "Neutral Play",
+  "addFriend": "Add Friend",
+  "shareResult": "Share Result",
+  "region": "Region",
+  "selectRegion": "Select Region",
+  
+  "teamLobby": "Team Lobby",
+  "createTeam": "Create Team",
+  "joinTeam": "Join Team",
+  "teamA": "Team A",
+  "teamB": "Team B",
+  "ready": "Ready",
+  "notReady": "Not Ready",
+  "waitingForPlayers": "Waiting for Players...",
+  "teamFull": "Team Full",
+  "mvp": "MVP",
+  
+  "dailyQuizAvailable": "Daily Quiz Available",
+  "dailyQuizCompleted": "Daily Quiz Completed",
+  "quizStartsIn": "Quiz starts in {time}",
+  "@quizStartsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "specialRewards": "Special Rewards",
+  "bonusCoins": "Bonus Coins",
+  "bonusXP": "Bonus XP",
+  
+  "global": "Global",
+  "friends": "Friends",
+  "monthly": "Monthly",
+  "allTime": "All Time",
+  "daily": "Daily",
+  "weekly": "Weekly",
+  "rank": "Rank",
+  "noDataAvailable": "No data available",
+  "noFriendsYet": "No friends yet. Add friends to see their rankings!",
+  "usingOfflineData": "Using offline data. Pull to refresh.",
+  
+  "friendsList": "Friends List",
+  "friendRequests": "Friend Requests",
+  "pendingRequests": "Pending Requests",
+  "sentRequests": "Sent Requests",
+  "addFriend": "Add Friend",
+  "accept": "Accept",
+  "reject": "Reject",
+  "remove": "Remove",
+  "searchFriends": "Search Friends",
+  "noFriends": "No friends yet",
+  "noRequests": "No pending requests",
+  "addFriendsToChallenge": "Add friends to challenge them!",
+  "noPendingRequests": "No pending requests",
+  "removeFriend": "Remove Friend",
+  "removeFriendConfirmation": "Are you sure you want to remove this friend?",
+  "friendRemoved": "Friend removed successfully",
+  "enterUsernameOrEmail": "Enter username or email",
+  "sendRequest": "Send Request",
+  "friendRequestSent": "Friend request sent successfully",
+  "userNotFound": "User not found",
+  "friendRequestAccepted": "Friend request accepted",
+  "friendRequestRejected": "Friend request rejected",
+  
+  "matchHistory": "Match History",
+  "recentMatches": "Recent Matches",
+  "noMatches": "No matches played yet",
+  "matchType": "Match Type",
+  "result": "Result",
+  "win": "Win",
+  "lose": "Lose",
+  "draw": "Draw",
+  "playedAt": "Played At",
+  
+  "editProfile": "Edit Profile",
+  "save": "Save",
+  "cancel": "Cancel",
+  "changeAvatar": "Change Avatar",
+  "totalGames": "Total Games",
+  "soloGames": "Solo Games",
+  "challengeGames": "1v1 Games",
+  "teamGames": "Team Games",
+  "winRate": "Win Rate",
+  "accuracyRate": "Accuracy Rate",
+  "achievements": "Achievements",
+  "badges": "Badges",
+  "vipStatus": "VIP Status",
+  "active": "Active",
+  "inactive": "Inactive",
+  "expiresOn": "Expires On",
+  
+  "coinPacks": "Coin Packs",
+  "vipMembership": "VIP Membership",
+  "boosts": "Boosts",
+  "smallPack": "Small Pack",
+  "mediumPack": "Medium Pack",
+  "largePack": "Large Pack",
+  "coins": "{count} Coins",
+  "@coins": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vipMonthly": "VIP Monthly",
+  "vipYearly": "VIP Yearly",
+  "vipLifetime": "VIP Lifetime",
+  "noAds": "No ads + 50% more rewards",
+  "purchase": "Purchase",
+  "purchased": "Purchased",
+  "insufficientCoins": "Insufficient coins",
+  "purchaseSuccessful": "Purchase successful!",
+  "purchaseFailed": "Purchase failed",
+  
+  "notifications": "Notifications",
+  "sound": "Sound",
+  "vibration": "Vibration",
+  "language": "Language",
+  "english": "English",
+  "arabic": "Arabic",
+  "selectLanguage": "Select Language",
+  "clearCache": "Clear Cache",
+  "logout": "Logout",
+  "about": "About",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "version": "Version",
+  "cacheCleared": "Cache cleared successfully",
+  
+  "onboarding": "Onboarding",
+  "skip": "Skip",
+  "next": "Next",
+  "getStarted": "Get Started",
+  "welcome": "Welcome",
+  "welcomeDescription": "Test your football knowledge and compete with players worldwide",
+  
+  "loading": "Loading...",
+  "error": "Error",
+  "success": "Success",
+  "warning": "Warning",
+  "info": "Info",
+  "ok": "OK",
+  "yes": "Yes",
+  "no": "No",
+  "close": "Close",
+  "retry": "Retry",
+  "refresh": "Refresh",
+  
+  "networkError": "Network error. Please check your connection.",
+  "connectionTimeout": "Connection timeout. Please check your internet connection.",
+  "serverError": "Server error. Please try again later.",
+  "unknownError": "An unknown error occurred",
+  
+  "pleaseLogin": "Please login to continue",
+  "pleaseLoginToPurchase": "Please login to make purchases",
+  "invalidCredentials": "Invalid email or password",
+  "emailAlreadyExists": "Email already exists",
+  "weakPassword": "Password is too weak",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "emailRequired": "Email is required",
+  "emailInvalid": "Please enter a valid email",
+  "passwordRequired": "Password is required",
+  "upgradeGuestAccount": "Upgrade Guest Account",
+  "upgradeGuestDescription": "Convert your guest account to a full account to save your progress and access all features.",
+  "upgradeAccount": "Upgrade Account",
+  "accountUpgradedSuccessfully": "Account upgraded successfully!",
+  "optional": "Optional",
+  "confirmPasswordRequired": "Please confirm your password",
+  
+  "bonus20Percent": "20% Bonus",
+  "bestValue": "Best Value",
+  "skipQuestion": "Skip Question",
+  "revealWrongOption": "Reveal Wrong",
+  "extraTimeBoost": "Extra Time",
+  "plus5Seconds": "+5 seconds per question",
+  "skipAnyQuestion": "Skip any question",
+  "revealOneWrong": "Reveal one wrong option",
+  
+  "gameModes": "Game Modes",
+  "xpProgress": "XP Progress",
+  "yourStats": "Your Stats",
+  "games": "Games",
+  "visitStore": "Visit Store",
+  "boostsAndItems": "Boosts & Items",
+  "open": "Open",
+  "playNow": "Play Now",
+  "quickQuiz": "Quick quiz",
+  "duelMode": "Duel mode",
+  "upTo10Players": "Up to 10 players",
+  "twoXRewards": "2x Rewards",
+  "twoXXP": "2x XP",
+  "bonusCoinsExclamation": "Bonus Coins!",
+  "or": "OR",
+  "apple": "Apple",
+  "google": "Google",
+  "pleaseEnterEmail": "Please enter your email",
+  "pleaseEnterValidEmail": "Please enter a valid email",
+  "pleaseEnterPassword": "Please enter your password",
+  "passwordMinLength": "Password must be at least 6 characters",
+  "levelFormat": "Level {level} - {country}",
+  "@levelFormat": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "empty": "Empty",
+  "noQuestions": "No questions available. Please try again later.",
+  "quizCompleted": "Quiz Completed",
+  "matchEnded": "Match Ended"
+}
+
