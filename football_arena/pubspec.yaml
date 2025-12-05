@@ -136,6 +136,7 @@ flutter:
     - assets/images/card1.png
     - assets/images/card2.png
     - assets/images/background2.png
+    - assets/images/withdraw.png
   
     # Offline Questions Database
     - assets/comprehensive-questions.json

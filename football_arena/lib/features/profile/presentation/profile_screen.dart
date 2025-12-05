@@ -5,7 +5,6 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/routes/route_names.dart';
 import '../../../core/network/users_api_service.dart';
-import '../../../shared/widgets/custom_card.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/app_bottom_bar.dart';
 import '../../../shared/widgets/top_notification.dart';
@@ -567,32 +566,70 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           spacing: 8,
                           alignment: WrapAlignment.center,
                           children: [
-                            Chip(
-                              avatar: const Icon(
-                                Icons.star,
-                                size: 16,
-                                color: Colors.white,
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
                               ),
-                              label: Text('Level $level'),
-                              backgroundColor: AppColors.primary,
-                              labelStyle: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: AppColors.primary,
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.star,
+                                    size: 16,
+                                    color: AppColors.primary,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Level $level',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Chip(
-                              avatar: const Icon(
-                                Icons.flag,
-                                size: 16,
-                                color: Colors.white70,
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
                               ),
-                              label: Text(country),
-                              backgroundColor: Colors.white.withOpacity(0.2),
-                              labelStyle: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.5),
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.flag,
+                                    size: 16,
+                                    color: Colors.white70,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    country,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             if (isVip)
@@ -668,10 +705,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               label: 'Played',
                               gradient: LinearGradient(
                                 colors: [
-                                  Colors.blue.shade600,
-                                  Colors.blue.shade800,
+                                  Colors.blue.shade400,
+                                  Colors.blue.shade700,
                                 ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
+                              iconColor: Colors.blue.shade400,
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -682,21 +722,34 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               label: 'Win Rate',
                               gradient: LinearGradient(
                                 colors: [
-                                  Colors.green.shade600,
-                                  Colors.green.shade800,
+                                  Colors.green.shade400,
+                                  Colors.green.shade700,
                                 ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
+                              iconColor: Colors.green.shade400,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 12),
-                      CustomCard(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.purple.shade700,
-                            Colors.purple.shade900,
-                          ],
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.purple.shade400.withOpacity(0.15),
+                              Colors.purple.shade700.withOpacity(0.15),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Colors.purple.shade400.withOpacity(0.5),
+                            width: 1.5,
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -845,6 +898,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               icon: Icons.people,
                               title: 'Friends',
                               onTap: () => context.push(RouteNames.friends),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.purple.shade400,
+                                  Colors.purple.shade700,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              iconColor: Colors.purple.shade400,
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -853,6 +915,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               icon: Icons.history,
                               title: 'History',
                               onTap: () => context.push(RouteNames.history),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.orange.shade400,
+                                  Colors.orange.shade700,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              iconColor: Colors.orange.shade400,
                             ),
                           ),
                         ],
@@ -865,6 +936,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               icon: Icons.leaderboard,
                               title: 'Leaderboard',
                               onTap: () => context.push(RouteNames.leaderboard),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.amber.shade400,
+                                  Colors.amber.shade700,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              iconColor: Colors.amber.shade400,
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -873,6 +953,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               icon: Icons.store,
                               title: 'Store',
                               onTap: () => context.push(RouteNames.store),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.green.shade400,
+                                  Colors.green.shade700,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              iconColor: Colors.green.shade400,
                             ),
                           ),
                         ],
@@ -949,38 +1038,53 @@ class _StatBox extends StatelessWidget {
   final IconData icon;
   final String value;
   final String label;
-  final Gradient gradient;
+  final Gradient? gradient;
+  final Color? iconColor;
 
   const _StatBox({
     required this.icon,
     required this.value,
     required this.label,
-    required this.gradient,
+    this.gradient,
+    this.iconColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: gradient,
+        gradient: gradient != null
+            ? LinearGradient(
+                colors: (gradient as LinearGradient)
+                    .colors
+                    .map((c) => c.withOpacity(0.15))
+                    .toList(),
+                begin: (gradient as LinearGradient).begin,
+                end: (gradient as LinearGradient).end,
+              )
+            : null,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: iconColor?.withOpacity(0.5) ?? Colors.white.withOpacity(0.3),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: (iconColor ?? Colors.white).withOpacity(0.1),
+            blurRadius: 8,
+            spreadRadius: 1,
           ),
         ],
       ),
       child: Column(
         children: [
-          Icon(icon, color: Colors.white, size: 36),
-          const SizedBox(height: 12),
+          Icon(icon, color: iconColor ?? Colors.white, size: 32),
+          const SizedBox(height: 10),
           Text(
             value,
             style: const TextStyle(
-              fontSize: 28,
+              fontSize: 24,
               fontWeight: FontWeight.w900,
               color: Colors.white,
             ),
@@ -988,7 +1092,7 @@ class _StatBox extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              fontSize: 12,
+              fontSize: 11,
               color: Colors.white70,
               fontWeight: FontWeight.w600,
             ),
@@ -1043,11 +1147,15 @@ class _ActionCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final VoidCallback onTap;
+  final Gradient? gradient;
+  final Color? iconColor;
 
   const _ActionCard({
     required this.icon,
     required this.title,
     required this.onTap,
+    this.gradient,
+    this.iconColor,
   });
 
   @override
@@ -1057,17 +1165,36 @@ class _ActionCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppColors.cardBackground,
+          gradient: gradient != null
+              ? LinearGradient(
+                  colors: (gradient as LinearGradient)
+                      .colors
+                      .map((c) => c.withOpacity(0.15))
+                      .toList(),
+                  begin: (gradient as LinearGradient).begin,
+                  end: (gradient as LinearGradient).end,
+                )
+              : null,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white12, width: 1),
+          border: Border.all(
+            color: iconColor?.withOpacity(0.5) ?? Colors.white.withOpacity(0.3),
+            width: 1.5,
+          ),
         ),
         child: Column(
           children: [
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                gradient: AppColors.primaryGradient,
+                gradient: gradient,
                 shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: (iconColor ?? AppColors.primary).withOpacity(0.3),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+                ],
               ),
               child: Icon(icon, color: Colors.white, size: 28),
             ),
@@ -1086,6 +1213,7 @@ class _ActionCard extends StatelessWidget {
     );
   }
 }
+
 
 // Achievement Data Model
 class _Achievement {
@@ -1237,12 +1365,11 @@ class _AvatarTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 105,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           gradient: selected ? AppColors.primaryGradient : null,
           color: locked ? Colors.black26 : unlockedBackground,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: selected ? Colors.white.withOpacity(0.7) : Colors.white12,
             width: selected ? 2.4 : 1,
@@ -1268,8 +1395,8 @@ class _AvatarTile extends StatelessWidget {
           children: [
             // Avatar Image
             Container(
-              width: 65,
-              height: 65,
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
@@ -1288,7 +1415,7 @@ class _AvatarTile extends StatelessWidget {
                             child: const Icon(
                               Icons.person,
                               color: Colors.white,
-                              size: 35,
+                              size: 32,
                             ),
                           )
                         : Image.asset(
@@ -1302,7 +1429,7 @@ class _AvatarTile extends StatelessWidget {
                                 child: const Icon(
                                   Icons.person,
                                   color: Colors.white,
-                                  size: 35,
+                                  size: 32,
                                 ),
                               );
                             },
@@ -1317,7 +1444,7 @@ class _AvatarTile extends StatelessWidget {
                               const Icon(
                                 Icons.lock,
                                 color: Colors.white70,
-                                size: 20,
+                                size: 18,
                               ),
                               if (item.requiresCoins &&
                                   !isPurchased &&
@@ -1330,20 +1457,20 @@ class _AvatarTile extends StatelessWidget {
                                     children: [
                                       Image.asset(
                                         'assets/icons/coin_icon.png',
-                                        width: 10,
-                                        height: 10,
+                                        width: 9,
+                                        height: 9,
                                         errorBuilder: (c, e, s) => const Icon(
                                           Icons.monetization_on,
                                           color: Colors.white70,
-                                          size: 10,
+                                          size: 9,
                                         ),
                                       ),
                                       const SizedBox(width: 2),
                                       Text(
-                                        '${item.coinCost} coins',
+                                        '${item.coinCost}',
                                         style: const TextStyle(
                                           color: Colors.white70,
-                                          fontSize: 9,
+                                          fontSize: 8,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -1358,38 +1485,41 @@ class _AvatarTile extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              item.name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: locked ? Colors.white38 : Colors.white,
+            const SizedBox(height: 6),
+            SizedBox(
+              height: 28,
+              child: Text(
+                item.name,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: locked ? Colors.white38 : Colors.white,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
             if (locked) ...[
-              const SizedBox(height: 4),
+              const SizedBox(height: 3),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                 decoration: BoxDecoration(
                   color: item.requiresVip
                       ? Colors.amber.withOpacity(0.25)
                       : item.requiresCoins
                       ? AppColors.primary.withOpacity(0.25)
                       : Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(5),
                 ),
                 child: Text(
                   item.requiresVip
                       ? 'VIP'
                       : item.requiresCoins
-                      ? '${item.coinCost} coins'
+                      ? '${item.coinCost}'
                       : 'Lv${item.requiredLevel}',
                   style: TextStyle(
-                    fontSize: 9,
+                    fontSize: 8,
                     color: item.requiresVip
                         ? Colors.amber
                         : item.requiresCoins

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'api_client.dart';
@@ -53,6 +54,29 @@ class UsersApiService {
   ) async {
     try {
       final response = await dio.patch(ApiEndpoints.userById(id), data: data);
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> uploadAvatar(
+    String id,
+    File imageFile,
+  ) async {
+    try {
+      final formData = FormData.fromMap({
+        'avatar': await MultipartFile.fromFile(
+          imageFile.path,
+          filename: 'avatar.jpg',
+        ),
+      });
+
+      final response = await dio.post(
+        '${ApiEndpoints.userById(id)}/avatar',
+        data: formData,
+      );
+
       return response.data;
     } on DioException catch (e) {
       throw _handleError(e);

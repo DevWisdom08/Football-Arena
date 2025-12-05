@@ -57,6 +57,14 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen>
   Widget build(BuildContext context) {
     // Get user data from storage
     final userData = StorageService.instance.getUserData();
+    // Helper to safely parse commissionRate
+    double parseCommissionRate(dynamic value) {
+      if (value == null) return 10.0;
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? 10.0;
+      return 10.0;
+    }
+
     final user = userData != null
         ? UserModel(
             id: userData['id'] ?? '',
@@ -68,7 +76,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen>
             coins: userData['coins'] ?? 0,
             withdrawableCoins: userData['withdrawableCoins'] ?? 0,
             purchasedCoins: userData['purchasedCoins'] ?? 0,
-            commissionRate: userData['commissionRate']?.toDouble() ?? 10.0,
+            commissionRate: parseCommissionRate(userData['commissionRate']),
             kycVerified: userData['kycVerified'] ?? false,
             kycStatus: userData['kycStatus'],
             createdAt: DateTime.now(),

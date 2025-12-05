@@ -3,14 +3,37 @@ import 'package:equatable/equatable.dart';
 
 part 'withdrawal_model.g.dart';
 
+// Custom converter for handling string or number to double
+class DoubleConverter implements JsonConverter<double, dynamic> {
+  const DoubleConverter();
+
+  @override
+  double fromJson(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is num) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
+  }
+
+  @override
+  dynamic toJson(double value) => value;
+}
+
 @JsonSerializable()
 class WithdrawalModel extends Equatable {
   final String id;
   final String userId;
   final int amount; // Amount in withdrawable coins
+  
+  @DoubleConverter()
   final double amountInUSD; // Amount in USD (1000 coins = $1)
+  
+  @DoubleConverter()
   final double withdrawalFee; // Fee charged
+  
+  @DoubleConverter()
   final double netAmount; // Amount user receives after fee
+  
   final String status; // pending, approved, processing, completed, rejected, cancelled
   final String withdrawalMethod; // paypal, bank_transfer, mobile_money, crypto
   final Map<String, dynamic> paymentDetails; // Payment details

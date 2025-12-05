@@ -21,6 +21,10 @@ class SocketService {
           .setTransports(['websocket'])
           .enableAutoConnect()
           .setAuth({'token': token})
+          .setTimeout(5000) // 5 second timeout
+          .enableReconnection()
+          .setReconnectionAttempts(3)
+          .setReconnectionDelay(1000)
           .build(),
     );
 
@@ -36,6 +40,11 @@ class SocketService {
 
     _socket?.onConnectError((error) {
       print('❌ Socket connection error: $error');
+      _isConnected = false;
+    });
+
+    _socket?.onConnectTimeout((data) {
+      print('⏱️ Socket connection timeout');
       _isConnected = false;
     });
 

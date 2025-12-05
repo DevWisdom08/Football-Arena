@@ -545,8 +545,8 @@ class _SoloGameScreenState extends ConsumerState<SoloGameScreen> {
               image: const AssetImage('assets/images/background1.png'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.95),
-                BlendMode.lighten,
+                Colors.black.withOpacity(0.2),
+                BlendMode.darken,
               ),
             ),
           ),
@@ -595,8 +595,8 @@ class _SoloGameScreenState extends ConsumerState<SoloGameScreen> {
             image: const AssetImage('assets/images/background1.png'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.95),
-              BlendMode.lighten,
+              Colors.black.withOpacity(0.2),
+              BlendMode.darken,
             ),
           ),
         ),

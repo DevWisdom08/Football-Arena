@@ -118,7 +118,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             'You can request data deletion or export at any time by contacting support.\n\n'
             '5. Cookies & Storage\n'
             'We use local storage for authentication tokens and user preferences only.\n\n'
-            'Last updated: November 2024',
+            'Last updated: November 2025',
             style: TextStyle(color: Colors.white70, height: 1.5, fontSize: 14),
           ),
         ),
@@ -181,8 +181,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             image: const AssetImage('assets/images/background1.png'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.1),
-              BlendMode.lighten,
+              Colors.black.withOpacity(0.3),
+              BlendMode.darken,
             ),
           ),
         ),
@@ -228,7 +228,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       const SizedBox(height: 12),
 
                       CustomCard(
-                        backgroundColor: AppColors.cardBackground,
+                        backgroundColor: Colors.transparent,
+                        border: Border.all(
+                          color: Colors.blue.withOpacity(0.5),
+                          width: 1.5,
+                        ),
                         child: Column(
                           children: [
                             _buildSwitchTile(
@@ -259,7 +263,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       const SizedBox(height: 12),
 
                       CustomCard(
-                        backgroundColor: AppColors.cardBackground,
+                        backgroundColor: Colors.transparent,
+                        border: Border.all(
+                          color: Colors.purple.withOpacity(0.5),
+                          width: 1.5,
+                        ),
                         child: Column(
                           children: [
                             _buildSwitchTile(
@@ -301,7 +309,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       const SizedBox(height: 12),
 
                       CustomCard(
-                        backgroundColor: AppColors.cardBackground,
+                        backgroundColor: Colors.transparent,
+                        border: Border.all(
+                          color: Colors.green.withOpacity(0.5),
+                          width: 1.5,
+                        ),
                         child: ListTile(
                           leading: const Icon(
                             Icons.language,
@@ -309,7 +321,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           ),
                           title: Text(
                             context.l10n.language,
-                            style: const TextStyle(color: Colors.white, fontSize: 16),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
                           ),
                           subtitle: Builder(
                             builder: (context) {
@@ -342,7 +357,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                         groupValue: currentLocale,
                                         onChanged: (value) {
                                           if (value != null) {
-                                            ref.read(localeProvider.notifier).setLocale(value);
+                                            ref
+                                                .read(localeProvider.notifier)
+                                                .setLocale(value);
                                             Navigator.pop(context);
                                           }
                                         },
@@ -355,7 +372,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                         groupValue: currentLocale,
                                         onChanged: (value) {
                                           if (value != null) {
-                                            ref.read(localeProvider.notifier).setLocale(value);
+                                            ref
+                                                .read(localeProvider.notifier)
+                                                .setLocale(value);
                                             Navigator.pop(context);
                                           }
                                         },
@@ -383,7 +402,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       const SizedBox(height: 12),
 
                       CustomCard(
-                        backgroundColor: AppColors.cardBackground,
+                        backgroundColor: Colors.transparent,
+                        border: Border.all(
+                          color: Colors.amber.withOpacity(0.5),
+                          width: 1.5,
+                        ),
                         child: Column(
                           children: [
                             ListTile(
@@ -426,7 +449,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       const SizedBox(height: 12),
 
                       CustomCard(
-                        backgroundColor: AppColors.cardBackground,
+                        backgroundColor: Colors.transparent,
+                        border: Border.all(
+                          color: Colors.cyan.withOpacity(0.5),
+                          width: 1.5,
+                        ),
                         child: Column(
                           children: [
                             const ListTile(
@@ -459,35 +486,35 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                   fontSize: 16,
                                 ),
                               ),
-                            trailing: const Icon(
-                              Icons.chevron_right,
-                              color: Colors.white70,
-                            ),
-                            onTap: () {
-                              _showPrivacyPolicy();
-                            },
-                          ),
-                          const Divider(color: Colors.white12, height: 1),
-                          ListTile(
-                            leading: const Icon(
-                              Icons.description,
-                              color: AppColors.primary,
-                            ),
-                            title: const Text(
-                              'Terms of Service',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
+                              trailing: const Icon(
+                                Icons.chevron_right,
+                                color: Colors.white70,
                               ),
+                              onTap: () {
+                                _showPrivacyPolicy();
+                              },
                             ),
-                            trailing: const Icon(
-                              Icons.chevron_right,
-                              color: Colors.white70,
+                            const Divider(color: Colors.white12, height: 1),
+                            ListTile(
+                              leading: const Icon(
+                                Icons.description,
+                                color: AppColors.primary,
+                              ),
+                              title: const Text(
+                                'Terms of Service',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              trailing: const Icon(
+                                Icons.chevron_right,
+                                color: Colors.white70,
+                              ),
+                              onTap: () {
+                                _showTermsOfService();
+                              },
                             ),
-                            onTap: () {
-                              _showTermsOfService();
-                            },
-                          ),
                           ],
                         ),
                       ),
@@ -497,12 +524,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       // Logout Button
                       SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton(
+                        child: OutlinedButton(
                           onPressed: _logout,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: Colors.red,
                             padding: const EdgeInsets.all(16),
+                            side: BorderSide(
+                              color: Colors.red.withOpacity(0.7),
+                              width: 2,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -510,13 +541,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.logout),
+                              Icon(Icons.logout, color: Colors.red),
                               SizedBox(width: 12),
                               Text(
                                 'Logout',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
+                                  color: Colors.red,
                                 ),
                               ),
                             ],

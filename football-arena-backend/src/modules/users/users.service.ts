@@ -171,6 +171,20 @@ export class UsersService {
     return updatedUser;
   }
 
+  async uploadAvatar(id: string, file: Express.Multer.File): Promise<User> {
+    const user = await this.findOne(id);
+    
+    // Convert image to base64
+    const base64Image = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+    
+    // Store base64 string in avatarUrl field
+    user.avatarUrl = base64Image;
+    
+    await this.usersRepository.save(user);
+    
+    return user;
+  }
+
   async remove(id: string): Promise<void> {
     const user = await this.findOne(id);
     await this.usersRepository.remove(user);

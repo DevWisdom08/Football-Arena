@@ -97,19 +97,23 @@ export class StoreService {
       coinsToAdd = Math.floor(pack.coins * (1 + pack.bonus));
     }
 
+    // Calculate balance before transaction
+    const balanceBefore = user.coins + user.withdrawableCoins + user.purchasedCoins;
+
     // Add as purchased coins (non-withdrawable)
     user.purchasedCoins += coinsToAdd;
     await this.usersRepository.save(user);
 
-    // Record transaction
-    await this.recordTransaction(
+    // Record transaction with correct balances
+    const balanceAfter = user.coins + user.withdrawableCoins + user.purchasedCoins;
+    await this.recordTransactionDirect(
       user.id,
-      'purchased',
+      'purchase',
       coinsToAdd,
       'purchased',
       `Purchased ${packId} coin pack (${coinsToAdd} non-withdrawable coins)`,
-      transactionId || 'manual',
-      'purchase',
+      balanceBefore,
+      balanceAfter,
     );
 
     const updatedUser = await this.usersService.findOne(user.id);
@@ -236,7 +240,32 @@ export class StoreService {
   }
 
   /**
-   * Helper: Record transaction history
+   * Helper: Record transaction history (with direct balance values)
+   */
+  private async recordTransactionDirect(
+    userId: string,
+    type: string,
+    amount: number,
+    coinType: string,
+    description: string,
+    balanceBefore: number,
+    balanceAfter: number,
+  ): Promise<void> {
+    const transaction = this.transactionRepository.create({
+      userId,
+      type,
+      amount,
+      coinType,
+      balanceBefore,
+      balanceAfter,
+      description,
+    });
+
+    await this.transactionRepository.save(transaction);
+  }
+
+  /**
+   * Helper: Record transaction history (legacy - calculates balance)
    */
   private async recordTransaction(
     userId: string,

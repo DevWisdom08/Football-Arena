@@ -78,26 +78,22 @@ class _HomeScreenState extends State<HomeScreen> {
             SafeArea(
               bottom: false, // Let bottom bar handle safe area
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _PlayerCard(userData: userData),
                     const SizedBox(height: 20),
-                    _StatRow(userData: userData),
-                    const SizedBox(height: 20),
-                    _DailyQuizCard(context),
-                    const SizedBox(height: 28),
+                    _DailyQuizTile(context),
+                    const SizedBox(height: 24),
                     Text(
                       context.l10n.gameModes,
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(color: AppColors.heading),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 14),
                     _GameModeGrid(context),
-                    const SizedBox(height: 28),
-                    StatsCard(userData: userData),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 14),
                     _StoreBanner(context),
                   ],
                 ),
@@ -305,163 +301,16 @@ class _PlayerCard extends StatelessWidget {
   }
 }
 
-class _StatRow extends StatelessWidget {
-  final Map<String, dynamic>? userData;
-
-  const _StatRow({this.userData});
-
-  @override
-  Widget build(BuildContext context) {
-    // Extract user data with fallbacks
-    final coins = userData?['coins'] ?? 0;
-    final streak = userData?['currentStreak'] ?? 0;
-    return Row(
-      children: [
-        Expanded(
-          child: CustomCard(
-            gradient: AppColors.coinsGradient,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Coin number
-                Text(
-                  coins.toString(),
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // Coin image - fills available space
-                Flexible(
-                  child: Image.asset(
-                    'assets/icons/coin_icon.png',
-                    height: 60,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: CustomCard(
-            gradient: AppColors.streakGradient,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Streak number
-                Text(
-                  streak.toString(),
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ), // Increased space between text and icon
-                // Streak fire icon - fills available space
-                Flexible(
-                  child: Image.asset(
-                    'assets/icons/day_streak.png',
-                    height: 60,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-Widget _DailyQuizCard(BuildContext context) {
-  return CustomCard(
+Widget _DailyQuizTile(BuildContext context) {
+  final dailyQuizData = _ModeTileData(
+    iconPath: 'assets/icons/daily_quiz_icon.png',
+    title: context.l10n.dailyQuiz,
+    subtitle: context.l10n.twoXRewards,
     gradient: AppColors.dailyQuizGradient,
-    onTap: () {
-      context.push(RouteNames.dailyQuiz);
-    },
-    child: Row(
-      children: [
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/icons/daily_quiz_icon.png',
-                    width: 24,
-                    height: 24,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    context.l10n.dailyQuiz,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/icons/xp coin.png',
-                    width: 24,
-                    height: 24,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    context.l10n.twoXXP,
-                    style: const TextStyle(color: Colors.white70),
-                  ),
-                  const SizedBox(width: 10),
-                  Image.asset(
-                    'assets/icons/coin_icon.png',
-                    width: 24,
-                    height: 24,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    context.l10n.bonusCoinsExclamation,
-                    style: const TextStyle(color: Colors.white70),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          decoration: BoxDecoration(
-            color: const Color(0xFFFAD263),
-            borderRadius: BorderRadius.circular(26),
-          ),
-          child: Text(
-            context.l10n.playNow,
-            style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-      ],
-    ),
+    onTap: () => context.push(RouteNames.dailyQuiz),
   );
+  
+  return _ModeTile(data: dailyQuizData);
 }
 
 Widget _GameModeGrid(BuildContext context) {
@@ -488,13 +337,6 @@ Widget _GameModeGrid(BuildContext context) {
       onTap: () => context.push(RouteNames.teamMatch),
     ),
     _ModeTileData(
-      iconPath: 'assets/icons/daily_quiz_icon.png',
-      title: context.l10n.dailyQuiz,
-      subtitle: context.l10n.twoXRewards,
-      gradient: AppColors.dailyQuizGradient,
-      onTap: () => context.push(RouteNames.dailyQuiz),
-    ),
-    _ModeTileData(
       iconPath: 'assets/icons/challenge_1v1_icon.png',
       title: '⚔️ Stake Match Arena',
       subtitle: 'Win Real Money',
@@ -518,7 +360,7 @@ Widget _GameModeGrid(BuildContext context) {
     children: tiles
         .map(
           (tile) => Padding(
-            padding: const EdgeInsets.only(bottom: 14),
+            padding: const EdgeInsets.only(bottom: 12),
             child: _ModeTile(data: tile),
           ),
         )
@@ -551,23 +393,37 @@ class _ModeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     // Determine background image based on game mode
     String? backgroundImage;
+    double? cardHeight;
     final l10n = context.l10n;
     if (data.title == l10n.soloMode) {
       backgroundImage = 'assets/icons/solo_mode.jpg';
+      cardHeight = 100;
     } else if (data.title == l10n.challenge1v1) {
       backgroundImage = 'assets/icons/challenge.jpeg';
+      cardHeight = 100;
     } else if (data.title == l10n.teamMatch) {
-      backgroundImage = 'assets/icons/team_match.jpg';
-    } else if (data.title == l10n.dailyQuiz) {
       backgroundImage = 'assets/icons/daily_quiz.jpg';
+      cardHeight = 100;
+    } else if (data.title == l10n.dailyQuiz) {
+      backgroundImage = 'assets/icons/team_match.jpg';
+      cardHeight = 100;
+    } else if (data.title == '⚔️ Stake Match Arena') {
+      backgroundImage = 'assets/images/card1.png';
+      cardHeight = 120; // Taller card
+    } else if (data.title == '💰 Withdraw Winnings') {
+      backgroundImage = 'assets/images/withdraw.png';
+      cardHeight = 120; // Same height as Stake Match
     }
 
+    // Determine if this is a tall card that needs smaller content
+    final isTallCard = cardHeight != null && cardHeight > 100;
+    
     Widget cardContent = Row(
       children: [
         // Icon on the left - Extra large with shadow, no background
         Container(
-          width: 90,
-          height: 90,
+          width: isTallCard ? 80 : 90,
+          height: isTallCard ? 80 : 90,
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -581,15 +437,15 @@ class _ModeTile extends StatelessWidget {
           child: data.iconPath != null
               ? Image.asset(
                   data.iconPath!,
-                  width: 90,
-                  height: 90,
+                  width: isTallCard ? 80 : 90,
+                  height: isTallCard ? 80 : 90,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) {
-                    return const Icon(
+                    return Icon(
                       Icons.gamepad,
                       color: Colors.white,
-                      size: 70,
-                      shadows: [
+                      size: isTallCard ? 60 : 70,
+                      shadows: const [
                         Shadow(
                           color: Colors.black87,
                           blurRadius: 15,
@@ -599,11 +455,11 @@ class _ModeTile extends StatelessWidget {
                     );
                   },
                 )
-              : const Icon(
+              : Icon(
                   Icons.sports_soccer,
                   color: Colors.white,
-                  size: 70,
-                  shadows: [
+                  size: isTallCard ? 60 : 70,
+                  shadows: const [
                     Shadow(
                       color: Colors.black87,
                       blurRadius: 15,
@@ -612,25 +468,26 @@ class _ModeTile extends StatelessWidget {
                   ],
                 ),
         ),
-        const SizedBox(width: 20),
+        SizedBox(width: isTallCard ? 16 : 20),
         // Text in the middle
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 data.title,
-                style: const TextStyle(
-                  fontSize: 22,
+                style: TextStyle(
+                  fontSize: isTallCard ? 20 : 22,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: isTallCard ? 2 : 4),
               Text(
                 data.subtitle,
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: isTallCard ? 14 : 15,
                   color: Colors.white.withOpacity(0.9),
                 ),
               ),
@@ -641,7 +498,7 @@ class _ModeTile extends StatelessWidget {
         Icon(
           Icons.arrow_forward_ios,
           color: Colors.white.withOpacity(0.7),
-          size: 20,
+          size: isTallCard ? 18 : 20,
         ),
       ],
     );
@@ -652,7 +509,7 @@ class _ModeTile extends StatelessWidget {
         onTap: data.onTap,
         borderRadius: BorderRadius.circular(20),
         child: Container(
-          height: 100,
+          height: cardHeight ?? 100,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
@@ -677,7 +534,7 @@ class _ModeTile extends StatelessWidget {
                 ],
               ),
             ),
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(isTallCard ? 16 : 18),
             child: cardContent,
           ),
         ),
@@ -692,121 +549,6 @@ class _ModeTile extends StatelessWidget {
       child: cardContent,
     );
   }
-}
-
-class StatsCard extends StatelessWidget {
-  final Map<String, dynamic>? userData;
-
-  const StatsCard({super.key, this.userData});
-
-  @override
-  Widget build(BuildContext context) {
-    // Extract user data with fallbacks
-    final totalGames = userData?['totalGames'] ?? 0;
-
-    // Handle accuracyRate - can be double, int, or string
-    final accuracyRaw = userData?['accuracyRate'] ?? 0.0;
-    final accuracyRate = accuracyRaw is String
-        ? double.tryParse(accuracyRaw) ?? 0.0
-        : (accuracyRaw is int ? accuracyRaw.toDouble() : accuracyRaw as double);
-
-    // Handle winRate - can be double, int, or string
-    final winRateRaw = userData?['winRate'] ?? 0.0;
-    final winRate = winRateRaw is String
-        ? double.tryParse(winRateRaw) ?? 0.0
-        : (winRateRaw is int ? winRateRaw.toDouble() : winRateRaw as double);
-
-    final stats = [
-      _StatMetric(value: totalGames.toString(), label: context.l10n.games),
-      _StatMetric(
-        value: '${accuracyRate.toStringAsFixed(0)}%',
-        label: context.l10n.accuracy,
-      ),
-      _StatMetric(
-        value: '${winRate.toStringAsFixed(0)}%',
-        label: context.l10n.winRate,
-      ),
-    ];
-
-    const radius = 26.0;
-    return CustomCard(
-      padding: EdgeInsets.zero,
-      borderRadius: radius,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset('assets/images/card1.png', fit: BoxFit.cover),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              // decoration: BoxDecoration(
-              //   gradient: LinearGradient(
-              //     begin: Alignment.topCenter,
-              //     end: Alignment.bottomCenter,
-              //     colors: [
-              //       Colors.black.withOpacity(0.65),
-              //       Colors.black.withOpacity(0.4),
-              //     ],
-              //   ),
-              // ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.l10n.yourStats,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: stats
-                        .map(
-                          (metric) => Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  metric.value,
-                                  style: const TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  metric.label,
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _StatMetric {
-  final String value;
-  final String label;
-
-  const _StatMetric({required this.value, required this.label});
 }
 
 Widget _StoreBanner(BuildContext context) {

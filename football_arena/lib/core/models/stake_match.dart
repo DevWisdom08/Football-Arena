@@ -48,13 +48,23 @@ class StakeMatch {
   });
 
   factory StakeMatch.fromJson(Map<String, dynamic> json) {
+    // Helper function to safely parse commissionRate from either string or number
+    double parseCommissionRate(dynamic value) {
+      if (value == null) return 0.0;
+      if (value is num) return value.toDouble();
+      if (value is String) {
+        return double.tryParse(value) ?? 0.0;
+      }
+      return 0.0;
+    }
+
     return StakeMatch(
       id: json['id'],
       creatorId: json['creatorId'],
       opponentId: json['opponentId'],
       stakeAmount: json['stakeAmount'],
       totalPot: json['totalPot'],
-      commissionRate: (json['commissionRate'] as num).toDouble(),
+      commissionRate: parseCommissionRate(json['commissionRate']),
       commissionAmount: json['commissionAmount'],
       winnerPayout: json['winnerPayout'],
       status: json['status'],
@@ -128,13 +138,23 @@ class WithdrawalRequest {
   });
 
   factory WithdrawalRequest.fromJson(Map<String, dynamic> json) {
+    // Helper function to safely parse double from either string or number
+    double parseDouble(dynamic value) {
+      if (value == null) return 0.0;
+      if (value is num) return value.toDouble();
+      if (value is String) {
+        return double.tryParse(value) ?? 0.0;
+      }
+      return 0.0;
+    }
+
     return WithdrawalRequest(
       id: json['id'],
       userId: json['userId'],
       amount: json['amount'],
-      amountInUSD: (json['amountInUSD'] as num).toDouble(),
-      withdrawalFee: (json['withdrawalFee'] as num).toDouble(),
-      netAmount: (json['netAmount'] as num).toDouble(),
+      amountInUSD: parseDouble(json['amountInUSD']),
+      withdrawalFee: parseDouble(json['withdrawalFee']),
+      netAmount: parseDouble(json['netAmount']),
       status: json['status'],
       withdrawalMethod: json['withdrawalMethod'],
       paymentDetails: json['paymentDetails'] ?? {},

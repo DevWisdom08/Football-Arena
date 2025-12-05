@@ -191,8 +191,8 @@ class _DailyQuizGameScreenState extends ConsumerState<DailyQuizGameScreen> {
             image: const AssetImage('assets/images/background1.png'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.95),
-              BlendMode.lighten,
+              Colors.black.withOpacity(0.3),
+              BlendMode.darken,
             ),
           ),
         ),

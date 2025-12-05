@@ -7,7 +7,6 @@ import '../../../core/network/daily_quiz_api_service.dart';
 import '../../../core/network/users_api_service.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/routes/route_names.dart';
-import '../../../shared/widgets/custom_card.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/top_notification.dart';
 
@@ -251,8 +250,8 @@ class _DailyQuizResultsScreenState
             image: const AssetImage('assets/images/background1.png'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.95),
-              BlendMode.lighten,
+              Colors.black.withOpacity(0.3),
+              BlendMode.darken,
             ),
           ),
         ),
@@ -262,7 +261,7 @@ class _DailyQuizResultsScreenState
               // Header
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
                   gradient: AppColors.dailyQuizGradient,
                 ),
@@ -274,10 +273,10 @@ class _DailyQuizResultsScreenState
                           : isGoodScore
                           ? Icons.celebration
                           : Icons.thumb_up,
-                      size: 80,
+                      size: 60,
                       color: Colors.white,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     Text(
                       isPerfect
                           ? '🏆 Perfect Score!'
@@ -285,15 +284,15 @@ class _DailyQuizResultsScreenState
                           ? '🎉 Great Job!'
                           : '👍 Good Try!',
                       style: const TextStyle(
-                        fontSize: 32,
+                        fontSize: 26,
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     const Text(
                       'Daily Quiz Completed',
-                      style: TextStyle(fontSize: 16, color: Colors.white70),
+                      style: TextStyle(fontSize: 14, color: Colors.white70),
                     ),
                   ],
                 ),
@@ -305,22 +304,44 @@ class _DailyQuizResultsScreenState
                   child: Column(
                     children: [
                       // Accuracy Card
-                      CustomCard(
-                        backgroundColor: AppColors.cardBackground,
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.blue.shade400.withOpacity(0.15),
+                              Colors.blue.shade700.withOpacity(0.15),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: AppColors.primary.withOpacity(0.5),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withOpacity(0.15),
+                              blurRadius: 10,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
                         child: Column(
                           children: [
                             const Text(
                               'Your Accuracy',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 color: Colors.white70,
                               ),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 10),
                             Text(
                               '$accuracy%',
                               style: TextStyle(
-                                fontSize: 64,
+                                fontSize: 48,
                                 fontWeight: FontWeight.w900,
                                 foreground: Paint()
                                   ..shader = AppColors.primaryGradient
@@ -329,11 +350,11 @@ class _DailyQuizResultsScreenState
                                       ),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             Text(
                               '$correctAnswers correct out of $totalQuestions',
                               style: const TextStyle(
-                                fontSize: 14,
+                                fontSize: 13,
                                 color: Colors.white70,
                               ),
                             ),
@@ -341,26 +362,48 @@ class _DailyQuizResultsScreenState
                         ),
                       ),
 
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
                       // Rewards Grid
                       Row(
                         children: [
                           Expanded(
-                            child: CustomCard(
-                              gradient: AppColors.xpGradient,
+                            child: Container(
+                              padding: const EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.purple.shade400.withOpacity(0.15),
+                                    Colors.purple.shade700.withOpacity(0.15),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.purple.withOpacity(0.5),
+                                  width: 1.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.purple.withOpacity(0.15),
+                                    blurRadius: 10,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
+                              ),
                               child: Column(
                                 children: [
                                   const Icon(
                                     Icons.flash_on,
                                     color: Colors.white,
-                                    size: 32,
+                                    size: 28,
                                   ),
-                                  const SizedBox(height: 8),
+                                  const SizedBox(height: 6),
                                   Text(
                                     '+$xpGained',
                                     style: const TextStyle(
-                                      fontSize: 28,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.w900,
                                       color: Colors.white,
                                     ),
@@ -368,7 +411,7 @@ class _DailyQuizResultsScreenState
                                   const Text(
                                     'XP Earned',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 11,
                                       color: Colors.white70,
                                     ),
                                   ),
@@ -378,20 +421,42 @@ class _DailyQuizResultsScreenState
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: CustomCard(
-                              gradient: AppColors.primaryGradient,
+                            child: Container(
+                              padding: const EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.amber.shade400.withOpacity(0.15),
+                                    Colors.amber.shade700.withOpacity(0.15),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.amber.withOpacity(0.5),
+                                  width: 1.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.amber.withOpacity(0.15),
+                                    blurRadius: 10,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
+                              ),
                               child: Column(
                                 children: [
                                   const Icon(
                                     Icons.monetization_on,
                                     color: Colors.white,
-                                    size: 32,
+                                    size: 28,
                                   ),
-                                  const SizedBox(height: 8),
+                                  const SizedBox(height: 6),
                                   Text(
                                     '+$coinsGained',
                                     style: const TextStyle(
-                                      fontSize: 28,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.w900,
                                       color: Colors.white,
                                     ),
@@ -399,7 +464,7 @@ class _DailyQuizResultsScreenState
                                   const Text(
                                     'Coins Earned',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 11,
                                       color: Colors.white70,
                                     ),
                                   ),
@@ -410,16 +475,50 @@ class _DailyQuizResultsScreenState
                         ],
                       ),
 
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
                       // Streak Card
-                      CustomCard(
-                        gradient: LinearGradient(
-                          colors: _streakProtected
-                              ? [Colors.green.shade700, Colors.teal.shade600]
-                              : wouldBreakStreak
-                              ? [Colors.red.shade700, Colors.orange.shade600]
-                              : [Colors.orange.shade700, Colors.red.shade600],
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: _streakProtected
+                                ? [
+                                    Colors.green.shade400.withOpacity(0.15),
+                                    Colors.teal.shade600.withOpacity(0.15),
+                                  ]
+                                : wouldBreakStreak
+                                ? [
+                                    Colors.red.shade400.withOpacity(0.15),
+                                    Colors.orange.shade600.withOpacity(0.15),
+                                  ]
+                                : [
+                                    Colors.orange.shade400.withOpacity(0.15),
+                                    Colors.red.shade600.withOpacity(0.15),
+                                  ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: _streakProtected
+                                ? Colors.green.withOpacity(0.5)
+                                : wouldBreakStreak
+                                ? Colors.red.withOpacity(0.5)
+                                : Colors.orange.withOpacity(0.5),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: _streakProtected
+                                  ? Colors.green.withOpacity(0.15)
+                                  : wouldBreakStreak
+                                  ? Colors.red.withOpacity(0.15)
+                                  : Colors.orange.withOpacity(0.15),
+                              blurRadius: 10,
+                              spreadRadius: 1,
+                            ),
+                          ],
                         ),
                         child: Row(
                           children: [
@@ -430,7 +529,7 @@ class _DailyQuizResultsScreenState
                                   ? Icons.warning
                                   : Icons.local_fire_department,
                               color: Colors.white,
-                              size: 32,
+                              size: 28,
                             ),
                             const SizedBox(width: 12),
                             Expanded(
@@ -445,7 +544,7 @@ class _DailyQuizResultsScreenState
                                         ? context.l10n.streakBroken
                                         : '$streak ${context.l10n.dayStreak}',
                                     style: const TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w900,
                                       color: Colors.white,
                                     ),
@@ -459,7 +558,7 @@ class _DailyQuizResultsScreenState
                                         ? context.l10n.streakBrokenMessage
                                         : context.l10n.keepPlayingDaily,
                                     style: const TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 11,
                                       color: Colors.white70,
                                     ),
                                     maxLines: 2,
@@ -474,11 +573,29 @@ class _DailyQuizResultsScreenState
 
                       if (wouldBreakStreak && !_streakProtected) ...[
                         const SizedBox(height: 20),
-                        CustomCard(
-                          backgroundColor: AppColors.cardBackground,
-                          border: Border.all(
-                            color: AppColors.warning,
-                            width: 2,
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.warning.withOpacity(0.15),
+                                Colors.orange.shade700.withOpacity(0.15),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: AppColors.warning.withOpacity(0.7),
+                              width: 2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.warning.withOpacity(0.15),
+                                blurRadius: 10,
+                                spreadRadius: 1,
+                              ),
+                            ],
                           ),
                           child: Column(
                             children: [
@@ -525,11 +642,28 @@ class _DailyQuizResultsScreenState
 
                       if (isPerfect) ...[
                         const SizedBox(height: 20),
-                        CustomCard(
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.purple.shade600,
-                              Colors.pink.shade600,
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.purple.shade400.withOpacity(0.15),
+                                Colors.pink.shade600.withOpacity(0.15),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: Colors.purple.withOpacity(0.5),
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.purple.withOpacity(0.2),
+                                blurRadius: 12,
+                                spreadRadius: 2,
+                              ),
                             ],
                           ),
                           child: const Row(
@@ -556,18 +690,32 @@ class _DailyQuizResultsScreenState
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.purple.withOpacity(0.1),
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.cyan.shade400.withOpacity(0.15),
+                              Colors.cyan.shade700.withOpacity(0.15),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: Colors.purple.withOpacity(0.3),
-                            width: 1,
+                            color: Colors.cyan.withOpacity(0.5),
+                            width: 1.5,
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.cyan.withOpacity(0.15),
+                              blurRadius: 10,
+                              spreadRadius: 1,
+                            ),
+                          ],
                         ),
                         child: Row(
                           children: [
                             Icon(
                               Icons.info_outline,
-                              color: Colors.purple[300],
+                              color: Colors.cyan[300],
                               size: 20,
                             ),
                             const SizedBox(width: 12),

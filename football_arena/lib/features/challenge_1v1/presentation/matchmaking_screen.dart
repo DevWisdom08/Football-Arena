@@ -48,6 +48,26 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
 
   void _initializeSocket() {
     final socketService = ref.read(socketServiceProvider);
+    
+    // Add timeout for socket connection
+    Future.delayed(const Duration(seconds: 5), () {
+      if (mounted && !_searching && _status == 'Initializing...') {
+        setState(() {
+          _status = 'Connection timeout';
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Unable to connect to matchmaking server.\nPlease check your connection and try again.'),
+            backgroundColor: AppColors.error,
+            duration: Duration(seconds: 4),
+          ),
+        );
+        Future.delayed(const Duration(seconds: 1), () {
+          if (mounted) context.pop();
+        });
+      }
+    });
+
     socketService.connect();
 
     // Setup listeners

@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/services/storage_service.dart';
@@ -19,10 +21,13 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
+  final ImagePicker _imagePicker = ImagePicker();
 
   // Initialize with the first country from the list to ensure it's always valid
   late String _selectedCountry;
   bool _isLoading = false;
+  File? _selectedImage;
+  String? _currentAvatarUrl;
 
   @override
   void initState() {
@@ -39,6 +44,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     if (userData != null) {
       _usernameController.text = userData['username'] ?? '';
       _emailController.text = userData['email'] ?? '';
+      _currentAvatarUrl = userData['avatarUrl'];
 
       // Ensure the country exists in the list
       final userCountry = userData['country'] ?? 'UAE';
@@ -51,6 +57,90 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             : 'UAE';
       }
     }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? pickedFile = await _imagePicker.pickImage(
+        source: source,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _selectedImage = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      TopNotification.show(
+        context,
+        message: 'Error picking image: $e',
+        type: NotificationType.error,
+      );
+    }
+  }
+
+  void _showImageSourceDialog() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.cardBackground,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt, color: AppColors.primary),
+                title: const Text(
+                  'Take Photo',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.photo_library,
+                  color: AppColors.primary,
+                ),
+                title: const Text(
+                  'Choose from Gallery',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+              if (_selectedImage != null || _currentAvatarUrl != null)
+                ListTile(
+                  leading: const Icon(Icons.delete, color: Colors.red),
+                  title: const Text(
+                    'Remove Photo',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    setState(() {
+                      _selectedImage = null;
+                      _currentAvatarUrl = null;
+                    });
+                  },
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -71,8 +161,14 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         throw Exception('User not logged in');
       }
 
-      // Call backend API to update user profile
       final usersService = ref.read(usersApiServiceProvider);
+
+      // Upload avatar if selected
+      if (_selectedImage != null) {
+        await usersService.uploadAvatar(userId, _selectedImage!);
+      }
+
+      // Call backend API to update user profile
       final updatedUser = await usersService.updateUser(userId, {
         'username': _usernameController.text.trim(),
         'country': _selectedCountry,
@@ -124,7 +220,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             children: [
               // App bar
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
                     IconButton(
@@ -134,7 +230,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                     const Text(
                       'Edit Profile',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 22,
                         fontWeight: FontWeight.w700,
                         color: AppColors.heading,
                       ),
@@ -145,55 +241,173 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
 
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Avatar section
+                        // Avatar section with preview
                         Center(
-                          child: Stack(
+                          child: Column(
                             children: [
-                              Container(
-                                width: 120,
-                                height: 120,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: AppColors.primaryGradient,
-                                ),
-                                child: const Icon(
-                                  Icons.sports_soccer,
-                                  size: 60,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primary,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: AppColors.cardBackground,
-                                      width: 3,
+                              Stack(
+                                children: [
+                                  GestureDetector(
+                                    onTap: _showImageSourceDialog,
+                                    child: Container(
+                                      width: 120,
+                                      height: 120,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient:
+                                            _selectedImage == null &&
+                                                _currentAvatarUrl == null
+                                            ? AppColors.primaryGradient
+                                            : null,
+                                        border: Border.all(
+                                          color: _selectedImage != null
+                                              ? AppColors.success
+                                              : AppColors.border,
+                                          width: _selectedImage != null ? 3 : 2,
+                                        ),
+                                        image: _selectedImage != null
+                                            ? DecorationImage(
+                                                image: FileImage(
+                                                  _selectedImage!,
+                                                ),
+                                                fit: BoxFit.cover,
+                                              )
+                                            : _currentAvatarUrl != null
+                                            ? DecorationImage(
+                                                image: NetworkImage(
+                                                  _currentAvatarUrl!,
+                                                ),
+                                                fit: BoxFit.cover,
+                                              )
+                                            : null,
+                                      ),
+                                      child:
+                                          _selectedImage == null &&
+                                              _currentAvatarUrl == null
+                                          ? const Icon(
+                                              Icons.sports_soccer,
+                                              size: 60,
+                                              color: Colors.white,
+                                            )
+                                          : null,
                                     ),
                                   ),
-                                  child: const Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.white,
-                                    size: 20,
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: GestureDetector(
+                                      onTap: _showImageSourceDialog,
+                                      child: Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: _selectedImage != null
+                                              ? AppColors.success
+                                              : AppColors.primary,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: AppColors.cardBackground,
+                                            width: 3,
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          _selectedImage != null
+                                              ? Icons.check
+                                              : Icons.camera_alt,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
+
+                              const SizedBox(height: 12),
+
+                              // Photo status indicator
+                              if (_selectedImage != null)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.success.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: AppColors.success,
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.check_circle,
+                                        color: AppColors.success,
+                                        size: 16,
+                                      ),
+                                      SizedBox(width: 6),
+                                      Text(
+                                        'Photo Selected - Ready to Upload',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              else
+                                Column(
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.camera_alt,
+                                          size: 16,
+                                          color: Colors.white.withOpacity(0.7),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          'Tap to upload photo',
+                                          style: TextStyle(
+                                            color: Colors.white.withOpacity(
+                                              0.7,
+                                            ),
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Camera or Gallery',
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                             ],
                           ),
                         ),
 
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 24),
 
                         // Username field
                         TextFormField(
@@ -323,31 +537,39 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                           },
                         ),
 
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 28),
 
-                        // Save button
-                        CustomButton(
-                          text: _isLoading ? 'Saving...' : 'Save Changes',
-                          onPressed: _isLoading ? null : _handleSave,
-                          gradient: AppColors.primaryGradient,
-                          icon: Icons.check,
-                          isLoading: _isLoading,
+                        // Action buttons
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomButton(
+                                text: 'Cancel',
+                                onPressed: () => context.pop(),
+                                type: ButtonType.outlined,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: CustomButton(
+                                text: _isLoading ? 'Saving...' : 'Save',
+                                onPressed: _isLoading ? null : _handleSave,
+                                type: ButtonType.outlined,
+                                icon: Icons.check,
+                                isLoading: _isLoading,
+                                borderColor: _isLoading
+                                    ? Colors.grey
+                                    : const Color(0xFFFFD700), // Gold border
+                              ),
+                            ),
+                          ],
                         ),
 
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 24),
 
-                        // Cancel button
-                        CustomButton(
-                          text: 'Cancel',
-                          onPressed: () => context.pop(),
-                          type: ButtonType.outlined,
-                        ),
-
-                        const SizedBox(height: 32),
-
-                        // Info card
+                        // Info cards
                         Container(
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
                             color: Colors.blue.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
@@ -367,6 +589,40 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                               const Expanded(
                                 child: Text(
                                   'Email cannot be changed for security reasons.',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        // Avatar info
+                        Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.green.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.green.withOpacity(0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.photo_camera,
+                                color: Colors.green[300],
+                                size: 20,
+                              ),
+                              const SizedBox(width: 12),
+                              const Expanded(
+                                child: Text(
+                                  'You can select a photo and upload it to your profile!',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.white70,

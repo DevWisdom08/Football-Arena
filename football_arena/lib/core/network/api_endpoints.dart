@@ -33,6 +33,13 @@ class ApiEndpoints {
   static const String storeItems = '/store/items';
   static const String storePurchase = '/store/purchase';
   
+  // Stake Match endpoints
+  static const String stakeMatches = '/stake-matches';
+  static String stakeMatchById(String id) => '/stake-matches/$id';
+  static String stakeMatchJoin(String id) => '/stake-matches/$id/join';
+  static const String stakeMatchesAvailable = '/stake-matches/available';
+  static String stakeMatchesByUser(String userId) => '/stake-matches/user/$userId';
+  
   // Future endpoints (not yet implemented in backend)
   static const String soloStart = '/game/solo/start';
   static const String soloSubmit = '/game/solo/submit';

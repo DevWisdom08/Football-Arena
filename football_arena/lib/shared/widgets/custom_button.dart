@@ -20,6 +20,7 @@ class CustomButton extends StatelessWidget {
   final double borderRadius;
   final bool isLoading;
   final EdgeInsets padding;
+  final Color? borderColor;
 
   const CustomButton({
     super.key,
@@ -33,6 +34,7 @@ class CustomButton extends StatelessWidget {
     this.borderRadius = 26,
     this.isLoading = false,
     this.padding = const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+    this.borderColor,
   });
 
   @override
@@ -121,8 +123,11 @@ class CustomButton extends StatelessWidget {
         return OutlinedButton(
           onPressed: isLoading ? null : onPressed,
           style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.white,
-            side: const BorderSide(color: AppColors.border, width: 1.5),
+            foregroundColor: borderColor ?? Colors.white,
+            side: BorderSide(
+              color: borderColor ?? AppColors.border,
+              width: 1.5, // Same thickness for all outlined buttons
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
             ),

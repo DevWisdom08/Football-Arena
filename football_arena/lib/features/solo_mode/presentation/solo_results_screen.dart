@@ -284,8 +284,8 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
             image: const AssetImage('assets/images/background1.png'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.95),
-              BlendMode.lighten,
+              Colors.black.withOpacity(0.3),
+              BlendMode.darken,
             ),
           ),
         ),
@@ -294,16 +294,16 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 12),
 
                       // Trophy icon
                       Container(
-                        width: 100,
-                        height: 100,
+                        width: 80,
+                        height: 80,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: accuracy >= 70
@@ -318,8 +318,8 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                                           ? AppColors.primary
                                           : Colors.grey)
                                       .withOpacity(0.5),
-                              blurRadius: 40,
-                              spreadRadius: 10,
+                              blurRadius: 30,
+                              spreadRadius: 5,
                             ),
                           ],
                         ),
@@ -327,11 +327,11 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                           accuracy >= 70
                               ? Icons.emoji_events
                               : Icons.sentiment_satisfied,
-                          size: 56,
+                          size: 44,
                           color: Colors.white,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 16),
 
                       Text(
                         accuracy >= 80
@@ -341,42 +341,43 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                             : 'Keep Practicing!',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontSize: 32,
+                          fontSize: 26,
                           fontWeight: FontWeight.w900,
                           color: AppColors.heading,
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 20),
 
                       // Score card
                       CustomCard(
                         gradient: AppColors.cardGradient,
+                        padding: const EdgeInsets.all(20),
                         child: Column(
                           children: [
                             // Main score
                             Text(
                               '$correctAnswers/$totalQuestions',
                               style: const TextStyle(
-                                fontSize: 64,
+                                fontSize: 48,
                                 fontWeight: FontWeight.w900,
                                 color: Colors.white,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             Text(
                               'Correct Answers',
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 color: Colors.white.withOpacity(0.7),
                               ),
                             ),
-                            const SizedBox(height: 24),
+                            const SizedBox(height: 16),
 
                             // Accuracy
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 12,
+                                horizontal: 20,
+                                vertical: 10,
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.1),
@@ -388,13 +389,13 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                                   const Icon(
                                     Icons.trending_up,
                                     color: AppColors.success,
-                                    size: 20,
+                                    size: 18,
                                   ),
-                                  const SizedBox(width: 8),
+                                  const SizedBox(width: 6),
                                   Text(
                                     '$accuracy% Accuracy',
                                     style: const TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
                                     ),
@@ -405,12 +406,12 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 16),
 
                       // Rewards
                       CustomCard(
                         gradient: AppColors.xpGradient,
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(16),
                         child: Column(
                           children: [
                             Row(
@@ -421,15 +422,15 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                                   children: [
                                     Image.asset(
                                       'assets/icons/xp_star.png',
-                                      width: 48,
-                                      height: 48,
+                                      width: 40,
+                                      height: 40,
                                       fit: BoxFit.contain,
                                     ),
-                                    const SizedBox(height: 8),
+                                    const SizedBox(height: 6),
                                     Text(
                                       '+$xpGained',
                                       style: const TextStyle(
-                                        fontSize: 22,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w900,
                                         color: Colors.white,
                                       ),
@@ -438,27 +439,27 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                                     const Text(
                                       'XP',
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 13,
                                         color: Colors.white70,
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(width: 32),
+                                const SizedBox(width: 28),
                                 // Coins Section
                                 Column(
                                   children: [
                                     Image.asset(
                                       'assets/icons/coins_dumb.png',
-                                      width: 48,
-                                      height: 48,
+                                      width: 40,
+                                      height: 40,
                                       fit: BoxFit.contain,
                                     ),
-                                    const SizedBox(height: 8),
+                                    const SizedBox(height: 6),
                                     Text(
                                       '+$coinsGained',
                                       style: const TextStyle(
-                                        fontSize: 22,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w900,
                                         color: Colors.white,
                                       ),
@@ -467,7 +468,7 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                                     const Text(
                                       'Coins',
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 13,
                                         color: Colors.white70,
                                       ),
                                     ),
@@ -475,16 +476,16 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 12),
                             // XP breakdown below as one line
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
+                                horizontal: 10,
+                                vertical: 6,
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.08),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -493,16 +494,16 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                                     'Base: +$baseXp XP',
                                     style: const TextStyle(
                                       color: Colors.white70,
-                                      fontSize: 13,
+                                      fontSize: 12,
                                     ),
                                   ),
                                   if (timeBonusXp > 0) ...[
-                                    const SizedBox(width: 16),
+                                    const SizedBox(width: 12),
                                     Text(
                                       'Time bonus: +$timeBonusXp XP',
                                       style: const TextStyle(
                                         color: AppColors.primaryLight,
-                                        fontSize: 13,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
@@ -520,7 +521,7 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
 
               // Buttons
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     CustomButton(
@@ -532,7 +533,7 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                         context.go(RouteNames.soloMode);
                       },
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -544,7 +545,7 @@ class _SoloResultsScreenState extends ConsumerState<SoloResultsScreen> {
                             onPressed: _shareScore,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: CustomButton(
                             text: 'Back to Home',

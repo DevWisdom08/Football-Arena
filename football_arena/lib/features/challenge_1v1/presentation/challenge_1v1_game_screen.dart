@@ -105,6 +105,22 @@ class _Challenge1v1GameScreenState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _setupSocketListeners();
       _sendPlayerReady();
+      
+      // Add timeout for waiting for game to start
+      Future.delayed(const Duration(seconds: 10), () {
+        if (mounted && waitingForReady) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Game start timeout.\nReturning to home...'),
+              backgroundColor: AppColors.error,
+              duration: Duration(seconds: 3),
+            ),
+          );
+          Future.delayed(const Duration(seconds: 1), () {
+            if (mounted) context.go(RouteNames.home);
+          });
+        }
+      });
     });
   }
 

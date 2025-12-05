@@ -5,7 +5,6 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/network/store_api_service.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/extensions/localization_extensions.dart';
-import '../../../shared/widgets/custom_card.dart';
 import '../../../shared/widgets/top_notification.dart';
 
 class StoreScreen extends ConsumerStatefulWidget {
@@ -110,7 +109,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
             children: [
               // App bar
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
                     IconButton(
@@ -120,7 +119,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                     Text(
                       context.l10n.store,
                       style: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 22,
                         fontWeight: FontWeight.w700,
                         color: AppColors.heading,
                       ),
@@ -165,19 +164,19 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
 
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         context.l10n.coinPacks,
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.w700,
                           color: AppColors.heading,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
 
                       // Coin packs
                       _StoreItem(
@@ -195,7 +194,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                               'mock_transaction_${DateTime.now().millisecondsSinceEpoch}',
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       _StoreItem(
                         title: context.l10n.mediumPack,
                         subtitle: context.l10n.coins(1500),
@@ -212,7 +211,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                               'mock_transaction_${DateTime.now().millisecondsSinceEpoch}',
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       _StoreItem(
                         title: context.l10n.largePack,
                         subtitle: context.l10n.coins(5000),
@@ -349,79 +348,136 @@ class _StoreItem extends StatelessWidget {
     this.isCoinPrice = false,
   });
 
+  Color _getGradientColor() {
+    // Extract primary color from gradient for border/glow
+    if (gradient == AppColors.coinsGradient) {
+      return Colors.amber.shade400;
+    } else if (gradient == AppColors.primaryGradient) {
+      return AppColors.primary;
+    } else if (gradient == AppColors.challenge1v1Gradient) {
+      return Colors.blue.shade400;
+    } else if (gradient == AppColors.teamMatchGradient) {
+      return Colors.green.shade400;
+    } else if (gradient == AppColors.dailyQuizGradient) {
+      return Colors.orange.shade400;
+    }
+    return AppColors.primary;
+  }
+
+  Gradient _getTransparentGradient() {
+    // Create transparent version of gradient for background
+    if (gradient is LinearGradient) {
+      final linear = gradient as LinearGradient;
+      return LinearGradient(
+        colors: linear.colors.map((c) => c.withOpacity(0.15)).toList(),
+        begin: linear.begin,
+        end: linear.end,
+      );
+    }
+    return gradient;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CustomCard(
-      backgroundColor: AppColors.cardBackground,
+    final borderColor = _getGradientColor();
+    
+    return GestureDetector(
       onTap: isLoading ? null : onPurchase,
-      child: Row(
-        children: [
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          gradient: _getTransparentGradient(),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: borderColor.withOpacity(0.5),
+            width: 1.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: borderColor.withOpacity(0.2),
+              blurRadius: 8,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
           // Icon container - no background for coin images
           iconAsset != null
               ? SizedBox(
-                  width: 60,
-                  height: 60,
+                  width: 56,
+                  height: 56,
                   child: Image.asset(
                     iconAsset!,
                     fit: BoxFit.contain,
                     errorBuilder: (c, e, s) => Container(
-                      width: 60,
-                      height: 60,
+                      width: 56,
+                      height: 56,
                       decoration: BoxDecoration(
                         gradient: gradient,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                       child: Icon(
                         icon ?? Icons.monetization_on,
                         color: Colors.white,
-                        size: 32,
+                        size: 28,
                       ),
                     ),
                   ),
                 )
               : Container(
-                  width: 60,
-                  height: 60,
+                  width: 56,
+                  height: 56,
                   decoration: BoxDecoration(
                     gradient: gradient,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: [
+                      BoxShadow(
+                        color: _getGradientColor().withOpacity(0.4),
+                        blurRadius: 8,
+                        spreadRadius: 1,
+                      ),
+                    ],
                   ),
                   child: Icon(
                     icon ?? Icons.monetization_on,
                     color: Colors.white,
-                    size: 32,
+                    size: 28,
                   ),
                 ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                    Flexible(
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     if (badge != null) ...[
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 6),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
+                          horizontal: 6,
+                          vertical: 2,
                         ),
                         decoration: BoxDecoration(
                           color: AppColors.success,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           badge!,
                           style: const TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
@@ -430,23 +486,31 @@ class _StoreItem extends StatelessWidget {
                     ],
                   ],
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 3),
                 Text(
                   subtitle,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     color: AppColors.textSecondary,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               gradient: gradient,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: _getGradientColor().withOpacity(0.4),
+                  blurRadius: 8,
+                  spreadRadius: 1,
+                ),
+              ],
             ),
             child: isCoinPrice
                 ? Row(
@@ -454,19 +518,19 @@ class _StoreItem extends StatelessWidget {
                     children: [
                       Image.asset(
                         'assets/icons/coin_icon.png',
-                        width: 16,
-                        height: 16,
+                        width: 14,
+                        height: 14,
                         errorBuilder: (c, e, s) => const Icon(
                           Icons.monetization_on,
                           color: Colors.white,
-                          size: 16,
+                          size: 14,
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 3),
                       Text(
                         price,
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
                         ),
@@ -476,13 +540,14 @@ class _StoreItem extends StatelessWidget {
                 : Text(
                     price,
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
                   ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
