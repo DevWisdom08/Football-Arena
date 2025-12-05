@@ -274,7 +274,7 @@ export class WithdrawalService {
       token: token,
     });
 
-    if (result.success) {
+    if (result.success && result.transactionHash) {
       // Mark as completed
       withdrawal.status = 'completed';
       withdrawal.transactionId = result.transactionHash;

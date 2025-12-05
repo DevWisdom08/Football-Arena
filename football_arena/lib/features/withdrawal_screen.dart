@@ -16,7 +16,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _amountController = TextEditingController();
-  String _selectedMethod = 'paypal';
+  String _selectedMethod = 'crypto'; // Default to crypto
 
   // Payment details controllers
   final TextEditingController _paypalEmailController = TextEditingController();
@@ -31,7 +31,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen>
       TextEditingController();
 
   final double _conversionRate = 1000; // 1000 coins = $1
-  final double _withdrawalFeePercentage = 5.0; // 5%
+  final double _withdrawalFeeFlat = 1.0; // $1 flat fee for crypto
   final int _minWithdrawal = 10000; // $10 minimum
 
   @override
@@ -81,7 +81,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen>
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title: const Text(
-          '💰 Withdraw Winnings',
+          '💰 Withdraw to Crypto Wallet',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         bottom: TabBar(
@@ -320,18 +320,11 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen>
 
   Widget _buildMethodSelector() {
     final methods = [
-      {'id': 'paypal', 'name': 'PayPal', 'icon': Icons.payment},
-      {
-        'id': 'bank_transfer',
-        'name': 'Bank Transfer',
-        'icon': Icons.account_balance,
-      },
-      {
-        'id': 'mobile_money',
-        'name': 'Mobile Money',
-        'icon': Icons.phone_android,
-      },
-      {'id': 'crypto', 'name': 'Crypto', 'icon': Icons.currency_bitcoin},
+      {'id': 'crypto', 'name': 'Crypto (USDT/USDC)', 'icon': Icons.currency_bitcoin},
+      // Other methods disabled - Crypto only!
+      // {'id': 'paypal', 'name': 'PayPal', 'icon': Icons.payment},
+      // {'id': 'bank_transfer', 'name': 'Bank Transfer', 'icon': Icons.account_balance},
+      // {'id': 'mobile_money', 'name': 'Mobile Money', 'icon': Icons.phone_android},
     ];
 
     return Wrap(
@@ -410,17 +403,17 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen>
                 ),
                 _buildCalculationRow(
                   'USD Value:',
-                  '\$${(int.tryParse(_amountController.text) ?? 0) / _conversionRate}',
+                  '\$${((int.tryParse(_amountController.text) ?? 0) / _conversionRate).toStringAsFixed(2)}',
                 ),
                 _buildCalculationRow(
-                  'Withdrawal Fee ($_withdrawalFeePercentage%):',
-                  '\$${((int.tryParse(_amountController.text) ?? 0) / _conversionRate * _withdrawalFeePercentage / 100).toStringAsFixed(2)}',
+                  'Withdrawal Fee (flat):',
+                  '\$${_withdrawalFeeFlat.toStringAsFixed(2)}',
                   isNegative: true,
                 ),
                 const Divider(color: Colors.white24),
                 _buildCalculationRow(
-                  'You receive:',
-                  '\$${(((int.tryParse(_amountController.text) ?? 0) / _conversionRate) * (1 - _withdrawalFeePercentage / 100)).toStringAsFixed(2)}',
+                  'You receive (USDT):',
+                  '\$${(((int.tryParse(_amountController.text) ?? 0) / _conversionRate) - _withdrawalFeeFlat).toStringAsFixed(2)}',
                   highlight: true,
                 ),
               ],
@@ -578,20 +571,50 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen>
   }
 
   Widget _buildCryptoForm() {
-    return TextField(
-      controller: _walletAddressController,
-      style: const TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        labelText: 'Crypto Wallet Address (USDT)',
-        labelStyle: const TextStyle(color: Colors.white70),
-        prefixIcon: const Icon(Icons.currency_bitcoin, color: Colors.white70),
-        filled: true,
-        fillColor: AppColors.cardBackground,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          controller: _walletAddressController,
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            labelText: 'Polygon Wallet Address (USDT/USDC)',
+            labelStyle: const TextStyle(color: Colors.white70),
+            hintText: '0x...',
+            hintStyle: const TextStyle(color: Colors.white38),
+            prefixIcon: const Icon(Icons.currency_bitcoin, color: Colors.white70),
+            filled: true,
+            fillColor: AppColors.cardBackground,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+          ),
         ),
-      ),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.green.shade900.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.green.shade700),
+          ),
+          child: Row(
+            children: const [
+              Icon(Icons.info_outline, color: Colors.greenAccent, size: 20),
+              SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  '✅ Instant withdrawal (30 seconds)\n'
+                  '✅ Low fee (\$1 flat fee)\n'
+                  '✅ Make sure you use Polygon network!',
+                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -617,11 +640,12 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen>
           SizedBox(height: 8),
           Text(
             '• Minimum withdrawal: \$10 (10,000 coins)\n'
-            '• Withdrawal fee: 5%\n'
-            '• Processing time: 3-5 business days\n'
+            '• Withdrawal fee: \$1 flat fee (not percentage!)\n'
+            '• Processing time: 30 seconds (instant!) ⚡\n'
+            '• Network: Polygon (low gas fees)\n'
             '• Only withdrawable coins can be withdrawn\n'
             '• Purchased coins are NOT withdrawable\n'
-            '• KYC verification required for all withdrawals',
+            '• KYC verification required (18+ only)',
             style: TextStyle(color: Colors.white70, fontSize: 12),
           ),
         ],
@@ -801,9 +825,10 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen>
         ),
         content: Text(
           'Withdraw $amount coins (\$${(amount / _conversionRate).toStringAsFixed(2)})?\n\n'
-          'Fee: 5%\n'
-          'You will receive: \$${((amount / _conversionRate) * 0.95).toStringAsFixed(2)}\n\n'
-          'Processing time: 3-5 business days',
+          'Withdrawal Method: Crypto (USDT on Polygon)\n'
+          'Fee: \$${_withdrawalFeeFlat.toStringAsFixed(2)} flat fee\n'
+          'You will receive: \$${((amount / _conversionRate) - _withdrawalFeeFlat).toStringAsFixed(2)} USDT\n\n'
+          '⚡ Processing time: 30 seconds (instant!)',
           style: const TextStyle(color: Colors.white70),
         ),
         actions: [
