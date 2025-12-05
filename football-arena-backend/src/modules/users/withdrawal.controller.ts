@@ -115,5 +115,24 @@ export class WithdrawalController {
     const userId = req.user?.id || req.body.userId;
     return await this.withdrawalService.cancelWithdrawal(userId, id);
   }
+
+  /**
+   * Process crypto withdrawal (admin only)
+   */
+  @Post('process-crypto')
+  async processCryptoWithdrawal(@Body() body: { withdrawalId: string; adminId: string }) {
+    return await this.withdrawalService.processCryptoWithdrawal(
+      body.withdrawalId,
+      body.adminId,
+    );
+  }
+
+  /**
+   * Get platform wallet info (admin only)
+   */
+  @Get('wallet-info')
+  async getWalletInfo() {
+    return await this.withdrawalService.getWalletInfo();
+  }
 }
 

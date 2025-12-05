@@ -7,14 +7,15 @@ import { TransactionHistory } from './entities/transaction-history.entity';
 import { CreateWithdrawalDto } from './dto/create-withdrawal.dto';
 import { SubmitKycDto } from './dto/submit-kyc.dto';
 import { ProcessWithdrawalDto } from './dto/process-withdrawal.dto';
+import { CryptoPaymentService } from './crypto-payment.service';
 
 @Injectable()
 export class WithdrawalService {
   // Conversion rate: 1000 coins = $1 USD
   private readonly COINS_TO_USD_RATE = 1000;
   
-  // Withdrawal fee: 5%
-  private readonly WITHDRAWAL_FEE_PERCENTAGE = 5;
+  // Withdrawal fee: $1 flat fee (covers gas costs)
+  private readonly WITHDRAWAL_FEE_USD = 1.0;
 
   constructor(
     @InjectRepository(User)
@@ -23,6 +24,7 @@ export class WithdrawalService {
     private withdrawalRepository: Repository<WithdrawalRequest>,
     @InjectRepository(TransactionHistory)
     private transactionRepository: Repository<TransactionHistory>,
+    private cryptoPaymentService: CryptoPaymentService,
   ) {}
 
   /**
@@ -110,7 +112,7 @@ export class WithdrawalService {
 
     // Calculate amounts
     const amountInUSD = withdrawalDto.amount / this.COINS_TO_USD_RATE;
-    const withdrawalFee = amountInUSD * (this.WITHDRAWAL_FEE_PERCENTAGE / 100);
+    const withdrawalFee = this.WITHDRAWAL_FEE_USD; // Flat $1 fee for crypto
     const netAmount = amountInUSD - withdrawalFee;
 
     // Deduct coins immediately
@@ -229,6 +231,115 @@ export class WithdrawalService {
     withdrawal.completedAt = new Date();
 
     return await this.withdrawalRepository.save(withdrawal);
+  }
+
+  /**
+   * Process crypto withdrawal automatically
+   */
+  async processCryptoWithdrawal(
+    withdrawalId: string,
+    adminId: string,
+  ): Promise<any> {
+    const withdrawal = await this.withdrawalRepository.findOne({
+      where: { id: withdrawalId },
+      relations: ['user'],
+    });
+
+    if (!withdrawal) {
+      throw new NotFoundException('Withdrawal request not found');
+    }
+
+    if (withdrawal.status !== 'pending') {
+      throw new BadRequestException('Withdrawal already processed');
+    }
+
+    // Check if withdrawal method is crypto
+    if (withdrawal.withdrawalMethod !== 'crypto') {
+      throw new BadRequestException('This withdrawal is not a crypto withdrawal');
+    }
+
+    // Get wallet address from payment details
+    const walletAddress = withdrawal.paymentDetails?.walletAddress;
+    if (!walletAddress) {
+      throw new BadRequestException('No wallet address provided');
+    }
+
+    // Get token type (default to USDT)
+    const token = withdrawal.paymentDetails?.token || 'USDT';
+
+    // Send crypto payment
+    const result = await this.cryptoPaymentService.sendCrypto({
+      userWalletAddress: walletAddress,
+      amountUSD: withdrawal.netAmount,
+      token: token,
+    });
+
+    if (result.success) {
+      // Mark as completed
+      withdrawal.status = 'completed';
+      withdrawal.transactionId = result.transactionHash;
+      withdrawal.processedBy = adminId;
+      withdrawal.processedAt = new Date();
+      withdrawal.completedAt = new Date();
+      await this.withdrawalRepository.save(withdrawal);
+
+      return {
+        success: true,
+        message: 'Crypto withdrawal processed successfully',
+        transactionHash: result.transactionHash,
+        explorerUrl: `https://polygonscan.com/tx/${result.transactionHash}`,
+      };
+    } else {
+      // Mark as rejected
+      withdrawal.status = 'rejected';
+      withdrawal.rejectionReason = result.error || 'Crypto payment failed';
+      withdrawal.processedBy = adminId;
+      withdrawal.processedAt = new Date();
+      await this.withdrawalRepository.save(withdrawal);
+
+      // Refund coins to user
+      const user = await this.userRepository.findOne({ where: { id: withdrawal.userId } });
+      if (user) {
+        user.withdrawableCoins += withdrawal.amount;
+        await this.userRepository.save(user);
+
+        // Record refund transaction
+        await this.recordTransaction(
+          withdrawal.userId,
+          'refund',
+          withdrawal.amount,
+          'withdrawable',
+          `Crypto withdrawal failed and refunded: ${result.error}`,
+          withdrawal.id,
+          'withdrawal',
+        );
+      }
+
+      return {
+        success: false,
+        message: 'Crypto withdrawal failed',
+        error: result.error,
+      };
+    }
+  }
+
+  /**
+   * Get platform crypto wallet info
+   */
+  async getWalletInfo(): Promise<any> {
+    const address = this.cryptoPaymentService.getWalletAddress();
+    const usdtBalance = await this.cryptoPaymentService.getWalletBalance('USDT');
+    const usdcBalance = await this.cryptoPaymentService.getWalletBalance('USDC');
+
+    return {
+      address,
+      network: 'Polygon',
+      balances: {
+        USDT: usdtBalance,
+        USDC: usdcBalance,
+      },
+      explorerUrl: `https://polygonscan.com/address/${address}`,
+    };
   }
 
   /**

@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { WithdrawalService } from './withdrawal.service';
 import { WithdrawalController } from './withdrawal.controller';
+import { CryptoPaymentService } from './crypto-payment.service';
 import { User } from './entities/user.entity';
 import { WithdrawalRequest } from './entities/withdrawal-request.entity';
 import { TransactionHistory } from './entities/transaction-history.entity';
@@ -21,7 +22,7 @@ import { Friendship } from '../friends/entities/friend.entity';
     ]),
   ],
   controllers: [UsersController, WithdrawalController],
-  providers: [UsersService, WithdrawalService],
-  exports: [UsersService, WithdrawalService],
+  providers: [UsersService, WithdrawalService, CryptoPaymentService],
+  exports: [UsersService, WithdrawalService, CryptoPaymentService],
 })
 export class UsersModule {}
