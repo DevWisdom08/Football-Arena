@@ -1,4 +1,4 @@
-# 📸 Avatar Upload with PostgreSQL Storage
+r# 📸 Avatar Upload with PostgreSQL Storage
 
 ## ✅ COMPLETE IMPLEMENTATION
 
