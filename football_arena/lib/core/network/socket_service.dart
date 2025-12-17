@@ -6,13 +6,17 @@ import '../services/storage_service.dart';
 class SocketService {
   IO.Socket? _socket;
   bool _isConnected = false;
+  bool _isConnecting = false;
+  final List<Function()> _connectionCallbacks = [];
 
   IO.Socket? get socket => _socket;
   bool get isConnected => _isConnected;
+  bool get isConnecting => _isConnecting;
 
   void connect() {
-    if (_isConnected) return;
+    if (_isConnected || _isConnecting) return;
 
+    _isConnecting = true;
     final token = StorageService.instance.getAuthToken();
     
     _socket = IO.io(
@@ -29,8 +33,15 @@ class SocketService {
     );
 
     _socket?.onConnect((_) {
-      print('🟢 Socket connected');
+      print('🟢 Socket connected to /game namespace');
       _isConnected = true;
+      _isConnecting = false;
+      
+      // Execute queued callbacks
+      for (var callback in _connectionCallbacks) {
+        callback();
+      }
+      _connectionCallbacks.clear();
     });
 
     _socket?.onDisconnect((_) {
@@ -41,11 +52,15 @@ class SocketService {
     _socket?.onConnectError((error) {
       print('❌ Socket connection error: $error');
       _isConnected = false;
+      _isConnecting = false;
+      _connectionCallbacks.clear();
     });
 
     _socket?.onConnectTimeout((data) {
       print('⏱️ Socket connection timeout');
       _isConnected = false;
+      _isConnecting = false;
+      _connectionCallbacks.clear();
     });
 
     _socket?.onError((error) {
@@ -58,6 +73,20 @@ class SocketService {
     _socket?.dispose();
     _socket = null;
     _isConnected = false;
+    _isConnecting = false;
+    _connectionCallbacks.clear();
+  }
+
+  // Execute action when connected, or queue it if connecting
+  void whenConnected(Function() callback) {
+    if (_isConnected) {
+      callback();
+    } else {
+      _connectionCallbacks.add(callback);
+      if (!_isConnecting && !_isConnected) {
+        connect();
+      }
+    }
   }
 
   // Matchmaking

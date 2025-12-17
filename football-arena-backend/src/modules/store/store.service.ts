@@ -52,19 +52,43 @@ export class StoreService {
   };
 
   async purchaseItem(purchaseRequest: PurchaseRequest): Promise<any> {
-    const { userId, itemType, itemId, paymentMethod, transactionId } = purchaseRequest;
-    
-    const user = await this.usersService.findOne(userId);
+    try {
+      const { userId, itemType, itemId, paymentMethod, transactionId } = purchaseRequest;
+      
+      console.log('[StoreService] Purchase request:', {
+        userId,
+        itemType,
+        itemId,
+        paymentMethod,
+      });
 
-    if (itemType === StoreItemType.COIN_PACK) {
-      return await this.purchaseCoinPack(user, itemId, paymentMethod, transactionId);
-    } else if (itemType === StoreItemType.VIP_SUBSCRIPTION || itemType === StoreItemType.VIP_ONE_TIME) {
-      return await this.purchaseVIP(user, itemId, itemType, paymentMethod, transactionId);
-    } else if (itemType === StoreItemType.BOOST) {
-      return await this.purchaseBoost(user, itemId);
+      if (!userId || !itemType || !itemId || !paymentMethod) {
+        throw new BadRequestException('Missing required fields: userId, itemType, itemId, paymentMethod');
+      }
+      
+      const user = await this.usersService.findOne(userId);
+      if (!user) {
+        throw new NotFoundException(`User with ID ${userId} not found`);
+      }
+
+      // Normalize itemType to match enum values
+      const normalizedItemType = itemType.toLowerCase();
+
+      if (normalizedItemType === 'coin_pack' || itemType === StoreItemType.COIN_PACK) {
+        return await this.purchaseCoinPack(user, itemId, paymentMethod, transactionId);
+      } else if (normalizedItemType === 'vip_subscription' || normalizedItemType === 'vip_one_time' || 
+                 itemType === StoreItemType.VIP_SUBSCRIPTION || itemType === StoreItemType.VIP_ONE_TIME) {
+        const vipType = normalizedItemType === 'vip_one_time' ? StoreItemType.VIP_ONE_TIME : StoreItemType.VIP_SUBSCRIPTION;
+        return await this.purchaseVIP(user, itemId, vipType, paymentMethod, transactionId);
+      } else if (normalizedItemType === 'boost' || itemType === StoreItemType.BOOST) {
+        return await this.purchaseBoost(user, itemId);
+      }
+
+      throw new BadRequestException(`Invalid item type: ${itemType}`);
+    } catch (error) {
+      console.error('[StoreService] Purchase error:', error);
+      throw error;
     }
-
-    throw new BadRequestException('Invalid item type');
   }
 
   private async purchaseCoinPack(
@@ -73,9 +97,15 @@ export class StoreService {
     paymentMethod: string,
     transactionId?: string,
   ): Promise<any> {
+    console.log('[StoreService] Purchasing coin pack:', {
+      packId,
+      paymentMethod,
+      availablePacks: Object.keys(this.storeItems.coin_packs),
+    });
+
     const pack = this.storeItems.coin_packs[packId];
     if (!pack) {
-      throw new NotFoundException('Coin pack not found');
+      throw new NotFoundException(`Coin pack '${packId}' not found. Available packs: ${Object.keys(this.storeItems.coin_packs).join(', ')}`);
     }
 
     if (paymentMethod === 'iap') {
@@ -197,21 +227,36 @@ export class StoreService {
   }
 
   private async purchaseBoost(user: User, boostId: string): Promise<any> {
+    console.log('[StoreService] Purchasing boost:', {
+      boostId,
+      availableBoosts: Object.keys(this.storeItems.boosts),
+      userCoins: user.coins,
+    });
+
     const boost = this.storeItems.boosts[boostId];
     if (!boost) {
-      throw new NotFoundException('Boost not found');
+      throw new NotFoundException(`Boost '${boostId}' not found. Available boosts: ${Object.keys(this.storeItems.boosts).join(', ')}`);
     }
 
-    if (user.coins < boost.coins) {
-      throw new BadRequestException('Insufficient coins');
+    const totalCoins = user.coins + user.purchasedCoins;
+    if (totalCoins < boost.coins) {
+      throw new BadRequestException(`Insufficient coins. Need ${boost.coins}, have ${totalCoins}`);
     }
 
-    // Spend coins
-    await this.usersService.spendCoins(
-      user.id,
-      boost.coins,
-      `Purchased ${boostId} boost`,
-    );
+    // Deduct coins (prioritize purchased coins, then regular coins)
+    let remaining = boost.coins;
+    
+    if (user.purchasedCoins >= remaining) {
+      user.purchasedCoins -= remaining;
+    } else {
+      remaining -= user.purchasedCoins;
+      user.purchasedCoins = 0;
+      user.coins -= remaining;
+    }
+
+    await this.usersRepository.save(user);
+
+    console.log('[StoreService] Boost purchased successfully');
 
     // In a real app, you'd store boost inventory or apply it immediately
     // For now, we'll just deduct coins and return success

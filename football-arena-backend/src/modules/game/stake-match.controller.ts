@@ -41,7 +41,7 @@ export class StakeMatchController {
   /**
    * Get user's stake match history
    */
-  @Get('my-matches/:userId')
+  @Get('user/:userId')
   async getUserMatches(@Param('userId') userId: string) {
     return await this.stakeMatchService.getUserStakeMatches(userId);
   }
@@ -57,13 +57,17 @@ export class StakeMatchController {
   /**
    * Join a stake match
    */
-  @Post('join')
+  @Post(':id/join')
   async joinStakeMatch(
+    @Param('id') matchId: string,
     @Request() req,
-    @Body() joinDto: JoinStakeMatchDto,
+    @Body() body?: { userId?: string },
   ) {
-    const userId = req.user?.id || req.body.userId;
-    return await this.stakeMatchService.joinStakeMatch(userId, joinDto.matchId);
+    const userId = req.user?.id || body?.userId;
+    if (!userId) {
+      throw new Error('User ID is required');
+    }
+    return await this.stakeMatchService.joinStakeMatch(userId, matchId);
   }
 
   /**

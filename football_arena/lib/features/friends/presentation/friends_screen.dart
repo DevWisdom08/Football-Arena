@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/network/friends_api_service.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/services/storage_service.dart';
+import '../../../core/routes/route_names.dart';
 import '../../../shared/widgets/custom_card.dart';
 import '../../../shared/widgets/app_bottom_bar.dart';
 import '../../../shared/widgets/top_notification.dart';
@@ -461,19 +462,17 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                   friend['friendId'] ?? friend['id'] ?? friend['userId'],
                 );
               } else if (value == 'challenge') {
-                // TODO: Navigate to challenge screen
+                // Navigate to 1v1 challenge
+                context.push(RouteNames.challenge1v1);
                 TopNotification.show(
                   context,
-                  message: 'Challenge feature coming soon!',
+                  message: 'Challenge your friend in 1v1 mode!',
                   type: NotificationType.info,
                 );
               } else if (value == 'profile') {
-                // TODO: Navigate to profile screen
-                TopNotification.show(
-                  context,
-                  message: 'Profile view coming soon!',
-                  type: NotificationType.info,
-                );
+                // Navigate to profile screen (currently shows own profile)
+                // In future: pass friendId to view friend's profile
+                context.push(RouteNames.profile);
               }
             },
           ),

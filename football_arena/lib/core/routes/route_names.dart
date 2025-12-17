@@ -45,6 +45,8 @@ class RouteNames {
   
   // Stake Match & Withdrawal Routes
   static const String stakeMatch = '/stake-match';
+  static const String stakeMatchGame = '/stake-match/game';
+  static const String stakeMatchResults = '/stake-match/results';
   static const String withdrawal = '/withdrawal';
   
   // Helper method to check if route requires auth

@@ -3,6 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AddCoinsDto } from './dto/add-coins.dto';
 
 @Controller('users')
 export class UsersController {
@@ -81,7 +82,7 @@ export class UsersController {
   @Post(':id/coins/add')
   addCoins(
     @Param('id') id: string,
-    @Body() body: { amount: number; reason: string },
+    @Body() body: AddCoinsDto,
   ) {
     return this.usersService.addCoins(id, body.amount, body.reason);
   }

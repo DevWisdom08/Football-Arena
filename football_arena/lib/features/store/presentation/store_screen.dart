@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/network/store_api_service.dart';
+import '../../../core/network/users_api_service.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/extensions/localization_extensions.dart';
 import '../../../shared/widgets/top_notification.dart';
@@ -32,6 +33,65 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
         userId = userData['id'];
         userCoins = (userData['coins'] ?? 0) as int;
       });
+    }
+  }
+
+  Future<void> _refreshUserDataFromAPI() async {
+    if (userId == null) return;
+
+    try {
+      final usersService = ref.read(usersApiServiceProvider);
+      final freshUserData = await usersService.getUserById(userId!);
+      
+      // Update storage with fresh data
+      await StorageService.instance.saveUserData(freshUserData);
+      
+      // Update UI
+      setState(() {
+        userCoins = (freshUserData['coins'] ?? 0) + 
+                    (freshUserData['purchasedCoins'] ?? 0) + 
+                    (freshUserData['withdrawableCoins'] ?? 0);
+      });
+    } catch (e) {
+      print('Error refreshing user data: $e');
+    }
+  }
+
+  // DEBUG: Quick way to add test coins for development
+  Future<void> _addTestCoins() async {
+    if (userId == null) return;
+
+    setState(() => isLoading = true);
+
+    try {
+      final usersService = ref.read(usersApiServiceProvider);
+      
+      // Add 10,000 coins for testing
+      await usersService.addCoins(
+        userId: userId!,
+        amount: 10000,
+        reason: 'Test coins for development',
+      );
+
+      await _refreshUserDataFromAPI();
+
+      if (mounted) {
+        TopNotification.show(
+          context,
+          message: '✅ Added 10,000 test coins!',
+          type: NotificationType.success,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        TopNotification.show(
+          context,
+          message: 'Error adding test coins: ${e.toString()}',
+          type: NotificationType.error,
+        );
+      }
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 
@@ -69,10 +129,10 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
           type: NotificationType.success,
         );
 
-        // Refresh user data
-        await _loadUserData();
+        // Refresh user data from API to get updated coins
+        await _refreshUserDataFromAPI();
 
-        // Update coins if returned
+        // Also update from result if provided
         if (result['newBalance'] != null) {
           setState(() {
             userCoins = result['newBalance'] as int;
@@ -115,6 +175,12 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                     IconButton(
                       onPressed: () => context.pop(),
                       icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    ),
+                    // DEBUG: Quick coins for testing
+                    IconButton(
+                      onPressed: () => _addTestCoins(),
+                      icon: const Icon(Icons.add_circle, color: Colors.green),
+                      tooltip: 'Add 10,000 test coins',
                     ),
                     Text(
                       context.l10n.store,

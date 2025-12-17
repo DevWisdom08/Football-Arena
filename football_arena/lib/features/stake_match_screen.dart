@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../shared/models/user_model.dart';
-import '../shared/models/stake_match_model.dart';
 import '../core/constants/app_colors.dart';
 import '../core/services/storage_service.dart';
 import '../core/network/stake_match_api_service.dart';
 import '../core/models/stake_match.dart';
+import '../core/routes/route_names.dart';
 
 class StakeMatchScreen extends ConsumerStatefulWidget {
   const StakeMatchScreen({super.key});
@@ -790,59 +790,6 @@ class _StakeMatchScreenState extends ConsumerState<StakeMatchScreen>
     }
   }
 
-  void _joinMatch(StakeMatchModel match, UserModel user) {
-    if (user.totalCoins < match.stakeAmount) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Insufficient coins to join this match'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.cardBackground,
-        title: const Text(
-          'Join Stake Match',
-          style: TextStyle(color: Colors.white),
-        ),
-        content: Text(
-          'Join this match with ${match.stakeAmount} coins?\n\nWinner gets ${match.winnerPayout} coins!',
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // TODO: Implement API call to join match
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Joining match...'),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.black,
-            ),
-            child: const Text(
-              'Join',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Future<void> _joinRealMatch(StakeMatch match, UserModel user) async {
     if (user.totalCoins < match.stakeAmount) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -986,12 +933,15 @@ class _StakeMatchScreenState extends ConsumerState<StakeMatchScreen>
   }
 
   void _playMatch(StakeMatch match) {
-    // Navigate to quiz game with stake match mode
-    context.push('/solo-mode'); // TODO: Pass stake match ID
-  }
+    final userId = StorageService.instance.getUserId();
+    final isCreator = match.creatorId == userId;
 
-  void _playMatchOld(StakeMatchModel match) {
-    // Navigate to quiz game with stake match mode
-    context.push('/solo-mode'); // TODO: Pass stake match ID
+    context.push(
+      RouteNames.stakeMatchGame,
+      extra: {
+        'match': match,
+        'isCreator': isCreator,
+      },
+    );
   }
 }

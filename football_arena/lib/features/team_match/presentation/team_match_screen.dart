@@ -127,14 +127,33 @@ class _TeamMatchScreenState extends ConsumerState<TeamMatchScreen> {
     setState(() => _isCreating = true);
 
     final socketService = ref.read(socketServiceProvider);
-    socketService.createTeamRoom(
-      userId: userId,
-      username: userData?['username'] ?? 'Player',
-      maxPlayers: 10,
-      roomName: roomName.isEmpty ? null : roomName,
-      rounds: rounds,
-      questionsPerRound: 1,
-    );
+    
+    // Wait for connection before creating room
+    socketService.whenConnected(() {
+      if (!mounted) return;
+      
+      print('Creating team room...');
+      socketService.createTeamRoom(
+        userId: userId,
+        username: userData?['username'] ?? 'Player',
+        maxPlayers: 10,
+        roomName: roomName.isEmpty ? null : roomName,
+        rounds: rounds,
+        questionsPerRound: 1,
+      );
+    });
+
+    // Timeout after 10 seconds if still creating
+    Future.delayed(const Duration(seconds: 10), () {
+      if (mounted && _isCreating) {
+        setState(() => _isCreating = false);
+        TopNotification.show(
+          context,
+          message: 'Connection timeout. Please try again.',
+          type: NotificationType.error,
+        );
+      }
+    });
   }
 
   void _joinRoom() {
@@ -176,11 +195,30 @@ class _TeamMatchScreenState extends ConsumerState<TeamMatchScreen> {
     setState(() => _isCreating = true);
 
     final socketService = ref.read(socketServiceProvider);
-    socketService.joinTeamRoom(
-      userId: userId,
-      username: userData?['username'] ?? 'Player',
-      roomCode: roomCode,
-    );
+    
+    // Wait for connection before joining room
+    socketService.whenConnected(() {
+      if (!mounted) return;
+      
+      print('Joining team room: $roomCode');
+      socketService.joinTeamRoom(
+        userId: userId,
+        username: userData?['username'] ?? 'Player',
+        roomCode: roomCode,
+      );
+    });
+
+    // Timeout after 10 seconds if still trying to join
+    Future.delayed(const Duration(seconds: 10), () {
+      if (mounted && _isCreating) {
+        setState(() => _isCreating = false);
+        TopNotification.show(
+          context,
+          message: 'Connection timeout. Please try again.',
+          type: NotificationType.error,
+        );
+      }
+    });
   }
 
   @override

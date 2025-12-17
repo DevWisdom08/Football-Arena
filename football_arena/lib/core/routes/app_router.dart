@@ -28,6 +28,8 @@ import '../../features/profile/presentation/profile_edit_screen.dart';
 import '../../features/leaderboard/presentation/leaderboard_screen.dart';
 import '../../features/store/presentation/store_screen.dart';
 import '../../features/stake_match_screen.dart';
+import '../../features/stake_match/presentation/stake_match_game_screen.dart';
+import '../../features/stake_match/presentation/stake_match_results_screen.dart';
 import '../../features/withdrawal_screen.dart';
 import '../services/storage_service.dart';
 
@@ -244,6 +246,32 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: RouteNames.stakeMatch,
         builder: (context, state) => const StakeMatchScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.stakeMatchGame,
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>?;
+          return StakeMatchGameScreen(
+            match: data?['match'],
+            isCreator: data?['isCreator'] ?? false,
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteNames.stakeMatchResults,
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>?;
+          return StakeMatchResultsScreen(
+            match: data?['match'],
+            myScore: data?['myScore'] ?? 0,
+            correctAnswers: data?['correctAnswers'] ?? 0,
+            totalQuestions: data?['totalQuestions'] ?? 0,
+            questionResults: List<Map<String, dynamic>>.from(
+              data?['questionResults'] ?? [],
+            ),
+            isCreator: data?['isCreator'] ?? false,
+          );
+        },
       ),
 
       // Withdrawal

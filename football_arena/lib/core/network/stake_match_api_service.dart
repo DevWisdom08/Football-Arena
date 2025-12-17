@@ -93,6 +93,31 @@ class StakeMatchApiService {
     }
   }
 
+  /// Complete a stake match with scores
+  Future<StakeMatch> completeStakeMatch({
+    required String matchId,
+    required int myScore,
+    required bool isCreator,
+  }) async {
+    try {
+      // In a real implementation with real-time gameplay,
+      // both players would submit their scores separately
+      // For now, we'll submit with placeholder opponent score
+      final response = await dio.post(
+        '${ApiEndpoints.stakeMatches}/complete',
+        data: {
+          'matchId': matchId,
+          'creatorScore': isCreator ? myScore : 0,
+          'opponentScore': isCreator ? 0 : myScore,
+        },
+      );
+
+      return StakeMatch.fromJson(response.data);
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   Exception _handleError(DioException e) {
     if (e.response != null) {
       final message = e.response?.data['message'] ?? 'An error occurred';

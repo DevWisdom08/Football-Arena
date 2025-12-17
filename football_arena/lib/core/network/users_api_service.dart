@@ -83,6 +83,26 @@ class UsersApiService {
     }
   }
 
+  Future<Map<String, dynamic>> addCoins({
+    required String userId,
+    required int amount,
+    required String reason,
+  }) async {
+    try {
+      final response = await dio.post(
+        '${ApiEndpoints.userById(userId)}/coins/add',
+        data: {
+          'amount': amount,
+          'reason': reason,
+          // DO NOT send userId in body - it's in the URL path
+        },
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   String _handleError(DioException e) {
     if (e.response != null) {
       final message = e.response?.data['message'];
