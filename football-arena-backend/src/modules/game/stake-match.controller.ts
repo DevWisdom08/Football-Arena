@@ -77,8 +77,8 @@ export class StakeMatchController {
   async completeStakeMatch(@Body() completeDto: CompleteStakeMatchDto) {
     return await this.stakeMatchService.completeStakeMatch(
       completeDto.matchId,
-      completeDto.creatorScore,
-      completeDto.opponentScore,
+      completeDto.userId,
+      completeDto.score,
     );
   }
 

@@ -7,6 +7,7 @@ import '../../../core/routes/route_names.dart';
 import '../../../core/network/questions_api_service.dart';
 import '../../../core/network/stake_match_api_service.dart';
 import '../../../core/models/stake_match.dart';
+import '../../../core/services/storage_service.dart';
 import '../../../shared/widgets/football_loading.dart';
 import '../../../shared/widgets/question_display.dart';
 import '../../../shared/widgets/top_notification.dart';
@@ -47,11 +48,25 @@ class _StakeMatchGameScreenState extends ConsumerState<StakeMatchGameScreen> {
 
   Future<void> _loadQuestions() async {
     try {
+      print('🎮 Loading questions for Stake Match...');
+      print('   Match ID: ${widget.match.id}');
+      print('   Number of Questions: ${widget.match.numberOfQuestions}');
+      print('   Difficulty: ${widget.match.difficulty}');
+      
       final questionsService = ref.read(questionsApiServiceProvider);
+      
+      // Use default values if not set
+      final count = widget.match.numberOfQuestions > 0 ? widget.match.numberOfQuestions : 10;
+      final difficulty = widget.match.difficulty?.isNotEmpty == true ? widget.match.difficulty : null;
+      
+      print('   Requesting: count=$count, difficulty=$difficulty');
+      
       final loadedQuestions = await questionsService.getRandomQuestions(
-        count: widget.match.numberOfQuestions,
-        difficulty: widget.match.difficulty,
+        count: count,
+        difficulty: difficulty,
       );
+
+      print('   ✅ Loaded ${loadedQuestions.length} questions');
 
       if (loadedQuestions.isEmpty) {
         throw Exception('No questions available');
@@ -63,9 +78,11 @@ class _StakeMatchGameScreenState extends ConsumerState<StakeMatchGameScreen> {
       });
 
       _startTimer();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('❌ Error loading questions: $e');
+      print('Stack trace: $stackTrace');
       setState(() {
-        errorMessage = e.toString();
+        errorMessage = 'Failed to load questions: ${e.toString()}';
         isLoading = false;
       });
     }
@@ -146,14 +163,17 @@ class _StakeMatchGameScreenState extends ConsumerState<StakeMatchGameScreen> {
 
     try {
       final stakeMatchService = ref.read(stakeMatchApiServiceProvider);
+      final userId = StorageService.instance.getUserId();
+
+      if (userId == null) {
+        throw Exception('User not logged in');
+      }
       
       // Submit match completion
-      // Note: In a real implementation, the opponent would also submit their score
-      // For now, we'll simulate the opponent's score or wait for real implementation
-      await stakeMatchService.completeStakeMatch(
+      final updatedMatch = await stakeMatchService.completeStakeMatch(
         matchId: widget.match.id,
-        myScore: totalScore,
-        isCreator: widget.isCreator,
+        userId: userId,
+        score: totalScore,
       );
 
       if (mounted) {
@@ -161,7 +181,7 @@ class _StakeMatchGameScreenState extends ConsumerState<StakeMatchGameScreen> {
         context.go(
           RouteNames.stakeMatchResults,
           extra: {
-            'match': widget.match,
+            'match': updatedMatch,
             'myScore': totalScore,
             'correctAnswers': correctAnswers,
             'totalQuestions': questions.length,
@@ -171,6 +191,7 @@ class _StakeMatchGameScreenState extends ConsumerState<StakeMatchGameScreen> {
         );
       }
     } catch (e) {
+      print('❌ Error submitting match: $e');
       if (mounted) {
         TopNotification.show(
           context,

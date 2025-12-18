@@ -137,8 +137,8 @@ export class StakeMatchService {
    */
   async completeStakeMatch(
     matchId: string,
-    creatorScore: number,
-    opponentScore: number,
+    userId: string,
+    score: number,
   ): Promise<StakeMatch> {
     const match = await this.stakeMatchRepository.findOne({ 
       where: { id: matchId },
@@ -153,47 +153,67 @@ export class StakeMatchService {
       throw new BadRequestException('Match is not active');
     }
 
-    // Determine winner
-    let winnerId: string;
-    if (creatorScore > opponentScore) {
-      winnerId = match.creatorId;
-    } else if (opponentScore > creatorScore) {
-      winnerId = match.opponentId;
+    // Determine if user is creator or opponent
+    const isCreator = match.creatorId === userId;
+    const isOpponent = match.opponentId === userId;
+
+    if (!isCreator && !isOpponent) {
+      throw new BadRequestException('User is not part of this match');
+    }
+
+    // Update score and finished status
+    if (isCreator) {
+      match.creatorScore = score;
+      match.creatorFinished = true;
     } else {
-      // Draw - refund both players
-      await this.refundStakeMatch(match);
+      match.opponentScore = score;
+      match.opponentFinished = true;
+    }
+
+    // Save intermediate state
+    await this.stakeMatchRepository.save(match);
+
+    // Check if both players have finished
+    if (match.creatorFinished && match.opponentFinished) {
+      // Both finished - determine winner
+      let winnerId: string;
+      
+      if (match.creatorScore > match.opponentScore) {
+        winnerId = match.creatorId;
+      } else if (match.opponentScore > match.creatorScore) {
+        winnerId = match.opponentId;
+      } else {
+        // Draw - refund both players
+        await this.refundStakeMatch(match);
+        match.status = 'completed';
+        match.completedAt = new Date();
+        return await this.stakeMatchRepository.save(match);
+      }
+
+      // Award winnings to winner (as withdrawable coins)
+      const winner = await this.userRepository.findOne({ where: { id: winnerId } });
+      if (!winner) {
+        throw new NotFoundException('Winner not found');
+      }
+      winner.withdrawableCoins += match.winnerPayout;
+      await this.userRepository.save(winner);
+
+      // Record transaction
+      await this.recordTransaction(
+        winnerId,
+        'earned_stake_match',
+        match.winnerPayout,
+        'withdrawable',
+        `Won stake match and earned ${match.winnerPayout} withdrawable coins`,
+        match.id,
+        'stake_match',
+      );
+
+      // Update match
+      match.winnerId = winnerId;
       match.status = 'completed';
-      match.creatorScore = creatorScore;
-      match.opponentScore = opponentScore;
       match.completedAt = new Date();
-      return await this.stakeMatchRepository.save(match);
     }
-
-    // Award winnings to winner (as withdrawable coins)
-    const winner = await this.userRepository.findOne({ where: { id: winnerId } });
-    if (!winner) {
-      throw new NotFoundException('Winner not found');
-    }
-    winner.withdrawableCoins += match.winnerPayout;
-    await this.userRepository.save(winner);
-
-    // Record transaction
-    await this.recordTransaction(
-      winnerId,
-      'earned_stake_match',
-      match.winnerPayout,
-      'withdrawable',
-      `Won stake match and earned ${match.winnerPayout} withdrawable coins`,
-      match.id,
-      'stake_match',
-    );
-
-    // Update match
-    match.winnerId = winnerId;
-    match.status = 'completed';
-    match.creatorScore = creatorScore;
-    match.opponentScore = opponentScore;
-    match.completedAt = new Date();
 
     return await this.stakeMatchRepository.save(match);
   }

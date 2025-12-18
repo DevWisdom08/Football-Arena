@@ -11,6 +11,9 @@ class StakeMatch {
   final String? winnerId;
   final int creatorScore;
   final int opponentScore;
+  final bool creatorFinished;
+  final bool opponentFinished;
+  final List<dynamic>? questions;
   final String matchType;
   final int numberOfQuestions;
   final String? difficulty;
@@ -36,6 +39,9 @@ class StakeMatch {
     this.winnerId,
     required this.creatorScore,
     required this.opponentScore,
+    this.creatorFinished = false,
+    this.opponentFinished = false,
+    this.questions,
     required this.matchType,
     required this.numberOfQuestions,
     this.difficulty,
@@ -71,6 +77,9 @@ class StakeMatch {
       winnerId: json['winnerId'],
       creatorScore: json['creatorScore'] ?? 0,
       opponentScore: json['opponentScore'] ?? 0,
+      creatorFinished: json['creatorFinished'] ?? false,
+      opponentFinished: json['opponentFinished'] ?? false,
+      questions: json['questions'],
       matchType: json['matchType'],
       numberOfQuestions: json['numberOfQuestions'],
       difficulty: json['difficulty'],
@@ -99,6 +108,9 @@ class StakeMatch {
       'winnerId': winnerId,
       'creatorScore': creatorScore,
       'opponentScore': opponentScore,
+      'creatorFinished': creatorFinished,
+      'opponentFinished': opponentFinished,
+      'questions': questions,
       'matchType': matchType,
       'numberOfQuestions': numberOfQuestions,
       'difficulty': difficulty,

@@ -13,16 +13,29 @@ class QuestionsApiService {
     String? difficulty,
   }) async {
     try {
-      final response = await dio.get(
-        ApiEndpoints.randomQuestions(count: count, difficulty: difficulty),
-      );
+      final url = ApiEndpoints.randomQuestions(count: count, difficulty: difficulty);
+      print('📡 Fetching questions from: $url');
+      
+      final response = await dio.get(url);
+      
+      print('✅ Response status: ${response.statusCode}');
+      print('📦 Response data type: ${response.data.runtimeType}');
       
       if (response.data is List) {
-        return List<Map<String, dynamic>>.from(response.data);
+        final questions = List<Map<String, dynamic>>.from(response.data);
+        print('✅ Parsed ${questions.length} questions');
+        return questions;
       }
-      throw Exception('Invalid response format');
+      throw Exception('Invalid response format: expected List, got ${response.data.runtimeType}');
     } on DioException catch (e) {
-      throw _handleError(e);
+      print('❌ DioException: ${e.type}');
+      print('   Message: ${e.message}');
+      print('   Response: ${e.response?.data}');
+      throw Exception(_handleError(e));
+    } catch (e, stackTrace) {
+      print('❌ Unexpected error: $e');
+      print('   Stack trace: $stackTrace');
+      throw Exception('Unexpected error: $e');
     }
   }
 

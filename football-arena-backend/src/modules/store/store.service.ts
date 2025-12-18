@@ -53,7 +53,7 @@ export class StoreService {
 
   async purchaseItem(purchaseRequest: PurchaseRequest): Promise<any> {
     try {
-      const { userId, itemType, itemId, paymentMethod, transactionId } = purchaseRequest;
+    const { userId, itemType, itemId, paymentMethod, transactionId } = purchaseRequest;
       
       console.log('[StoreService] Purchase request:', {
         userId,
@@ -65,8 +65,8 @@ export class StoreService {
       if (!userId || !itemType || !itemId || !paymentMethod) {
         throw new BadRequestException('Missing required fields: userId, itemType, itemId, paymentMethod');
       }
-      
-      const user = await this.usersService.findOne(userId);
+    
+    const user = await this.usersService.findOne(userId);
       if (!user) {
         throw new NotFoundException(`User with ID ${userId} not found`);
       }
@@ -75,14 +75,14 @@ export class StoreService {
       const normalizedItemType = itemType.toLowerCase();
 
       if (normalizedItemType === 'coin_pack' || itemType === StoreItemType.COIN_PACK) {
-        return await this.purchaseCoinPack(user, itemId, paymentMethod, transactionId);
+      return await this.purchaseCoinPack(user, itemId, paymentMethod, transactionId);
       } else if (normalizedItemType === 'vip_subscription' || normalizedItemType === 'vip_one_time' || 
                  itemType === StoreItemType.VIP_SUBSCRIPTION || itemType === StoreItemType.VIP_ONE_TIME) {
         const vipType = normalizedItemType === 'vip_one_time' ? StoreItemType.VIP_ONE_TIME : StoreItemType.VIP_SUBSCRIPTION;
         return await this.purchaseVIP(user, itemId, vipType, paymentMethod, transactionId);
       } else if (normalizedItemType === 'boost' || itemType === StoreItemType.BOOST) {
-        return await this.purchaseBoost(user, itemId);
-      }
+      return await this.purchaseBoost(user, itemId);
+    }
 
       throw new BadRequestException(`Invalid item type: ${itemType}`);
     } catch (error) {

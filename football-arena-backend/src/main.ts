@@ -20,14 +20,15 @@ async function bootstrap() {
   // Enable validation
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
-    forbidNonWhitelisted: true,
+    forbidNonWhitelisted: false, // Changed to false to allow extra properties (they'll be stripped)
     transform: true,
   }));
   
   const port = process.env.PORT || 3000;
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0'); // Listen on all interfaces for emulator access
   
   console.log(`🚀 Backend is running on: http://localhost:${port}`);
+  console.log(`📱 For Android Emulator: http://10.0.2.2:${port}`);
   console.log(`📚 API Endpoints:`);
   console.log(`   - POST   /auth/register`);
   console.log(`   - POST   /auth/login`);

@@ -21,7 +21,7 @@ export class QuestionsController {
   @Get('random')
   getRandom(
     @Query('count') count?: number,
-    @Query('difficulty') difficulty?: QuestionDifficulty,
+    @Query('difficulty') difficulty?: string,
   ) {
     return this.questionsService.getRandom(count ? +count : 10, difficulty);
   }

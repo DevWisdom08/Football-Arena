@@ -59,6 +59,15 @@ export class StakeMatch {
   @Column({ default: 0 })
   opponentScore: number;
 
+  @Column({ default: false })
+  creatorFinished: boolean;
+
+  @Column({ default: false })
+  opponentFinished: boolean;
+
+  @Column({ type: 'jsonb', nullable: true })
+  questions: any[]; // Store questions for both players to use the same set
+
   @Column({ length: 50, default: 'football_quiz' })
   matchType: string; // football_quiz, trivia, etc.
 

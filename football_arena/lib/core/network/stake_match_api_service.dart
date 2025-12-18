@@ -96,19 +96,16 @@ class StakeMatchApiService {
   /// Complete a stake match with scores
   Future<StakeMatch> completeStakeMatch({
     required String matchId,
-    required int myScore,
-    required bool isCreator,
+    required String userId,
+    required int score,
   }) async {
     try {
-      // In a real implementation with real-time gameplay,
-      // both players would submit their scores separately
-      // For now, we'll submit with placeholder opponent score
       final response = await dio.post(
         '${ApiEndpoints.stakeMatches}/complete',
         data: {
           'matchId': matchId,
-          'creatorScore': isCreator ? myScore : 0,
-          'opponentScore': isCreator ? 0 : myScore,
+          'userId': userId,
+          'score': score,
         },
       );
 

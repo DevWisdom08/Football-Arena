@@ -4,12 +4,11 @@ export class CompleteStakeMatchDto {
   @IsUUID()
   matchId: string;
 
-  @IsNumber()
-  @Min(0)
-  creatorScore: number;
+  @IsUUID()
+  userId: string;
 
   @IsNumber()
   @Min(0)
-  opponentScore: number;
+  score: number;
 }
 

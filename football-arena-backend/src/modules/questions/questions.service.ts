@@ -31,14 +31,17 @@ export class QuestionsService {
     return question;
   }
 
-  async getRandom(count: number = 10, difficulty?: QuestionDifficulty): Promise<Question[]> {
+  async getRandom(count: number = 10, difficulty?: string): Promise<Question[]> {
     const queryBuilder = this.questionsRepository
       .createQueryBuilder('question')
       .where('question.isActive = :isActive', { isActive: true });
 
-    if (difficulty) {
-      queryBuilder.andWhere('question.difficulty = :difficulty', { difficulty });
+    // Only filter by difficulty if it's a specific difficulty (not 'mixed' or null)
+    // 'mixed' means return questions of any difficulty
+    if (difficulty && difficulty !== 'mixed' && ['easy', 'medium', 'hard'].includes(difficulty.toLowerCase())) {
+      queryBuilder.andWhere('question.difficulty = :difficulty', { difficulty: difficulty.toLowerCase() });
     }
+    // If difficulty is 'mixed' or not specified, return questions of any difficulty
 
     const questions = await queryBuilder
       .orderBy('RANDOM()')
