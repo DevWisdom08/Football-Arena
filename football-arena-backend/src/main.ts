@@ -49,7 +49,8 @@ async function bootstrap() {
   console.log(`   - POST   /questions/seed`);
   console.log(`   - GET    /leaderboard`);
   console.log(``);
-  console.log(`🎛️  Admin Dashboard: http://localhost:${port}/admin.html`);
+  console.log(`🎛️  Admin Dashboard (NEW): http://localhost:${port}/admin-dashboard.html`);
   console.log(`📊 Admin API: http://localhost:${port}/admin/stats/dashboard`);
+  console.log(`🚨 Fraud Detection: http://localhost:${port}/fraud-detection/stats`);
 }
 bootstrap();
