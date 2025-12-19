@@ -97,79 +97,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   void _showPrivacyPolicy() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.cardBackground,
-        title: const Text(
-          'Privacy Policy',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-        ),
-        content: const SingleChildScrollView(
-          child: Text(
-            'Football Arena Privacy Policy\n\n'
-            '1. Data Collection\n'
-            'We collect minimal data necessary for game functionality including username, email, game statistics, and progress.\n\n'
-            '2. Data Usage\n'
-            'Your data is used solely to provide game services, track progress, and enable multiplayer features.\n\n'
-            '3. Data Storage\n'
-            'All data is securely stored in encrypted databases and never shared with third parties.\n\n'
-            '4. User Rights\n'
-            'You can request data deletion or export at any time by contacting support.\n\n'
-            '5. Cookies & Storage\n'
-            'We use local storage for authentication tokens and user preferences only.\n\n'
-            'Last updated: November 2025',
-            style: TextStyle(color: Colors.white70, height: 1.5, fontSize: 14),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
+    context.push(RouteNames.privacyPolicy);
   }
 
   void _showTermsOfService() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.cardBackground,
-        title: const Text(
-          'Terms of Service',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-        ),
-        content: const SingleChildScrollView(
-          child: Text(
-            'Football Arena Terms of Service\n\n'
-            '1. Acceptance\n'
-            'By using this app, you agree to these terms.\n\n'
-            '2. User Conduct\n'
-            'Users must not cheat, exploit bugs, or harass others.\n\n'
-            '3. Account Security\n'
-            'You are responsible for maintaining account security.\n\n'
-            '4. Virtual Currency\n'
-            'Coins and XP have no real-world value and cannot be exchanged for money.\n\n'
-            '5. Service Availability\n'
-            'We strive for 99% uptime but cannot guarantee uninterrupted service.\n\n'
-            '6. Changes to Terms\n'
-            'We may update these terms at any time.\n\n'
-            '7. Termination\n'
-            'We reserve the right to terminate accounts that violate these terms.\n\n'
-            'Last updated: November 2024',
-            style: TextStyle(color: Colors.white70, height: 1.5, fontSize: 14),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
+    context.push(RouteNames.termsOfService);
   }
 
   @override

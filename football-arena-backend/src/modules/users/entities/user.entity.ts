@@ -26,6 +26,9 @@ export class User {
   @Column({ length: 100 })
   country: string;
 
+  @Column({ type: 'date', nullable: true })
+  dateOfBirth: Date; // Date of birth for age verification
+
   @Column({ default: 1 })
   level: number;
 

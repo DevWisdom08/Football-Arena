@@ -9,6 +9,7 @@ import {
   Query,
   Delete,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { StakeMatchService } from './stake-match.service';
 import { CreateStakeMatchDto } from './dto/create-stake-match.dto';
 import { JoinStakeMatchDto } from './dto/join-stake-match.dto';
@@ -22,6 +23,7 @@ export class StakeMatchController {
    * Create a new stake match
    */
   @Post()
+  @Throttle({ limit: 10, ttl: 60000 }) // 10 stake match creations per minute
   async createStakeMatch(
     @Request() req,
     @Body() createDto: CreateStakeMatchDto,

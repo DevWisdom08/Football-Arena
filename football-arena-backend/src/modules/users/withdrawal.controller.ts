@@ -8,6 +8,7 @@ import {
   Query,
   Delete,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { WithdrawalService } from './withdrawal.service';
 import { CreateWithdrawalDto } from './dto/create-withdrawal.dto';
 import { SubmitKycDto } from './dto/submit-kyc.dto';
@@ -18,16 +19,17 @@ export class WithdrawalController {
   constructor(private readonly withdrawalService: WithdrawalService) {}
 
   /**
-   * Submit KYC verification
+   * Submit KYC verification (optional - for future use)
    */
   @Post('kyc')
+  @Throttle({ limit: 3, ttl: 300000 }) // 3 KYC submissions per 5 minutes
   async submitKyc(@Request() req, @Body() kycDto: SubmitKycDto) {
     const userId = req.user?.id || req.body.userId;
     return await this.withdrawalService.submitKyc(userId, kycDto);
   }
 
   /**
-   * Process KYC (admin only)
+   * Process KYC (admin only - optional feature)
    */
   @Post('kyc/process')
   async processKyc(
@@ -41,9 +43,10 @@ export class WithdrawalController {
   }
 
   /**
-   * Create withdrawal request
+   * Create withdrawal request (No KYC required)
    */
   @Post()
+  @Throttle({ limit: 5, ttl: 300000 }) // 5 withdrawal requests per 5 minutes
   async createWithdrawal(
     @Request() req,
     @Body() withdrawalDto: CreateWithdrawalDto,

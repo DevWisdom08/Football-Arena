@@ -13,6 +13,7 @@ class AuthApiService {
     required String email,
     required String password,
     required String country,
+    String? dateOfBirth,
   }) async {
     try {
       final response = await dio.post(
@@ -22,6 +23,7 @@ class AuthApiService {
           'email': email,
           'password': password,
           'country': country,
+          if (dateOfBirth != null) 'dateOfBirth': dateOfBirth,
         },
       );
       return response.data;

@@ -2,300 +2,571 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/routes/route_names.dart';
-import '../../../core/models/stake_match.dart';
-import '../../../shared/widgets/custom_button.dart';
 
-class StakeMatchResultsScreen extends StatelessWidget {
-  final StakeMatch match;
-  final int myScore;
-  final int correctAnswers;
-  final int totalQuestions;
-  final List<Map<String, dynamic>> questionResults;
-  final bool isCreator;
+class StakeMatchResultsScreen extends StatefulWidget {
+  final Map<String, dynamic> matchData;
 
   const StakeMatchResultsScreen({
     super.key,
-    required this.match,
-    required this.myScore,
-    required this.correctAnswers,
-    required this.totalQuestions,
-    required this.questionResults,
-    required this.isCreator,
+    required this.matchData,
   });
 
   @override
+  State<StakeMatchResultsScreen> createState() =>
+      _StakeMatchResultsScreenState();
+}
+
+class _StakeMatchResultsScreenState extends State<StakeMatchResultsScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  
+  bool get isWinner =>
+      widget.matchData['winnerId'] == widget.matchData['playerId'] ||
+      (widget.matchData['playerScore'] ?? 0) >
+          (widget.matchData['opponentScore'] ?? 0);
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Determine if user won (in real implementation, wait for opponent's score)
-    final opponentScore = isCreator ? match.opponentScore : match.creatorScore;
-    final didWin = myScore > opponentScore;
-    final isDraw = myScore == opponentScore;
+    final matchData = widget.matchData;
+    final playerScore = matchData['playerScore'] ?? 0;
+    final opponentScore = matchData['opponentScore'] ?? 0;
+    final playerUsername = matchData['playerUsername'] ?? 'You';
+    final opponentUsername = matchData['opponentUsername'] ?? 'Opponent';
+    final stakeAmount = matchData['stakeAmount'] ?? 0;
+    final playerPayout = matchData['playerPayout'] ?? 0;
+    final commission = matchData['commission'] ?? 0;
+    final error = matchData['error'];
 
-    final resultColor = didWin ? Colors.green : (isDraw ? Colors.orange : Colors.red);
-    final resultText = didWin ? '🏆 YOU WON!' : (isDraw ? '🤝 DRAW!' : '😔 YOU LOST');
-    final resultMessage = didWin
-        ? 'Congratulations! You won ${match.winnerPayout} coins!'
-        : isDraw
-            ? 'It\'s a draw! Stakes refunded.'
-            : 'Better luck next time!';
+    final isDraw = playerScore == opponentScore;
 
-    final accuracy = (correctAnswers / totalQuestions * 100).toStringAsFixed(1);
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  const SizedBox(height: 40),
 
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: const AssetImage('assets/images/background1.png'),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.3),
-            BlendMode.darken,
-          ),
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => context.go(RouteNames.home),
-          ),
-          title: const Text(
-            'Match Results',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                // Result card
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        resultColor.withOpacity(0.2),
-                        resultColor.withOpacity(0.05),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: resultColor.withOpacity(0.5), width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: resultColor.withOpacity(0.3),
-                        blurRadius: 20,
-                        spreadRadius: 2,
-                      ),
-                    ],
+                  // Result Trophy
+                  _buildResultIcon(),
+
+                  const SizedBox(height: 24),
+
+                  // Result Text
+                  _buildResultText(isDraw),
+
+                  const SizedBox(height: 32),
+
+                  // Scores Card
+                  _buildScoresCard(
+                    playerUsername,
+                    opponentUsername,
+                    playerScore,
+                    opponentScore,
                   ),
-                  child: Column(
-                    children: [
-                      Text(
-                        resultText,
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: resultColor,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        resultMessage,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      Divider(color: Colors.white.withOpacity(0.2)),
-                      const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _ScoreColumn(
-                            label: 'Your Score',
-                            value: myScore.toString(),
-                            isHighlight: didWin,
-                          ),
-                          Container(
-                            width: 2,
-                            height: 60,
-                            color: Colors.white.withOpacity(0.3),
-                          ),
-                          _ScoreColumn(
-                            label: 'Opponent',
-                            value: opponentScore.toString(),
-                            isHighlight: !didWin && !isDraw,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                // Stats grid
-                Row(
-                  children: [
-                    Expanded(
-                      child: _StatCard(
-                        icon: Icons.check_circle,
-                        label: 'Correct',
-                        value: '$correctAnswers/$totalQuestions',
-                        color: Colors.green,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _StatCard(
-                        icon: Icons.percent,
-                        label: 'Accuracy',
-                        value: '$accuracy%',
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ],
-                ),
+                  // Payout Card (if won)
+                  if (isWinner && !isDraw && error == null)
+                    _buildPayoutCard(stakeAmount, playerPayout, commission),
 
-                const SizedBox(height: 12),
+                  // Draw card
+                  if (isDraw) _buildDrawCard(stakeAmount),
 
-                Row(
-                  children: [
-                    Expanded(
-                      child: _StatCard(
-                        icon: Icons.monetization_on,
-                        label: 'Stake',
-                        value: '${match.stakeAmount}',
-                        color: Colors.orange,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Expanded(
-                      child: _StatCard(
-                        icon: Icons.emoji_events,
-                        label: didWin ? 'Won' : 'Lost',
-                        value: didWin ? '+${match.winnerPayout}' : '-${match.stakeAmount}',
-                        color: didWin ? Colors.green : Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
+                  // Loss card
+                  if (!isWinner && !isDraw) _buildLossCard(stakeAmount),
 
-                const SizedBox(height: 32),
+                  // Error card (if any)
+                  if (error != null) _buildErrorCard(error),
 
-                // Buttons
-                CustomButton(
-                  onPressed: () => context.go(RouteNames.stakeMatch),
-                  text: 'Back to Stake Match',
-                  type: ButtonType.primary,
-                ),
-                const SizedBox(height: 12),
-                CustomButton(
-                  onPressed: () => context.go(RouteNames.home),
-                  text: 'Home',
-                  type: ButtonType.outlined,
-                ),
+                  const SizedBox(height: 32),
 
-                const SizedBox(height: 24),
+                  // Action Buttons
+                  _buildActionButtons(context),
 
-                // Question breakdown
-                _QuestionBreakdown(
-                  questionResults: questionResults,
-                ),
-              ],
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
-}
 
-class _ScoreColumn extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool isHighlight;
+  Widget _buildResultIcon() {
+    IconData icon;
+    Color color;
+    double size = 100;
 
-  const _ScoreColumn({
-    required this.label,
-    required this.value,
-    required this.isHighlight,
-  });
+    if (widget.matchData['error'] != null) {
+      icon = Icons.error_outline;
+      color = Colors.orange;
+    } else if (isWinner && !isDraw) {
+      icon = Icons.emoji_events;
+      color = AppColors.primary;
+    } else if (isDraw) {
+      icon = Icons.handshake;
+      color = Colors.blue;
+    } else {
+      icon = Icons.sentiment_dissatisfied;
+      color = Colors.red;
+    }
 
-  @override
-  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          colors: [
+            color.withOpacity(0.3),
+            color.withOpacity(0.1),
+          ],
+        ),
+        border: Border.all(color: color, width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.4),
+            blurRadius: 20,
+            spreadRadius: 5,
+          ),
+        ],
+      ),
+      child: Icon(
+        icon,
+        size: size,
+        color: color,
+      ),
+    );
+  }
+
+  Widget _buildResultText(bool isDraw) {
+    String title;
+    String subtitle;
+    Color color;
+
+    if (widget.matchData['error'] != null) {
+      title = 'Match Incomplete';
+      subtitle = 'There was an issue processing the match';
+      color = Colors.orange;
+    } else if (isDraw) {
+      title = 'IT\'S A DRAW!';
+      subtitle = 'Both players scored the same';
+      color = Colors.blue;
+    } else if (isWinner) {
+      title = 'VICTORY!';
+      subtitle = 'You won the stake match!';
+      color = AppColors.primary;
+    } else {
+      title = 'DEFEAT';
+      subtitle = 'Better luck next time!';
+      color = Colors.red;
+    }
+
     return Column(
       children: [
         Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 14,
+          title,
+          style: TextStyle(
+            color: color,
+            fontSize: 36,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2,
           ),
         ),
         const SizedBox(height: 8),
         Text(
-          value,
+          subtitle,
           style: TextStyle(
-            color: isHighlight ? AppColors.primary : Colors.white,
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
+            color: Colors.white.withOpacity(0.7),
+            fontSize: 16,
           ),
         ),
       ],
     );
   }
-}
 
-class _StatCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color color;
+  Widget _buildScoresCard(
+    String playerUsername,
+    String opponentUsername,
+    int playerScore,
+    int opponentScore,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.1),
+            Colors.white.withOpacity(0.05),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white24),
+      ),
+      child: Column(
+        children: [
+          const Text(
+            'FINAL SCORES',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              // Player
+              Expanded(
+                child: _buildPlayerScore(
+                  playerUsername,
+                  playerScore,
+                  Colors.blue,
+                  isWinner: playerScore > opponentScore,
+                ),
+              ),
 
-  const _StatCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.color,
-  });
+              // VS
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  'VS',
+                  style: TextStyle(
+                    color: Colors.white38,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
 
-  @override
-  Widget build(BuildContext context) {
+              // Opponent
+              Expanded(
+                child: _buildPlayerScore(
+                  opponentUsername,
+                  opponentScore,
+                  Colors.red,
+                  isWinner: opponentScore > playerScore,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlayerScore(
+    String username,
+    int score,
+    Color color, {
+    bool isWinner = false,
+  }) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            color.withOpacity(0.2),
-            color.withOpacity(0.05),
+            color.withOpacity(isWinner ? 0.3 : 0.15),
+            color.withOpacity(isWinner ? 0.2 : 0.08),
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.5)),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: color.withOpacity(isWinner ? 0.8 : 0.4),
+          width: isWinner ? 2 : 1,
+        ),
+        boxShadow: isWinner
+            ? [
+                BoxShadow(
+                  color: color.withOpacity(0.3),
+                  blurRadius: 12,
+                  spreadRadius: 2,
+                ),
+              ]
+            : null,
       ),
       child: Column(
         children: [
-          Icon(icon, color: color, size: 32),
+          if (isWinner)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Icon(
+                Icons.emoji_events,
+                color: color,
+                size: 24,
+              ),
+            ),
+          Text(
+            username,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 8),
           Text(
-            label,
-            style: const TextStyle(
-              color: Colors.white70,
+            '$score',
+            style: TextStyle(
+              color: color,
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const Text(
+            'points',
+            style: TextStyle(
+              color: Colors.white54,
               fontSize: 12,
             ),
           ),
-          const SizedBox(height: 4),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPayoutCard(int stakeAmount, int playerPayout, int commission) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.green.withOpacity(0.2),
+            Colors.teal.withOpacity(0.1),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.green, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.green.withOpacity(0.3),
+            blurRadius: 15,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.celebration, color: Colors.green, size: 28),
+              const SizedBox(width: 12),
+              const Text(
+                'YOU WON',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildPayoutRow('Stake Amount:', '$stakeAmount coins'),
+          const Divider(color: Colors.white24),
+          _buildPayoutRow('Opponent Stake:', '$stakeAmount coins'),
+          const Divider(color: Colors.white24),
+          _buildPayoutRow('Total Pot:', '${stakeAmount * 2} coins'),
+          const Divider(color: Colors.white24),
+          _buildPayoutRow('Commission:', '-$commission coins', isNegative: true),
+          const Divider(color: Colors.green),
+          _buildPayoutRow('Your Payout:', '+$playerPayout coins', isHighlight: true),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDrawCard(int stakeAmount) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.blue.withOpacity(0.2),
+            Colors.cyan.withOpacity(0.1),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.blue, width: 2),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.handshake, color: Colors.blue, size: 28),
+              const SizedBox(width: 12),
+              const Text(
+                'DRAW - STAKE REFUNDED',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Your $stakeAmount coins have been refunded',
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.7),
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLossCard(int stakeAmount) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.red.withOpacity(0.2),
+            Colors.red.withOpacity(0.1),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.red, width: 2),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.sentiment_dissatisfied,
+                  color: Colors.red, size: 28),
+              const SizedBox(width: 12),
+              const Text(
+                'STAKE LOST',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'You lost $stakeAmount coins',
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.7),
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Practice makes perfect! Try again!',
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.5),
+              fontSize: 12,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorCard(String error) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.orange.withOpacity(0.2),
+            Colors.orange.withOpacity(0.1),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.orange, width: 2),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.info_outline, color: Colors.orange, size: 24),
+              const SizedBox(width: 12),
+              const Text(
+                'Processing Issue',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            error,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.7),
+              fontSize: 13,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPayoutRow(String label, String value,
+      {bool isNegative = false, bool isHighlight = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: isHighlight ? Colors.white : Colors.white70,
+              fontSize: isHighlight ? 16 : 14,
+              fontWeight: isHighlight ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
           Text(
             value,
             style: TextStyle(
-              color: color,
-              fontSize: 20,
+              color: isNegative
+                  ? Colors.redAccent
+                  : isHighlight
+                      ? Colors.greenAccent
+                      : Colors.white,
+              fontSize: isHighlight ? 20 : 14,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -303,118 +574,75 @@ class _StatCard extends StatelessWidget {
       ),
     );
   }
-}
 
-class _QuestionBreakdown extends StatelessWidget {
-  final List<Map<String, dynamic>> questionResults;
-
-  const _QuestionBreakdown({required this.questionResults});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Icon(Icons.list, color: AppColors.primary),
-                const SizedBox(width: 8),
-                const Text(
-                  'Question Breakdown',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+  Widget _buildActionButtons(BuildContext context) {
+    return Column(
+      children: [
+        // Play Again Button
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.primary, AppColors.primaryDark],
+              ),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.5),
+                  blurRadius: 15,
+                  spreadRadius: 2,
                 ),
               ],
             ),
-          ),
-          Divider(color: Colors.white.withOpacity(0.1)),
-          ...questionResults.asMap().entries.map((entry) {
-            final index = entry.key;
-            final result = entry.value;
-            final isCorrect = result['isCorrect'] as bool;
-
-            return Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.white.withOpacity(0.1),
-                  ),
+            child: ElevatedButton(
+              onPressed: () {
+                // Go back to stake match arena
+                context.go(RouteNames.stakeMatch);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+              ),
+              child: const Text(
+                'PLAY ANOTHER MATCH',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
                 ),
               ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: isCorrect
-                          ? Colors.green.withOpacity(0.2)
-                          : Colors.red.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: isCorrect ? Colors.green : Colors.red,
-                      ),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        isCorrect ? Icons.check : Icons.close,
-                        color: isCorrect ? Colors.green : Colors.red,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Q${index + 1}',
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 12,
-                          ),
-                        ),
-                        Text(
-                          result['question'] as String,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    '+${result['score']}',
-                    style: TextStyle(
-                      color: isCorrect ? Colors.green : Colors.red,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
+        // Home Button
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: OutlinedButton(
+            onPressed: () => context.go(RouteNames.home),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: Colors.white.withOpacity(0.3)),
+            ),
+            child: const Text(
+              'GO HOME',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
-            );
-          }).toList(),
-        ],
-      ),
+            ),
+          ),
+        ),
+      ],
     );
   }
-}
 
+  bool get isDraw =>
+      (widget.matchData['playerScore'] ?? 0) ==
+      (widget.matchData['opponentScore'] ?? 0);
+}

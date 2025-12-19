@@ -22,8 +22,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _dobController = TextEditingController();
 
   String _selectedCountry = 'UAE';
+  DateTime? _selectedDateOfBirth;
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   bool _isLoading = false;
@@ -34,11 +36,75 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _dobController.dispose();
     super.dispose();
+  }
+
+  Future<void> _selectDateOfBirth() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000, 1, 1),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: AppColors.primary,
+              onPrimary: Colors.white,
+              surface: AppColors.cardBackground,
+              onSurface: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null && picked != _selectedDateOfBirth) {
+      setState(() {
+        _selectedDateOfBirth = picked;
+        _dobController.text = 
+            '${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}';
+      });
+    }
+  }
+
+  int _calculateAge(DateTime birthDate) {
+    final today = DateTime.now();
+    int age = today.year - birthDate.year;
+    if (today.month < birthDate.month ||
+        (today.month == birthDate.month && today.day < birthDate.day)) {
+      age--;
+    }
+    return age;
   }
 
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
+
+    // Validate age requirement
+    if (_selectedDateOfBirth == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select your date of birth'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    final age = _calculateAge(_selectedDateOfBirth!);
+    if (age < 18) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('You must be at least 18 years old to register'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 4),
+        ),
+      );
+      return;
+    }
 
     setState(() => _isLoading = true);
 
@@ -49,6 +115,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text,
         country: _selectedCountry,
+        dateOfBirth: _selectedDateOfBirth!.toIso8601String(),
       );
 
       // Save auth token and user data
@@ -288,6 +355,60 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         }).toList(),
                         onChanged: (value) {
                           setState(() => _selectedCountry = value!);
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      // Date of Birth field
+                      TextFormField(
+                        controller: _dobController,
+                        readOnly: true,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          labelText: 'Date of Birth (Must be 18+)',
+                          labelStyle: const TextStyle(color: Colors.white70),
+                          hintText: 'DD/MM/YYYY',
+                          hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                          prefixIcon: const Icon(
+                            Icons.cake,
+                            color: AppColors.primary,
+                          ),
+                          suffixIcon: const Icon(
+                            Icons.calendar_today,
+                            color: Colors.white70,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.1),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: Colors.white.withOpacity(0.2),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: AppColors.primary,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                        onTap: _selectDateOfBirth,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please select your date of birth';
+                          }
+                          if (_selectedDateOfBirth == null) {
+                            return 'Please select a valid date';
+                          }
+                          final age = _calculateAge(_selectedDateOfBirth!);
+                          if (age < 18) {
+                            return 'You must be at least 18 years old';
+                          }
+                          return null;
                         },
                       ),
                       const SizedBox(height: 16),

@@ -31,6 +31,8 @@ import '../../features/stake_match_screen.dart';
 import '../../features/stake_match/presentation/stake_match_game_screen.dart';
 import '../../features/stake_match/presentation/stake_match_results_screen.dart';
 import '../../features/withdrawal_screen.dart';
+import '../../features/legal/terms_of_service_screen.dart';
+import '../../features/legal/privacy_policy_screen.dart';
 import '../services/storage_service.dart';
 
 // Router provider
@@ -252,8 +254,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final data = state.extra as Map<String, dynamic>?;
           return StakeMatchGameScreen(
-            match: data?['match'],
-            isCreator: data?['isCreator'] ?? false,
+            matchId: data?['matchId'] ?? '',
+            opponentId: data?['opponentId'] ?? '',
+            opponentUsername: data?['opponentUsername'] ?? 'Opponent',
+            stakeAmount: data?['stakeAmount'] ?? 0,
+            difficulty: data?['difficulty'] ?? 'mixed',
+            questionCount: data?['questionCount'] ?? 10,
           );
         },
       ),
@@ -261,16 +267,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: RouteNames.stakeMatchResults,
         builder: (context, state) {
           final data = state.extra as Map<String, dynamic>?;
-          return StakeMatchResultsScreen(
-            match: data?['match'],
-            myScore: data?['myScore'] ?? 0,
-            correctAnswers: data?['correctAnswers'] ?? 0,
-            totalQuestions: data?['totalQuestions'] ?? 0,
-            questionResults: List<Map<String, dynamic>>.from(
-              data?['questionResults'] ?? [],
-            ),
-            isCreator: data?['isCreator'] ?? false,
-          );
+          return StakeMatchResultsScreen(matchData: data ?? {});
         },
       ),
 
@@ -278,6 +275,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: RouteNames.withdrawal,
         builder: (context, state) => const WithdrawalScreen(),
+      ),
+
+      // Legal Routes
+      GoRoute(
+        path: RouteNames.termsOfService,
+        builder: (context, state) => const TermsOfServiceScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.privacyPolicy,
+        builder: (context, state) => const PrivacyPolicyScreen(),
       ),
 
       // TODO: Add more routes for other features

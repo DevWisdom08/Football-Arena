@@ -3,16 +3,25 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import * as helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  
+  // Security headers with helmet
+  app.use(helmet({
+    contentSecurityPolicy: false, // Disable for API (can enable with proper config for admin dashboard)
+    crossOriginEmbedderPolicy: false,
+  }));
   
   // Serve static files (for admin dashboard)
   app.useStaticAssets(join(__dirname, '..', 'public'));
   
   // Enable CORS for Flutter app and admin dashboard
   app.enableCors({
-    origin: '*', // In production, specify your Flutter app's domain
+    origin: process.env.NODE_ENV === 'production' 
+      ? ['https://your-flutter-app.com', 'https://admin.your-app.com'] 
+      : '*', // In production, specify your Flutter app's domain
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

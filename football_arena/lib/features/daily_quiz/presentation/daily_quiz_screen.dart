@@ -541,10 +541,10 @@ class _DailyQuizScreenState extends ConsumerState<DailyQuizScreen> {
                             ],
                           ),
                           child: CustomButton(
-                            text: 'Start Daily Quiz',
-                            onPressed: _startQuiz,
-                            gradient: AppColors.dailyQuizGradient,
-                            icon: Icons.play_arrow,
+                          text: 'Start Daily Quiz',
+                          onPressed: _startQuiz,
+                          gradient: AppColors.dailyQuizGradient,
+                          icon: Icons.play_arrow,
                           ),
                         ),
 

@@ -14,7 +14,15 @@ export class WithdrawalService {
   // Conversion rate: 1000 coins = $1 USD
   private readonly COINS_TO_USD_RATE = 1000;
   
-  // Withdrawal fee: $1 flat fee (covers gas costs)
+  // Withdrawal fees by payment method
+  private readonly WITHDRAWAL_FEES = {
+    crypto: 1.0,          // $1 flat fee for crypto (covers gas costs)
+    paypal: 1.5,          // $1.50 for PayPal
+    bank_transfer: 2.0,   // $2 for bank transfer
+    mobile_money: 1.0,    // $1 for mobile money
+  };
+  
+  // Default withdrawal fee
   private readonly WITHDRAWAL_FEE_USD = 1.0;
 
   constructor(
@@ -77,6 +85,7 @@ export class WithdrawalService {
 
   /**
    * Create a withdrawal request
+   * Note: KYC verification has been removed for direct withdrawals
    */
   async createWithdrawal(
     userId: string,
@@ -85,19 +94,6 @@ export class WithdrawalService {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException('User not found');
-    }
-
-    // Check KYC verification
-    if (!user.kycVerified) {
-      throw new BadRequestException('KYC verification required before withdrawal');
-    }
-
-    // Check age (must be 18+)
-    if (user.kycDateOfBirth) {
-      const age = this.calculateAge(user.kycDateOfBirth);
-      if (age < 18) {
-        throw new BadRequestException('Must be 18+ to withdraw');
-      }
     }
 
     // Check if user has enough withdrawable coins
@@ -110,10 +106,15 @@ export class WithdrawalService {
       throw new BadRequestException('Minimum withdrawal is 10,000 coins ($10)');
     }
 
-    // Calculate amounts
+    // Calculate amounts with method-specific fee
     const amountInUSD = withdrawalDto.amount / this.COINS_TO_USD_RATE;
-    const withdrawalFee = this.WITHDRAWAL_FEE_USD; // Flat $1 fee for crypto
+    const withdrawalFee = this.WITHDRAWAL_FEES[withdrawalDto.withdrawalMethod] || this.WITHDRAWAL_FEE_USD;
     const netAmount = amountInUSD - withdrawalFee;
+    
+    // Validate that netAmount is positive
+    if (netAmount <= 0) {
+      throw new BadRequestException(`Withdrawal amount must be greater than the fee ($${withdrawalFee})`);
+    }
 
     // Deduct coins immediately
     user.withdrawableCoins -= withdrawalDto.amount;

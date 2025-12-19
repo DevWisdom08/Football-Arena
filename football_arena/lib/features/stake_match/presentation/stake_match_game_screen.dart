@@ -6,81 +6,107 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/routes/route_names.dart';
 import '../../../core/network/questions_api_service.dart';
 import '../../../core/network/stake_match_api_service.dart';
-import '../../../core/models/stake_match.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../shared/widgets/football_loading.dart';
 import '../../../shared/widgets/question_display.dart';
 import '../../../shared/widgets/top_notification.dart';
+import 'widgets/stake_match_header.dart';
 
 class StakeMatchGameScreen extends ConsumerStatefulWidget {
-  final StakeMatch match;
-  final bool isCreator;
+  final String matchId;
+  final String opponentId;
+  final String opponentUsername;
+  final int stakeAmount;
+  final String difficulty;
+  final int questionCount;
 
   const StakeMatchGameScreen({
     super.key,
-    required this.match,
-    required this.isCreator,
+    required this.matchId,
+    required this.opponentId,
+    required this.opponentUsername,
+    required this.stakeAmount,
+    this.difficulty = 'mixed',
+    this.questionCount = 10,
   });
 
   @override
-  ConsumerState<StakeMatchGameScreen> createState() => _StakeMatchGameScreenState();
+  ConsumerState<StakeMatchGameScreen> createState() =>
+      _StakeMatchGameScreenState();
 }
 
 class _StakeMatchGameScreenState extends ConsumerState<StakeMatchGameScreen> {
   int currentQuestionIndex = 0;
-  int correctAnswers = 0;
+  int playerScore = 0;
+  int opponentScore = 0; // Will be calculated by backend
   int timeRemaining = 15; // 15 seconds per question for stake matches
   Timer? timer;
   String? selectedAnswer;
   bool isAnswered = false;
   bool isLoading = true;
+  bool isSubmitting = false;
   String? errorMessage;
-  int totalScore = 0;
-  List<Map<String, dynamic>> questionResults = [];
+  String playerUsername = 'You';
 
   List<Map<String, dynamic>> questions = [];
+  List<Map<String, dynamic>> playerAnswers = [];
 
   @override
   void initState() {
     super.initState();
+    _loadPlayerData();
     _loadQuestions();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadPlayerData() async {
+    final userData = StorageService.instance.getUserData();
+    if (userData != null) {
+      setState(() {
+        playerUsername = userData['username'] ?? 'You';
+      });
+    }
   }
 
   Future<void> _loadQuestions() async {
     try {
-      print('🎮 Loading questions for Stake Match...');
-      print('   Match ID: ${widget.match.id}');
-      print('   Number of Questions: ${widget.match.numberOfQuestions}');
-      print('   Difficulty: ${widget.match.difficulty}');
-      
       final questionsService = ref.read(questionsApiServiceProvider);
-      
-      // Use default values if not set
-      final count = widget.match.numberOfQuestions > 0 ? widget.match.numberOfQuestions : 10;
-      final difficulty = widget.match.difficulty?.isNotEmpty == true ? widget.match.difficulty : null;
-      
-      print('   Requesting: count=$count, difficulty=$difficulty');
-      
+
+      // Load questions based on difficulty
       final loadedQuestions = await questionsService.getRandomQuestions(
-        count: count,
-        difficulty: difficulty,
+        count: widget.questionCount,
+        difficulty: widget.difficulty,
       );
 
-      print('   ✅ Loaded ${loadedQuestions.length} questions');
-
       if (loadedQuestions.isEmpty) {
-        throw Exception('No questions available');
+        setState(() {
+          errorMessage = 'No questions available. Please try again.';
+          isLoading = false;
+        });
+        return;
       }
 
       setState(() {
-        questions = loadedQuestions;
+        questions = loadedQuestions
+            .map((q) => {
+                  'id': q['id'],
+                  'question': q['text'] ?? q['question'],
+                  'text': q['text'] ?? q['question'],
+                  'options': List<String>.from(q['options'] ?? []),
+                  'correctAnswer': q['correctAnswer'],
+                  'difficulty': q['difficulty'],
+                })
+            .toList();
         isLoading = false;
       });
 
       _startTimer();
-    } catch (e, stackTrace) {
-      print('❌ Error loading questions: $e');
-      print('Stack trace: $stackTrace');
+    } catch (e) {
       setState(() {
         errorMessage = 'Failed to load questions: ${e.toString()}';
         isLoading = false;
@@ -102,38 +128,37 @@ class _StakeMatchGameScreenState extends ConsumerState<StakeMatchGameScreen> {
         if (timeRemaining > 0) {
           timeRemaining--;
         } else {
-          // Time's up - treat as wrong answer
-          _handleAnswer('', isTimeout: true);
+          // Time's up - auto submit with no answer
+          _handleAnswer(null, isTimeout: true);
         }
       });
     });
   }
 
-  void _handleAnswer(String answer, {bool isTimeout = false}) {
+  void _handleAnswer(String? answer, {bool isTimeout = false}) {
     if (isAnswered) return;
 
     timer?.cancel();
 
-    final question = questions[currentQuestionIndex];
-    final correctAnswer = question['correctAnswer'] as String;
-    final isCorrect = answer == correctAnswer && !isTimeout;
+    final currentQuestion = questions[currentQuestionIndex];
+    final isCorrect = answer == currentQuestion['correctAnswer'];
 
-    // Calculate score: 100 points + time bonus (up to 50 points)
-    int questionScore = 0;
+    // Calculate points (100 base + time bonus)
+    int questionPoints = 0;
     if (isCorrect) {
-      questionScore = 100 + (timeRemaining * 3); // Up to 45 bonus points
-      correctAnswers++;
+      questionPoints = 100 + (timeRemaining * 5); // 5 points per second remaining
+      playerScore += questionPoints;
     }
 
-    totalScore += questionScore;
-
-    questionResults.add({
-      'question': question['text'] ?? question['question'],
+    // Record answer
+    playerAnswers.add({
+      'questionId': currentQuestion['id'],
+      'question': currentQuestion['question'],
       'selectedAnswer': answer,
-      'correctAnswer': correctAnswer,
+      'correctAnswer': currentQuestion['correctAnswer'],
       'isCorrect': isCorrect,
       'timeSpent': 15 - timeRemaining,
-      'score': questionScore,
+      'points': questionPoints,
     });
 
     setState(() {
@@ -141,7 +166,7 @@ class _StakeMatchGameScreenState extends ConsumerState<StakeMatchGameScreen> {
       isAnswered = true;
     });
 
-    // Wait 2 seconds before moving to next question
+    // Move to next question after delay
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
 
@@ -153,95 +178,119 @@ class _StakeMatchGameScreenState extends ConsumerState<StakeMatchGameScreen> {
         });
         _startTimer();
       } else {
-        _finishMatch();
+        // Game finished - submit results
+        _submitResults();
       }
     });
   }
 
-  Future<void> _finishMatch() async {
-    timer?.cancel();
+  Future<void> _submitResults() async {
+    setState(() => isSubmitting = true);
 
     try {
-      final stakeMatchService = ref.read(stakeMatchApiServiceProvider);
       final userId = StorageService.instance.getUserId();
-
       if (userId == null) {
         throw Exception('User not logged in');
       }
-      
-      // Submit match completion
-      final updatedMatch = await stakeMatchService.completeStakeMatch(
-        matchId: widget.match.id,
+
+      final stakeMatchService = ref.read(stakeMatchApiServiceProvider);
+
+      // Submit score to backend
+      final result = await stakeMatchService.completeStakeMatch(
+        matchId: widget.matchId,
         userId: userId,
-        score: totalScore,
+        score: playerScore,
       );
 
-      if (mounted) {
-        // Navigate to results screen
-        context.go(
-          RouteNames.stakeMatchResults,
-          extra: {
-            'match': updatedMatch,
-            'myScore': totalScore,
-            'correctAnswers': correctAnswers,
-            'totalQuestions': questions.length,
-            'questionResults': questionResults,
-            'isCreator': widget.isCreator,
-          },
-        );
+      if (!mounted) return;
+
+      // Calculate opponent score
+      final isCreator = result.creatorId == userId;
+      final opponentScore = isCreator ? result.opponentScore : result.creatorScore;
+      
+      // Calculate payout if match is completed
+      int playerPayout = 0;
+      if (result.status == 'completed' && result.winnerId == userId) {
+        playerPayout = result.winnerPayout;
       }
+
+      // Navigate to results screen
+      context.pushReplacement(
+        RouteNames.stakeMatchResults,
+        extra: {
+          'matchId': widget.matchId,
+          'playerScore': playerScore,
+          'opponentScore': opponentScore,
+          'playerUsername': playerUsername,
+          'opponentUsername': widget.opponentUsername,
+          'stakeAmount': widget.stakeAmount,
+          'winnerId': result.winnerId,
+          'playerId': userId,
+          'playerPayout': playerPayout,
+          'status': result.status,
+        },
+      );
     } catch (e) {
-      print('❌ Error submitting match: $e');
+      setState(() => isSubmitting = false);
+
       if (mounted) {
         TopNotification.show(
           context,
-          message: 'Error submitting match: ${e.toString()}',
+          message: 'Failed to submit results: ${e.toString()}',
           type: NotificationType.error,
         );
-        // Still navigate to results
-        context.go(RouteNames.home);
+      }
+
+      // Fallback: Navigate to results with local data
+      if (mounted) {
+        context.pushReplacement(
+          RouteNames.stakeMatchResults,
+          extra: {
+            'matchId': widget.matchId,
+            'playerScore': playerScore,
+            'opponentScore': 0,
+            'playerUsername': playerUsername,
+            'opponentUsername': widget.opponentUsername,
+            'stakeAmount': widget.stakeAmount,
+            'error': e.toString(),
+          },
+        );
       }
     }
   }
 
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
+  Color _getTimerColor() {
+    if (timeRemaining > 10) return Colors.green;
+    if (timeRemaining > 5) return Colors.orange;
+    return Colors.red;
   }
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Scaffold(
-        backgroundColor: AppColors.background,
-        body: Center(child: FootballLoading()),
-      );
-    }
-
-    if (errorMessage != null) {
       return Scaffold(
         backgroundColor: AppColors.background,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 64, color: Colors.red),
-              const SizedBox(height: 16),
+              const FootballLoading(),
+              const SizedBox(height: 24),
               Text(
-                'Error loading questions',
-                style: const TextStyle(color: Colors.white, fontSize: 20),
+                'Loading Stake Match...',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 16,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
-                errorMessage!,
-                style: const TextStyle(color: Colors.white54),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () => context.go(RouteNames.stakeMatch),
-                child: const Text('Back to Stake Match'),
+                'Stake: ${widget.stakeAmount} coins',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -249,180 +298,164 @@ class _StakeMatchGameScreenState extends ConsumerState<StakeMatchGameScreen> {
       );
     }
 
-    final question = questions[currentQuestionIndex];
-
-    return WillPopScope(
-      onWillPop: () async {
-        final confirm = await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Quit Match?'),
-            content: const Text(
-              'Are you sure you want to quit? You will lose your stake!',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+    if (errorMessage != null) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 64,
                 ),
-                child: const Text('Quit'),
-              ),
-            ],
-          ),
-        );
-        return confirm ?? false;
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: const AssetImage('assets/images/background1.png'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.3),
-              BlendMode.darken,
+                const SizedBox(height: 24),
+                Text(
+                  'Error',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  errorMessage!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.7),
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: () => context.pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
+                  ),
+                  child: const Text('Go Back'),
+                ),
+              ],
             ),
           ),
         ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.black.withOpacity(0.3),
-            title: Row(
-              children: [
-                Icon(Icons.emoji_events, color: AppColors.primary),
-                const SizedBox(width: 8),
-                Text(
-                  'Stake Match',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+      );
+    }
+
+    if (isSubmitting) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const FootballLoading(),
+              const SizedBox(height: 24),
+              Text(
+                'Submitting Results...',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 16,
                 ),
-                const Spacer(),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.primary),
-                  ),
-                  child: Text(
-                    '${widget.match.stakeAmount} coins',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            actions: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Text(
-                    'Score: $totalScore',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Calculating Winner...',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 14,
                 ),
               ),
             ],
           ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                // Progress bar
-                LinearProgressIndicator(
-                  value: (currentQuestionIndex + 1) / questions.length,
-                  backgroundColor: Colors.white24,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                  minHeight: 6,
-                ),
+        ),
+      );
+    }
 
-                // Question info
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Question ${currentQuestionIndex + 1}/${questions.length}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: timeRemaining <= 5
-                              ? Colors.red.withOpacity(0.2)
-                              : AppColors.primary.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: timeRemaining <= 5
-                                ? Colors.red
-                                : AppColors.primary,
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.timer,
-                              color: timeRemaining <= 5
-                                  ? Colors.red
-                                  : AppColors.primary,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '$timeRemaining s',
-                              style: TextStyle(
-                                color: timeRemaining <= 5
-                                    ? Colors.red
-                                    : AppColors.primary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+    final currentQuestion = questions[currentQuestionIndex];
+
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header with match info
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: StakeMatchHeader(
+                stakeAmount: widget.stakeAmount,
+                currentQuestion: currentQuestionIndex + 1,
+                totalQuestions: questions.length,
+                playerScore: playerScore,
+                opponentScore: opponentScore,
+                playerUsername: playerUsername,
+                opponentUsername: widget.opponentUsername,
+              ),
+            ),
+
+            // Timer
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    _getTimerColor().withOpacity(0.2),
+                    _getTimerColor().withOpacity(0.1),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: _getTimerColor(), width: 2),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.timer,
+                    color: _getTimerColor(),
+                    size: 24,
                   ),
-                ),
-
-                // Question display
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(20),
-                    child:                     QuestionDisplay(
-                      question: question,
-                      selectedAnswer: selectedAnswer,
-                      isAnswered: isAnswered,
-                      onAnswerSelected: _handleAnswer,
+                  const SizedBox(width: 8),
+                  Text(
+                    '$timeRemaining seconds',
+                    style: TextStyle(
+                      color: _getTimerColor(),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+
+            const SizedBox(height: 24),
+
+            // Question Display
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: QuestionDisplay(
+                  question: currentQuestion,
+                  selectedAnswer: selectedAnswer,
+                  onAnswerSelected: (answer) => _handleAnswer(answer),
+                  isAnswered: isAnswered,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-

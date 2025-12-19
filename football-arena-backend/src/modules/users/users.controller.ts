@@ -101,7 +101,25 @@ export class UsersController {
   }
 
   @Get('search')
-  searchUsers(@Query('q') query: string, @Query('limit') limit?: number) {
-    return this.usersService.searchUsers(query, limit ? +limit : 10);
+  async searchUsers(@Query('q') query: string, @Query('limit') limit?: number) {
+    try {
+      if (!query || query.length < 2) {
+        return [];
+      }
+      const users = await this.usersService.searchUsers(query, limit ? +limit : 10);
+      // Return only necessary fields for friend search
+      return users.map(user => ({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        level: user.level,
+        xp: user.xp,
+        country: user.country,
+        avatarUrl: user.avatarUrl,
+      }));
+    } catch (error) {
+      console.error('Error searching users:', error);
+      return [];
+    }
   }
 }

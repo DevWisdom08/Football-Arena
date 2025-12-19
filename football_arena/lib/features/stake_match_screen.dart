@@ -936,11 +936,22 @@ class _StakeMatchScreenState extends ConsumerState<StakeMatchScreen>
     final userId = StorageService.instance.getUserId();
     final isCreator = match.creatorId == userId;
 
+    // Determine opponent details
+    final opponentId = isCreator ? match.opponentId ?? '' : match.creatorId;
+    final opponentUsername = isCreator 
+        ? (match.opponentUsername ?? 'Opponent')
+        : (match.creatorUsername ?? 'Creator');
+
+    // Navigate to stake match game
     context.push(
       RouteNames.stakeMatchGame,
       extra: {
-        'match': match,
-        'isCreator': isCreator,
+        'matchId': match.id,
+        'opponentId': opponentId,
+        'opponentUsername': opponentUsername,
+        'stakeAmount': match.stakeAmount,
+        'difficulty': match.difficulty ?? 'mixed',
+        'questionCount': match.numberOfQuestions,
       },
     );
   }

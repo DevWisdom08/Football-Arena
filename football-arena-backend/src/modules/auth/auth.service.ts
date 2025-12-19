@@ -14,7 +14,8 @@ export class AuthService {
     username: string; 
     email: string; 
     password: string; 
-    country: string 
+    country: string;
+    dateOfBirth?: string;
   }) {
     const existingUser = await this.usersService.findByEmail(registerDto.email);
     
@@ -22,10 +23,27 @@ export class AuthService {
       throw new ConflictException('Email already exists');
     }
 
+    // Validate age if dateOfBirth is provided
+    if (registerDto.dateOfBirth) {
+      const birthDate = new Date(registerDto.dateOfBirth);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      if (age < 18) {
+        throw new ConflictException('You must be at least 18 years old to register');
+      }
+    }
+
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
     
     const user = await this.usersService.create({
       ...registerDto,
+      dateOfBirth: registerDto.dateOfBirth ? new Date(registerDto.dateOfBirth) : undefined,
       passwordHash: hashedPassword,
     });
 
