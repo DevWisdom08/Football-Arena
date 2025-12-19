@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StakeMatch } from './entities/stake-match.entity';
 import { User } from '../users/entities/user.entity';
 import { TransactionHistory } from '../users/entities/transaction-history.entity';
 import { CreateStakeMatchDto } from './dto/create-stake-match.dto';
+import { FraudDetectionService } from '../fraud-detection/fraud-detection.service';
 
 @Injectable()
 export class StakeMatchService {
@@ -15,6 +16,8 @@ export class StakeMatchService {
     private userRepository: Repository<User>,
     @InjectRepository(TransactionHistory)
     private transactionRepository: Repository<TransactionHistory>,
+    @Inject(forwardRef(() => FraudDetectionService))
+    private fraudDetectionService: FraudDetectionService,
   ) {}
 
   /**
@@ -28,6 +31,9 @@ export class StakeMatchService {
     if (!creator) {
       throw new NotFoundException('User not found');
     }
+
+    // Run fraud detection for rapid betting
+    await this.fraudDetectionService.checkRapidBetting(creatorId);
 
     // Check if user has enough coins (use both coin types)
     const totalCoins = creator.coins + creator.withdrawableCoins + creator.purchasedCoins;
@@ -197,6 +203,9 @@ export class StakeMatchService {
       }
       winner.withdrawableCoins += match.winnerPayout;
       await this.userRepository.save(winner);
+
+      // Check winner's win rate for fraud detection
+      await this.fraudDetectionService.checkWinRate(winnerId);
 
       // Record transaction
       await this.recordTransaction(

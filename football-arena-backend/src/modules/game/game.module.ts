@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GameService } from './game.service';
 import { GameController } from './game.controller';
@@ -14,6 +14,7 @@ import { User } from '../users/entities/user.entity';
 import { TransactionHistory } from '../users/entities/transaction-history.entity';
 import { QuestionsModule } from '../questions/questions.module';
 import { UsersModule } from '../users/users.module';
+import { FraudDetectionModule } from '../fraud-detection/fraud-detection.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UsersModule } from '../users/users.module';
     ]),
     QuestionsModule,
     UsersModule,
+    forwardRef(() => FraudDetectionModule),
   ],
   controllers: [GameController, StakeMatchController],
   providers: [GameService, GameGateway, StakeMatchService],

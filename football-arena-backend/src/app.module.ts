@@ -14,6 +14,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { StoreModule } from './modules/store/store.module';
 import { AvatarsModule } from './modules/avatars/avatars.module';
 import { UnlocksModule } from './modules/unlocks/unlocks.module';
+import { FraudDetectionModule } from './modules/fraud-detection/fraud-detection.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { UnlocksModule } from './modules/unlocks/unlocks.module';
     StoreModule,
     AvatarsModule,
     UnlocksModule,
+    FraudDetectionModule,
   ],
   providers: [
     {

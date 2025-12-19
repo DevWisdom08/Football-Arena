@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -8,6 +8,7 @@ import { CreateWithdrawalDto } from './dto/create-withdrawal.dto';
 import { SubmitKycDto } from './dto/submit-kyc.dto';
 import { ProcessWithdrawalDto } from './dto/process-withdrawal.dto';
 import { CryptoPaymentService } from './crypto-payment.service';
+import { FraudDetectionService } from '../fraud-detection/fraud-detection.service';
 
 @Injectable()
 export class WithdrawalService {
@@ -33,6 +34,8 @@ export class WithdrawalService {
     @InjectRepository(TransactionHistory)
     private transactionRepository: Repository<TransactionHistory>,
     private cryptoPaymentService: CryptoPaymentService,
+    @Inject(forwardRef(() => FraudDetectionService))
+    private fraudDetectionService: FraudDetectionService,
   ) {}
 
   /**
@@ -94,6 +97,16 @@ export class WithdrawalService {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+
+    // Run fraud detection checks
+    const fraudCheck = await this.fraudDetectionService.checkWithdrawal(
+      userId,
+      withdrawalDto.amount,
+    );
+
+    if (!fraudCheck.allowed) {
+      throw new BadRequestException(fraudCheck.reason || 'Withdrawal blocked due to suspicious activity');
     }
 
     // Check if user has enough withdrawable coins
